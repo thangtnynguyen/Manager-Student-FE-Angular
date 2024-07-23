@@ -1,0 +1,223 @@
+<div class="row">
+  <div class="col-12">
+    <div class="page-title-box d-flex align-items-center justify-content-between">
+      <h4 class="mb-0">Quản lý đề thi</h4>
+      <div class="page-title-right">
+        <ol class="breadcrumb m-0">
+          <li routerLink="/admin/dashboard" class="breadcrumb-item d-flex align-items-center">
+            <span>Trang chủ</span>
+            <i class="breadcrumb-item-arrow fa-solid fa-angle-right"></i>
+          </li>
+          <li class="breadcrumb-item active">
+            <span>Chi tiết đề thi</span>
+          </li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-xl-8">
+    <div class="card">
+      <div class="card-header bg-info text-white">
+        Chi tiết đề thi
+      </div>
+      <div class=" card-body  add-exam">
+
+        <div class="modal-body overflow-hidden px-4">
+          <div class="form-group">
+            <div class="row">
+              <label class="col-md-3 col-lg-3 col-form-label" for="title">Tên đề kiểm tra <span
+                  class="text-danger">*</span></label>
+              <div class="col-md-9 col-lg-8 col-table-reponsive p-0">
+                <input class="form-control" id="title" name="title" type="text" required placeholder="Tiêu đề"
+                  [(ngModel)]="exam.title" disabled />
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="row">
+              <label class="col-md-3 col-lg-3 col-form-label" for="description">Mô tả</label>
+              <div class="col-md-9 col-lg-8 col-table-reponsive p-0">
+                <input class="form-control" placeholder="Mô tả" name="description" id="description" type="text"
+                  [(ngModel)]="exam.description" disabled />
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="row">
+              <label class="col-md-3 col-lg-3 col-form-label" for="start">Thời gian bắt đầu</label>
+              <div class="col-md-9">
+                <div class="row">
+                  <div class="col-6 ps-0">
+                    <input [(ngModel)]="exam.startTime" class="form-control" placeholder="Từ" name="start" id="start"
+                      type="datetime-local" />
+                  </div>
+                  <div class="col-6">
+                    <input [(ngModel)]="exam.endTime" class="form-control" placeholder="Đến" name="end" id="end"
+                      type="datetime-local" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="row">
+              <label class="col-md-3 col-lg-3 col-form-label" for="duration">Thời gian làm bài</label>
+              <div class="col-md-9 col-lg-8 col-table-reponsive p-0 relative">
+                <input [(ngModel)]="exam.duration" class="form-control" placeholder="Thời gian làm bài" name="duration"
+                  id="duration" type="text" />
+                <p class="minutes">Phút</p>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="row border-collapse">
+
+              <label class="col-md-3 col-lg-3 col-form-label" for="description">Chương</label>
+              <div class="col-md-9 col-lg-8 col-table-reponsive p-0" disabled>
+                <span *ngFor="let section of exam.sections;">{{ section.title }} </span>
+
+              </div>
+
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="row border-collapse">
+
+              <label class="col-md-3 col-lg-3 col-form-label" for="description">Giao cho </label>
+              <div class="col-md-9 col-lg-8 col-table-reponsive p-0" disabled>
+                <span *ngFor="let groupmodule of exam.groupmodules;">{{ groupmodule.name }} </span>
+              </div>
+
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="row">
+              <label class="col-md-3 col-lg-3 col-form-label" for="description">Số câu dễ</label>
+              <div class="col-md-9 col-lg-8 col-table-reponsive p-0">
+                <input class="form-control" placeholder="Số câu dễ" name="description" id="description" type="text"
+                  [(ngModel)]="exam.numberQuestionEasy" disabled />
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="row">
+              <label class="col-md-3 col-lg-3 col-form-label" for="description">Số câu trung bình</label>
+              <div class="col-md-9 col-lg-8 col-table-reponsive p-0">
+                <input class="form-control" placeholder="Số câu trung bình" name="description" id="description"
+                  type="text" [(ngModel)]="exam.numberQuestionModerate" disabled />
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="row">
+              <label class="col-md-3 col-lg-3 col-form-label" for="description">Số câu khó</label>
+              <div class="col-md-9 col-lg-8 col-table-reponsive p-0">
+                <input class="form-control" placeholder="Số câu khó" name="description" id="description" type="text"
+                  [(ngModel)]="exam.numberQuestionDifficult" disabled />
+              </div>
+            </div>
+          </div>
+
+         
+
+          <div class="form-group" style="margin-top: 50px !important;" >
+            <div class="row">
+              <label class="col-md-3 col-lg-3 col-form-label" for="idquestion">Nội dung câu hỏi</label>
+            </div>
+            <div class="row" *ngFor="let question of exam.questions; let i = index">
+              <div class="col-md-9 col-lg-6 col-table-reponsive p-0">
+                <div disabled class="form-control" [innerHTML]="question.title" name="name" id="name" type="text"
+                  placeholder="Loại câu hỏi"></div>
+              </div>              <div class="col-md-9 col-lg-6 col-table-reponsive p-0">
+                <tbody>
+                  <tr *ngFor="let questionAnswer of question.questionAnswers; let i = index">
+                    <td>
+                      <div class="d-flex align-items-center gap-2">
+                        <div>
+                          <div style="display: flex;">
+                            <span
+                              class="container-correct {{ questionAnswer.isCorrect ? 'text-success' : 'text-danger' }}">{{
+                              handleConvert(i)}} .
+                            </span>
+                            <span class="{{ questionAnswer.isCorrect ? 'text-success' : 'text-danger' }}"
+                              [innerHTML]="questionAnswer.content"></span>
+                            <div style="margin-left: 30px;">
+                              <span
+                                class="container-correct badge {{ questionAnswer.isCorrect ? 'badge-success' : 'badge-danger' }}"
+                                [innerHTML]="questionAnswer.score+' điểm'"></span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+
+                  </tr>
+                  <tr *ngFor="let questionAnswer of question.questionAnswers; let i = index">
+                    <div *ngIf="questionAnswer.isCorrect===true">
+                      <div>
+                        <span class="container-correct">Điểm khả dụng: </span>
+                        <br>
+                        <span class="container-correct left" [innerHTML]="getMaxScoreQuestionAnswers()+' điểm'"></span>
+                      </div>
+                    </div>
+                  </tr>
+                </tbody>
+              </div>
+            </div>
+          </div>
+
+
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+
+
+  <div class="col-xl-4">
+    <div class="card">
+      <div class="card-header bg-info text-white">
+        Cấu hình
+      </div>
+      <div class="card-body ps-5 pe-3 py-0">
+        <div class="custom-control custom-switch ml-3" dir="ltr">
+          <input type="checkbox" class="custom-control-input" id="status" name="status" [checked]="exam.status"
+            disabled>
+          <label class="custom-control-label" for="status">Trạng thái</label>
+        </div>
+        <div class="custom-control custom-switch ml-3" dir="ltr">
+          <input type="checkbox" class="custom-control-input" id="isSeeScore" name="isSeeScore"
+            [checked]="exam.isSeeScore" disabled>
+          <label class="custom-control-label" for="isSeeScore">Xem điểm sau khi thi</label>
+        </div>
+        <div class="custom-control custom-switch ml-3" dir="ltr">
+          <input type="checkbox" class="custom-control-input" id="isShowContent" name="isShowContent"
+            [checked]="exam.isShowContent" disabled>
+          <label class="custom-control-label" for="isShowContent">Xem bài làm khi thi xong</label>
+        </div>
+        <div class="custom-control custom-switch ml-3" dir="ltr">
+          <input type="checkbox" class="custom-control-input" id="isMixQuestion" name="isMixQuestion"
+            [checked]="exam.isMixQuestion" disabled>
+          <label class="custom-control-label" for="isMixQuestion">Đảo câu hỏi</label>
+        </div>
+        <div class="custom-control custom-switch ml-3" dir="ltr">
+          <input type="checkbox" class="custom-control-input" id="isMixQuestionAnswer" name="isMixQuestionAnswer"
+            [checked]="exam.isMixQuestionAnswer" disabled>
+          <label class="custom-control-label" for="isMixQuestionAnswer">Đảo đáp án</label>
+        </div>
+        <div class="custom-control custom-switch ml-3" dir="ltr">
+          <input type="checkbox" class="custom-control-input" id="isAllowChangeTab" name="isAllowChangeTab"
+            [checked]="exam.isAllowChangeTab" disabled>
+          <label class="custom-control-label" for="isAllowChangeTab">Tự động nộp bài khi chuyển tab</label>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>

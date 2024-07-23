@@ -1,0 +1,388 @@
+<div class="row">
+   <div class="col-12">
+      <div class="page-title-box d-flex align-items-center justify-content-between">
+         <h4 class="mb-0">Quản lý bài giảng</h4>
+         <div class="page-title-right">
+            <ol class="breadcrumb m-0">
+               <li routerLink="/admin/dashboard" class="breadcrumb-item d-flex align-items-center">
+                  <span>Trang chủ</span>
+                  <i class="breadcrumb-item-arrow fa-solid fa-angle-right"></i>
+               </li>
+               <li class="breadcrumb-item d-flex align-items-center" routerLink="/admin/course/lesson">
+                  <span>Quản lý bài giảng</span>
+                  <i class="breadcrumb-item-arrow fa-solid fa-angle-right"></i>
+               </li>
+               <li class="breadcrumb-item active">
+                  <span>Nội dung bài giảng</span>
+               </li>
+            </ol>
+         </div>
+      </div>
+   </div>
+</div>
+
+
+<div class="row">
+   <div class="col-12">
+      <div class="card">
+         <div class="card-body">
+            <div class="group-action">
+               <div class="row">
+                  <div class="group-action__left col-xl-10 col-md-9 col-sm-12">
+                     <div class="row">
+                        <div class="form-group col-md-4">
+                           <input class="form-control" type="text" placeholder="Tiêu đề"
+                              [(ngModel)]="queryParameters.title" />
+                        </div>
+                        <div class="form-group col-md-4">
+                           <input class="form-control" type="text" placeholder="Mô tả"
+                              [(ngModel)]="queryParameters.description" />
+                        </div>
+
+                        <div class="form-group col-md-1">
+                           <button (click)="handleSearchContentLessons()" type="button"
+                              class="btn btn-primary waves-effect waves-light">
+                              <i class="fa-solid fa-magnifying-glass"></i>
+                           </button>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="group-action__right col-xl-2 col-md-3 col-sm-12">
+                     <button type="button" class="btn btn-success waves-effect waves-light"
+                        (click)="handleOpenCreateContentLessonModal()">
+                        <i class="fa-solid fa-plus mr-1"></i> Thêm mới
+                     </button>
+                  </div>
+                  <div class="group-action__right col-xl-2 col-md-4 col-sm-12">
+                     <button [@fadeInOut]="selectedlessons.length > 0 ? 'visible' : 'hidden'" type="button"
+                        class="btn btn-danger waves-effect waves-light align-items-center"
+                        (click)="handleOnDeleteMultiple()">
+                        <i class="fa-solid fa-trash mr-1"></i> Xoá {{ selectedlessons.length}} bản ghi
+                     </button>
+                  </div>
+               </div>
+            </div>
+            <div class="table-data overflow-auto">
+               <table id="datatable" class="table table-bordered dt-responsive nowrap mt-3"
+                  style="border-collapse: collapse; border-spacing: 0; width: 100%">
+                  <thead class="thead-light">
+                     <tr>
+                        <th class="selected-col">
+                           <div class="custom-control custom-checkbox">
+                              <input (change)="selectAllContentLessons($event)"
+                                 [checked]="selectedlessons.length === contentlessons.length && selectedlessons.length > 0"
+                                 type="checkbox" class="custom-control-input" id="select-box" title="select-box"
+                                 placeholder="select-box">
+                              <label class="custom-control-label" for="select-box">&nbsp;</label>
+                           </div>
+                        </th>
+                        <th class="order-sort" (click)="handleOnSortAndOrderChange(constant.order.id)"
+                           [ngClass]="{'order-sort-active': paging?.orderBy === constant.order.id }">
+                           Id
+                           <span *ngIf="paging?.orderBy === constant.order.id"
+                              class="order-sort-group test-{{paging?.orderBy}}">
+                              <i *ngIf="paging?.sortBy === constant.sort.desc" class="bi bi-sort-down"></i>
+                              <i *ngIf="paging?.sortBy === constant.sort.asc" class="bi bi-sort-up"></i>
+                           </span>
+                           <span *ngIf="!(paging?.orderBy === constant.order.id)" class="test-{{paging?.orderBy}}"><img
+                                 src="../../../../../assets/sort.png" height="14.41" width="14.41"
+                                 style="margin-top: -3px;" alt="icon-sort"></span>
+                        </th>
+                        <th>Tiêu đề</th>
+                        <th>Mô tả</th>
+                        <th>Ngày sửa</th>
+                        <th>Trạng thái</th>
+                        <th>Hành động</th>
+                     </tr>
+                  </thead>
+                  <tbody>
+                     <ng-container *ngIf="contentlessons.length > 0">
+                        <tr *ngFor="let lesson of contentlessons;">
+                           <td>
+                              <div class="custom-control custom-checkbox">
+                                 <input id="select-box-{{ lesson.id }}" type="checkbox" class="custom-control-input">
+                                 <label class="custom-control-label" for="select-box-{{ lesson.id }}">&nbsp;</label>
+                              </div>
+                           </td>
+                           <td>{{ lesson.id }}</td>
+                           <td>{{ lesson.title }}</td>
+                           <td>{{ lesson.description }}</td>
+                           <td>{{ lesson.updatedAt | date:'dd/MM/yyyy' }}</td>
+                           <td>
+                              <span class="badge {{ lesson.isPublished ? 'badge-success' : 'badge-warning' }}">{{
+                                 lesson.isPublished ? 'Đã được duyệt' : 'Chưa được duyệt' }}</span>
+                           </td>
+
+                           <td>
+                              <span class="text-info cursor-pointer"
+                                 (click)="handleOpenDetailContentLessonModal(lesson)"><i
+                                    class="fa-solid fa-eye"></i></span>
+                              <span class="text-warning cursor-pointer ml-2"
+                                 [routerLink]="['/admin/teacher/edit', lesson.id]"><i
+                                    class="fa-solid fa-pen"></i></span>
+                              <span class="text-danger cursor-pointer ml-2" (click)="handleDeleteItem(lesson.id)"><i
+                                    class="fa-solid fa-trash"></i></span>
+
+                           </td>
+                        </tr>
+
+                     </ng-container>
+                     <ng-container *ngIf="!(contentlessons.length > 0)">
+                        <tr>
+                           <td class="text-center" colspan="8">Không có bản ghi nào</td>
+                        </tr>
+                     </ng-container>
+                  </tbody>
+               </table>
+            </div>
+
+            <div class="table-filter d-flex justify-content-between align-items-center mt-2">
+               <div class="page-index">
+                  <ul class="pagination pagination-rounded">
+                     <li class="page-item" (click)="handleOnChangePage(paging.pageIndex - 1)"
+                        [class.disabled]="paging.pageIndex === 1 || contentlessons.length === 0">
+                        <span class="page-link"><i class="fa-solid fa-angle-left"></i></span>
+                     </li>
+
+                     <ng-container *ngIf="contentlessons.length > 0">
+                        <li *ngFor="let page of [].constructor(paging.totalPages); let i = index" class="page-item"
+                           (click)="handleOnChangePage(i + 1)" [class.active]="paging.pageIndex === i + 1">
+                           <span class="page-link">{{ i + 1 }}</span>
+                        </li>
+                     </ng-container>
+
+                     <li class="page-item" (click)="handleOnChangePage(paging.pageIndex + 1)"
+                        [class.disabled]="paging.pageIndex === paging.totalPages || contentlessons.length === 0">
+                        <span class="page-link"><i class="fa-solid fa-angle-right"></i></span>
+                     </li>
+                  </ul>
+               </div>
+               <div class="per-page">
+                  Hiển thị
+                  <select class="mx-1" (change)="handleOnPerPageChange($event)">
+                     <option *ngFor="let item of config.perPageOptions;" [ngValue]="item.value"
+                        [attr.selected]="item.value === paging.pageSize ? true : null">{{ item.label }}</option>
+                  </select>
+                  / {{ paging.totalRecords }} tổng số bản ghi
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+
+<form (ngSubmit)="handleOnSubmitCreateContentLesson()" #createForm="ngForm">
+   <ng-template #createContentLessonTemplate>
+      <div class="modal-header">
+         <h5 class="modal-title mt-0" id="exampleModalScrollableTitle">Tạo mới Content Lesson</h5>
+         <button type="button" class="close" (click)="createContentLessonModalRef?.hide()">
+            <span aria-hidden="true">&times;</span>
+         </button>
+      </div>
+      <div class="modal-body">
+         <div class="form-group">
+            <div class="row">
+               <label class="col-md-3 col-lg-3 col-form-label" for="title">Tiêu đề <span
+                     class="text-danger">*</span></label>
+               <div class="col-md-9 col-lg-8 col-table-reponsive p-0">
+                  <input class="form-control" [(ngModel)]="contentlesson.title" id="title" name="title" type="text"
+                     required placeholder="Tiêu đề" />
+                  <div
+                     *ngIf="createForm.controls['title']?.invalid && (createForm.controls['title']?.dirty || createForm.controls['title'].touched)"
+                     class="danger-notice">
+                     <div *ngIf="createForm.controls['title'].errors?.['required']">Tiêu đề không được để trống</div>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="form-group">
+            <div class="row">
+               <label class="col-md-3 col-lg-3 col-form-label" for="description">Mô tả </label>
+               <div class="col-md-9 col-lg-8 col-table-reponsive p-0">
+                  <input class="form-control" placeholder="Nội dung" name="description"
+                     [(ngModel)]="contentlesson.description" id="description" type="text" />
+               </div>
+            </div>
+         </div>
+         <div class="form-group">
+            <div class="row">
+               <label class="col-md-3 col-lg-3 col-form-label" for="type">Type</label>
+               <div class="col-md-9 col-lg-8 col-table-reponsive p-0">
+                  <input class="form-control" placeholder="Type" name="type"
+                     [(ngModel)]="contentlesson.type" id="type" type="text" />
+               </div>
+            </div>
+         </div>
+         <div class="form-group">
+            <div class="row">
+               <div class="custom-control custom-switch ml-3" dir="ltr">
+                  <input type="checkbox" class="custom-control-input" id="status" name="status"
+                     [(ngModel)]="contentlesson.isPublished" [checked]="contentlesson.isPublished">
+                  <label class="custom-control-label" for="status">Công khai</label>
+               </div>
+            </div>
+         </div>
+         
+         <div class="form-group">
+            <div class="row">
+               <label class="col-md-3 col-lg-3 col-form-label" for="imageUrl">Video giới thiệu</label>
+               <div class="col-md-9 col-lg-6 col-table-reponsive d-flex align-items-center gap-4">
+                  <div class="custom-control custom-radio">
+                     <input type="radio" id="verification-type-email" name="verificationType"
+                        class="custom-control-input" [(ngModel)]="contentlesson.type" [value]="1" checked="">
+                     <label class="custom-control-label font-weight-normal"
+                        for="verification-type-email">Youtube</label>
+                  </div>
+                  <div class="custom-control custom-radio">
+                     <input type="radio" id="verification-type-phone" name="verificationType"
+                        class="custom-control-input" [(ngModel)]="contentlesson.type" [value]="2">
+                     <label class="custom-control-label font-weight-normal" for="verification-type-phone">Video</label>
+                  </div>
+               </div>
+            </div>
+
+            <div class="youtube-video">
+               <div *ngIf="contentlesson.type === 1" class="row">
+                  <label class="col-md-3 col-lg-3 col-form-label" for="title"></label>
+                  <div class="col-md-9 col-lg-4 col-table-reponsive p-0 mt-2">
+                     <input class="form-control" [(ngModel)]="contentlesson.videoUrl" (change)="selectLesson(contentlesson.videoUrl)" name="videoUrl" id="videoUrl"
+                        type="text" placeholder="Youtube link" />
+                  </div>
+               </div>
+
+               <div *ngIf="contentlesson.videoUrl !=='' && contentlesson.type === 1" class="row">
+                  <label class="col-md-3 col-lg-3 col-form-label" for="imageUrl"></label>
+                  <div
+                     class="col-md-9 col-lg-6 col-table-reponsive d-flex align-items-center gap-4 video-preview-small mt-2 pl-0 mt-3">
+                     <iframe width="100%" height="200" [src]="currentVideoUrl" title="YouTube video player"
+                        frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowfullscreen></iframe>
+                  </div>
+               </div>
+            </div>
+
+            <!-- <div class="normal-video">
+                <div class="form-group mt-2">
+                    <div class="row">
+                        <label class="col-md-3 col-lg-3 col-form-label" for="imageUrl"></label>
+                        <div class="col-md-9 col-lg-4 col-table-reponsive p-0">
+                            <div *ngIf="course.typeVideo === 2" class="custom-file">
+                                <input (change)="handleChangeVideo($event)" type="file" class="custom-file-input" id="customFile" accept="video/*" multiple="false">
+                                <label class="custom-file-label" for="customFile">Chọn file</label>
+                            </div>
+                            <div *ngIf="course.base64Video !== '' && course.typeVideo === 2" class="img-preview mt-2">
+                                <video width="252" height="140" controls>
+                                    <source [src]="course.base64Video" type="video/mp4">
+                                    Your browser does not support the video tag.
+                                  </video>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+         </div>
+         <div class="form-group">
+            <div class="row">
+               <label class="col-md-3 col-lg-3 col-form-label" for="linkTo">Id bài học</label>
+               <div class="col-md-9 col-lg-8 col-table-reponsive p-0">
+                  <input class="form-control" name="linkTo" [(ngModel)]="contentlesson.lessonId"
+                     placeholder="Id bài học" id="linkTo" type="text" disabled />
+               </div>
+            </div>
+         </div>
+
+
+
+      </div>
+      <div class="modal-footer">
+         <button type="button" class="btn btn-light waves-effect"
+            (click)="createContentLessonModalRef?.hide()">Đóng</button>
+         <button [disabled]="createForm.invalid && validateForm()" type="submit"
+            (click)="handleOnSubmitCreateContentLesson()" class="btn btn-primary waves-effect waves-light ml-2">Xác
+            nhận</button>
+      </div>
+   </ng-template>
+</form>
+
+
+<ng-template #detailContentLessonTemplate>
+   <div class="modal-header">
+      <h5 class="modal-title mt-0" id="exampleModalScrollableTitle">Chi tiết Lesson</h5>
+      <button type="button" class="close" (click)="detailContentLessonModalRef?.hide()">
+         <span aria-hidden="true">&times;</span>
+      </button>
+   </div>
+   <div class="modal-body">
+      <div class="form-group">
+         <div class="row">
+            <label class="col-md-3 col-lg-3 col-form-label" for="email">Id</label>
+            <div class="col-md-9 col-lg-8 col-table-reponsive p-0">
+               <input disabled class="form-control" [(ngModel)]="contentlesson.id" name="email" id="email" type="email"
+                  email />
+            </div>
+         </div>
+      </div>
+      <div class="form-group">
+         <div class="row">
+            <label class="col-md-3 col-lg-3 col-form-label" for="email">Tiêu đề</label>
+            <div class="col-md-9 col-lg-8 col-table-reponsive p-0">
+               <input disabled class="form-control" [(ngModel)]="contentlesson.title" name="email" id="email"
+                  type="text" />
+            </div>
+         </div>
+      </div>
+      <div class="form-group">
+         <div class="row">
+            <label class="col-md-3 col-lg-3 col-form-label" for="email">Mô tả</label>
+            <div class="col-md-9 col-lg-8 col-table-reponsive p-0">
+               <input disabled class="form-control" [(ngModel)]="contentlesson.description" name="email" id="email"
+                  type="text" />
+            </div>
+         </div>
+      </div>
+      <div class="form-group">
+         <div class="row">
+            <label class="col-md-3 col-lg-3 col-form-label" for="email">Công khai</label>
+            <div class="col-md-9 col-lg-8 col-table-reponsive d-flex align-items-center p-0">
+               <input disabled class="form-control" value="{{contentlesson.isPublished }}" name="email" id="email"
+                  type="text" />
+            </div>
+         </div>
+      </div>
+      <div class="form-group">
+         <div class="row">
+            <label class="col-md-3 col-lg-3 col-form-label" for="email">Id bài học (lesson)</label>
+            <div class="col-md-9 col-lg-8 col-table-reponsive d-flex flex-column justify-content-center p-0">
+               <input disabled class="form-control" value="{{contentlesson.lessonId}}" name="email" id="email"
+                  type="text" />
+            </div>
+         </div>
+      </div>
+      <div class="form-group">
+         <div class="row">
+            <label class="col-md-3 col-lg-3 col-form-label" for="email">Thêm lúc</label>
+            <div class="col-md-9 col-lg-8 col-table-reponsive d-flex align-items-center p-0">
+               <input disabled class="form-control" value="{{contentlesson.createdAt| date:'dd/MM/yyyy' }}" name="email"
+                  id="email" type="text" />
+            </div>
+         </div>
+      </div>
+      <div class="youtube-video">
+         <div class="row">
+            <label class="col-md-3 col-lg-3 col-form-label" for="imageUrl"></label>
+            <div
+               class="col-md-9 col-lg-6 col-table-reponsive d-flex align-items-center gap-4 video-preview-small mt-2 pl-0 mt-3">
+               <iframe width="100%" height="200" [src]="currentVideoUrl" title="YouTube video player"
+                  frameborder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowfullscreen></iframe>
+            </div>
+         </div>
+      </div>
+   </div>
+   <div class="modal-footer">
+      <button type="button" class="btn btn-light waves-effect"
+         (click)="detailContentLessonModalRef?.hide()">Đóng</button>
+   </div>
+</ng-template>

@@ -1,0 +1,27 @@
+<div *ngIf="isAuthPage">
+    <router-outlet></router-outlet>
+</div>
+
+<div id="layout-wrapper" *ngIf="isAdminPage">
+    <app-header></app-header>
+
+    <app-vertical-menu></app-vertical-menu>
+
+    <div class="main-content">
+        <div class="page-content">
+            <div class="container-fluid">
+                <router-outlet></router-outlet>
+            </div>
+        </div>
+        <app-footer></app-footer>
+    </div>
+
+    <!-- <app-right-side-bar></app-right-side-bar> -->
+
+    <div class="rightbar-overlay"></div>
+</div>
+
+
+
+
+

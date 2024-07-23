@@ -1,0 +1,187 @@
+
+
+
+
+
+
+
+ <div class="row">
+   <div class="col-12">
+      <div
+         class="page-title-box d-flex align-items-center justify-content-between"
+         >
+         <h4 class="mb-0">Danh sách bài viết</h4>
+         <div class="page-title-right">
+            <ol class="breadcrumb m-0">
+               <li
+                  routerLink="/dashboard"
+                  class="breadcrumb-item d-flex align-items-center"
+                  >
+                  <span>Trang chủ</span>
+                  <i class="breadcrumb-item-arrow fa-solid fa-angle-right"></i>
+               </li>
+               <li class="breadcrumb-item active">
+                  <span>Quản lý sinh viên</span>
+               </li>
+            </ol>
+         </div>
+      </div>
+   </div>
+</div>
+<div class="row">
+   <div class="col-12">
+      <div class="card">
+         <div class="card-body">
+            <div class="group-action">
+               <div class="row">
+                  <div class="group-action__left col-xl-10 col-md-9 col-sm-12">
+                     <div class="row">
+                        <div class="form-group col-md-4">
+                           <input
+                              class="form-control"
+                              type="text"
+                              placeholder="Tiêu đề"
+                              [(ngModel)]="search.title"
+                              />
+                        </div>
+                        <div class="form-group col-md-4">
+                           <input
+                              class="form-control"
+                              type="text"
+                              placeholder="Mô tả"
+                              [(ngModel)]="search.description"
+                              />
+                        </div>
+                        <!-- <div class="form-group col-md-3">
+                           <select class="form-control" [(ngModel)]="search.status">
+                              <option value="" [attr.selected]="search.status === '' ? true : null">Trạng thái</option>
+                              <option value="true" [attr.selected]="search.status === 'true' ? true : null">Hoạt động</option>
+                              <option value="false" [attr.selected]="search.status === 'false' ? true : null">Không hoạt động</option>
+                           </select>
+                        </div> -->
+                        <div class="form-group col-md-1">
+                           <button (click)="onSearchChange()"
+                              type="button"
+                              class="btn btn-primary waves-effect waves-light"
+                              >
+                           <i class="fa-solid fa-magnifying-glass"></i>
+                           </button>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="group-action__right col-xl-2 col-md-3 col-sm-12">
+                     <button
+                        type="button"
+                        class="btn btn-success waves-effect waves-light"
+                        routerLink="/post/create"
+                        >
+                     <i class="fa-solid fa-plus mr-1"></i> Thêm mới
+                     </button>
+                  </div>
+                  <div class="group-action__right col-xl-2 col-md-4 col-sm-12">
+                    <button
+                       [@fadeInOut]="selectedItems.length > 0 ? 'visible' : 'hidden'"
+                       type="button"
+                       class="btn btn-danger waves-effect waves-light align-items-center"
+                       (click)="handleOnDeleteMultiple()"
+                       >
+                       <i class="fa-solid fa-trash mr-1"></i> Xoá {{ selectedItems.length}} bản ghi
+                    </button>
+                 </div>
+               </div>
+            </div>
+            <div class="table-data overflow-auto">
+               <table id="datatable" class="table table-bordered dt-responsive nowrap mt-3" style="border-collapse: collapse; border-spacing: 0; width: 100%">
+                  <thead class="thead-light">
+                     <tr>
+                         <th style="width: 20px;">
+                          <div class="custom-control custom-checkbox">
+                              <input (change)="selectAllPosts($event)" [checked]="selectedItems.length === posts.length && selectedItems.length > 0" type="checkbox" class="custom-control-input" id="select-box" title="select-box" placeholder="select-box">
+                              <label class="custom-control-label" for="select-box">&nbsp;</label>
+                          </div>
+                        </th>
+                        <th class="order-sort" (click)="onSortAndOrderChange(orderConstant.id)" [ngClass]="{'order-sort-active': selectedSortAndOrder?.orderBy === orderConstant.id }">
+                          Id
+                          <span *ngIf="selectedSortAndOrder?.orderBy === orderConstant.id" class="order-sort-group">
+                             <i *ngIf="selectedSortAndOrder?.sortBy === sortConstant.desc" class="bi bi-sort-down"></i>
+                             <i *ngIf="selectedSortAndOrder?.sortBy === sortConstant.asc" class="bi bi-sort-up"></i>
+                          </span>
+                          <span *ngIf="!selectedSortAndOrder?.orderBy && !selectedSortAndOrder?.sortBy"><img src="../../../../../assets/sort.png" height="14.41" width="14.41" style="margin-top: -3px;" alt="icon-sort"></span>
+                        </th>
+                        <th>Tiêu đề</th>
+                        <th>Mô tả </th>
+                        <th>Ảnh tiêu đề</th>
+                        <th>Công khai</th>
+                        <th>Hành động</th>
+                     </tr>
+                  </thead>
+                  <tbody>
+                     <tr *ngFor="let post of posts;">
+                       <td>
+                          <div class="custom-control custom-checkbox">
+                              <input (change)="toggleSelection(post.id)" id="select-box-{{ post.id }}" [checked]="isSelected(post.id)" type="checkbox" class="custom-control-input">
+                              <label class="custom-control-label" for="select-box-{{ post.id }}">&nbsp;</label>
+                          </div>
+                       </td>
+                        <td>{{ post.id }}</td>
+                        <td>
+                           <div class="d-flex align-items-center gap-2">
+                              <div>
+                                 <span class="container-title">{{ post.title }}</span>
+                             </div>
+                           </div>
+                        </td>
+                        <td>
+                           <span class="container-description">{{ post.description }}</span>
+                        </td>
+                        <td>
+                           <img src="{{ post.image }}" alt="Header Avatar" class="container-image">
+                        </td>
+                        <td>
+                           <div class="custom-control custom-switch mb-2" dir="ltr">
+                               <input type="checkbox" class="custom-control-input" id="switch-{{ post.id }}" [checked]="post.isPublished" disabled>
+                               <label class="custom-control-label" for="switch-{{ post.id }}"></label>
+                           </div>
+                        </td>
+                        <td>
+                           <span class="text-info cursor-pointer" [routerLink]="['/post/detail', post.id]"><i class="fa-solid fa-eye"></i></span>
+                           <span class="text-warning cursor-pointer ml-2" [routerLink]="['/post/edit', post.id]"><i class="fa-solid fa-pen"></i></span>
+                           <span class="text-danger cursor-pointer ml-2" (click)="handleDelete(post.id)"><i class="fa-solid fa-trash"></i></span>
+                        </td>
+                     </tr>
+                  </tbody>
+               </table>
+            </div>
+
+            <div class="table-filter d-flex justify-content-between align-items-center mt-2">
+              <div class="page-index">
+                 <ul class="pagination pagination-rounded">
+                    <li class="page-item" (click)="setPage(currentPage - 1)" [class.disabled]="currentPage === 1 || posts.length === 0">
+                      <span class="page-link"><i class="fa-solid fa-angle-left"></i></span>
+                    </li>
+                  
+                    <ng-container *ngIf="posts.length > 0">
+                      <li *ngFor="let page of [].constructor(totalPages); let i = index" class="page-item" (click)="setPage(i + 1)" [class.active]="currentPage === i + 1">
+                        <span class="page-link">{{ i + 1 }}</span>
+                      </li>
+                    </ng-container>
+                  
+                    <li class="page-item" (click)="setPage(currentPage + 1)" [class.disabled]="currentPage === totalPages">
+                      <span class="page-link"><i class="fa-solid fa-angle-right"></i></span>
+                    </li>
+                  </ul>
+              </div>
+              <div class="per-page">
+                 Hiển thị 
+                 <select class="mx-1" (change)="onPerPageChange($event)">
+                    <option *ngFor="let item of config.perPageOptions;" [ngValue]="item.value" [attr.selected]="item.value === pageSize ? true : null">{{ item.label }}</option>
+                 </select>
+                 bản ghi
+              </div>
+            </div>
+         </div>
+      </div>
+   </div>
+   <!-- end col -->
+</div>
+

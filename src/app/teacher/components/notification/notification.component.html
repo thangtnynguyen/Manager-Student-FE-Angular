@@ -1,0 +1,433 @@
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0">Quản lý thông báo</h4>
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li routerLink="/admin/dashboard" class="breadcrumb-item d-flex align-items-center">
+                        <span>Trang chủ</span>
+                        <i class="breadcrumb-item-arrow fa-solid fa-angle-right"></i>
+                    </li>
+                    <li class="breadcrumb-item active">
+                        <span>Quản lý thông báo</span>
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="group-action">
+                    <div class="row">
+                        <div class="group-action__left col-xl-10 col-md-9 col-sm-12">
+                            <div class="row">
+                                <div class="form-group col-md-4">
+                                    <input class="form-control" type="text" placeholder="Tiêu đề"
+                                        [(ngModel)]="queryParameters.title" />
+                                </div>
+                                <!-- <div class="form-group col-md-4">
+                                    <input class="form-control" type="text" placeholder="Mô tả"
+                                        [(ngModel)]="queryParameters.description" />
+                                </div> -->
+
+                                <div class="form-group col-md-1">
+                                    <button (click)="handleSearchSections()" type="button"
+                                        class="btn btn-primary waves-effect waves-light">
+                                        <i class="fa-solid fa-magnifying-glass"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="group-action__right col-xl-2 col-md-3 col-sm-12">
+                            <button type="button" class="btn btn-success waves-effect waves-light"
+                                (click)="handleOpenCreateSectionModal()">
+                                <i class="fa-solid fa-plus mr-1"></i> Thêm mới
+                            </button>
+                        </div>
+                        <div class="group-action__right col-xl-2 col-md-4 col-sm-12">
+                            <button [@fadeInOut]="selectedsections.length > 0 ? 'visible' : 'hidden'" type="button"
+                                class="btn btn-danger waves-effect waves-light align-items-center"
+                                (click)="handleOnDeleteMultiple()">
+                                <i class="fa-solid fa-trash mr-1"></i> Xoá {{ selectedsections.length}} bản ghi
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <ng-container *ngIf="(sections.length > 0)">
+                    <div class="col-12" *ngFor="let notification of sections;">
+                        <div
+                            class="block-content bg-white box-shadow-notification block-content-full border-start border-3 border-danger py-3">
+                            <div class="d-md-flex justify-content-md-between align-items-md-center">
+                                <div class="p-1 p-md-3">
+                                    <h3 class="h4 fw-bold mb-3">
+                                        {{notification.title}}
+                                    </h3>
+                                    <p class=" fw-bold mb-3">
+                                        {{notification.message}}
+                                    </p>
+                                </div>
+                                <div class="p-1 p-md-3">
+                                    <span
+                                        class="btn btn-primary btn-sm btn-alt-success rounded-pill px-3 me-1 my-1 d-inline-flex align-items-center justify-content-center"
+                                        (click)="handleOpenDetailsectionModal(notification)">
+                                        <i class="fa fa-eye opacity-50 me-2"></i>
+                                        <span>Xem chi tiết</span>
+                                    </span>
+                                    <span data-role="dethi" data-action="update"
+                                        class="btn btn-sm btn-warning rounded-pill px-3 me-1 my-1 show d-inline-flex align-items-center justify-content-center"
+                                        (click)="handleOpenEditSectionModal(notification)">
+                                        <i class="fa fa-wrench opacity-50 me-2"></i>
+                                        <span>Chỉnh sửa</span>
+                                    </span>
+                                    <span data-role="dethi" data-action="delete"
+                                        class="btn btn-sm btn-danger rounded-pill px-3 my-1 btn-delete show d-inline-flex align-items-center justify-content-center"
+                                        href="javascript:void(0)" (click)="handleDeleteItem(notification.id)">
+                                        <i class="fa fa-times opacity-50 me-2"></i>
+                                        <span>Xoá thông báo</span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="table-filter d-flex justify-content-between align-items-center my-3">
+                        <div class="page-index">
+                            <ul class="pagination pagination-rounded">
+                                <li class="page-item" (click)="handleOnChangePage(paging.pageIndex - 1)"
+                                    [class.disabled]="paging.pageIndex === 1 || sections.length === 0">
+                                    <span class="page-link"><i class="fa-solid fa-angle-left"></i></span>
+                                </li>
+
+                                <ng-container *ngIf="sections.length > 0">
+                                    <li *ngFor="let page of [].constructor(paging.totalPages); let i = index"
+                                        class="page-item" (click)="handleOnChangePage(i + 1)"
+                                        [class.active]="paging.pageIndex === i + 1">
+                                        <span class="page-link">{{ i + 1 }}</span>
+                                    </li>
+                                </ng-container>
+
+                                <li class="page-item" (click)="handleOnChangePage(paging.pageIndex + 1)"
+                                    [class.disabled]="paging.pageIndex === paging.totalPages || sections.length === 0">
+                                    <span class="page-link"><i class="fa-solid fa-angle-right"></i></span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="per-page">
+                            Hiển thị
+                            <select class="mx-1" (change)="handleOnPerPageChange($event)">
+                                <option *ngFor="let item of config.perPageOptions;" [ngValue]="item.value"
+                                    [attr.selected]="item.value === paging.pageSize ? true : null">{{ item.label }}
+                                </option>
+                            </select>
+                            / {{ paging.totalRecords }} tổng số bản ghi
+                        </div>
+                    </div>
+                </ng-container>
+
+                <ng-container *ngIf="!(sections.length > 0)">
+                    <tr>
+                        <td class="text-center my-4 d-flex justify-content-center">Không có bản ghi nào</td>
+                    </tr>
+                </ng-container>
+                <!-- <div class="table-data overflow-auto">
+                    <table id="datatable" class="table table-bordered dt-responsive nowrap mt-3"
+                        style="border-collapse: collapse; border-spacing: 0; width: 100%">
+                        <thead class="thead-light">
+                            <tr>
+                                <th class="selected-col">
+                                    <div class="custom-control custom-checkbox">
+                                        <input (change)="selectAllsections($event)"
+                                            [checked]="selectedsections.length === sections.length && selectedsections.length > 0"
+                                            type="checkbox" class="custom-control-input" id="select-box"
+                                            title="select-box" placeholder="select-box">
+                                        <label class="custom-control-label" for="select-box">&nbsp;</label>
+                                    </div>
+                                </th>
+                                <th class="order-sort" (click)="handleOnSortAndOrderChange(constant.order.id)"
+                                    [ngClass]="{'order-sort-active': paging?.orderBy === constant.order.id }">
+                                    Id
+                                    <span *ngIf="paging?.orderBy === constant.order.id"
+                                        class="order-sort-group test-{{paging?.orderBy}}">
+                                        <i *ngIf="paging?.sortBy === constant.sort.desc" class="bi bi-sort-down"></i>
+                                        <i *ngIf="paging?.sortBy === constant.sort.asc" class="bi bi-sort-up"></i>
+                                    </span>
+                                    <span *ngIf="!(paging?.orderBy === constant.order.id)"
+                                        class="test-{{paging?.orderBy}}"><img src="../../../../../assets/sort.png"
+                                            height="14.41" width="14.41" style="margin-top: -3px;"
+                                            alt="icon-sort"></span>
+                                </th>
+                                <th>Tên Nhóm</th>
+                                <th>Trạng thái</th>
+                                <th class="order-sort" (click)="handleOnSortAndOrderChange(constant.order.priority)"
+                                    [ngClass]="{'order-sort-active': paging?.orderBy === constant.order.priority }">
+                                    Độ ưu tiên
+                                    <span *ngIf="paging?.orderBy === constant.order.priority"
+                                        class="order-sort-group test-{{paging?.orderBy}}">
+                                        <i *ngIf="paging?.sortBy === constant.sort.desc" class="bi bi-sort-down"></i>
+                                        <i *ngIf="paging?.sortBy === constant.sort.asc" class="bi bi-sort-up"></i>
+                                    </span>
+                                    <span *ngIf="!(paging?.orderBy === constant.order.priority)"
+                                        class="test-{{paging?.orderBy}}"><img src="../../../../../assets/sort.png"
+                                            height="14.41" width="14.41" style="margin-top: -3px;"
+                                            alt="icon-sort"></span>
+                                </th>
+                                <th>Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <ng-container *ngIf="sections.length > 0">
+                                <tr *ngFor="let section of sections;">
+                                    <td>
+                                        <div class="custom-control custom-checkbox">
+                                            <input (change)="toggleSelection(section.id)" id="select-box-{{ section.id }}" [checked]="isSelected(section.id)" type="checkbox" class="custom-control-input">
+                                            <label class="custom-control-label" for="select-box-{{ section.id }}">&nbsp;</label>
+                                        </div>
+                                     </td>
+                                    <td>{{ section.id }}</td>
+                                    <td>{{ section.title }}</td>
+                                    <td>
+                                        <span
+                                            class="badge {{ section.status ? 'badge-success' : 'badge-warning' }}">{{
+                                            section.status ? 'Hoạt động' : 'Ngừng hoạt động' }}</span>
+                                    </td>
+                                    <td>{{ section.priority }}</td>
+                                   
+                                    <td>
+                                        <span class="text-info cursor-pointer"
+                                            (click)="handleOpenDetailsectionModal(section)"><i
+                                                class="fa-solid fa-eye"></i></span>
+                                        <span class="text-warning cursor-pointer ml-2"
+                                        (click)="handleOpenEditSectionModal(section)"><i
+                                                class="fa-solid fa-pen"></i></span>
+                                        <span class="text-danger cursor-pointer ml-2"
+                                            (click)="handleDeleteItem(section.id)"><i
+                                                class="fa-solid fa-trash"></i></span>
+                                    </td>
+                                </tr>
+
+                            </ng-container>
+                            <ng-container *ngIf="!(sections.length > 0)">
+                                <tr>
+                                    <td class="text-center" colspan="8">Không có bản ghi nào</td>
+                                </tr>
+                            </ng-container>
+                        </tbody>
+                    </table>
+                </div> -->
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<form (ngSubmit)="handleOnSubmitNotification()" #createForm="ngForm">
+    <ng-template #createSectionTemplate>
+        <div class="modal-header">
+            <h5 class="modal-title mt-0" id="notificationpleModalScrollableTitle">Tạo mới thông báo</h5>
+            <button type="button" class="close" (click)="createSectionModalRef?.hide()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body overflow-hidden px-4">
+            <div class="form-group">
+                <div class="row">
+                    <label class="col-md-3 col-lg-3 col-form-label" for="title">Tiêu đề <span
+                            class="text-danger">*</span></label>
+                    <div class="col-md-9 col-lg-8 col-table-reponsive p-0">
+                        <input class="form-control" [(ngModel)]="notification.title" id="title" name="title" type="text"
+                            required placeholder="Tiêu đề" />
+                        <div *ngIf="createForm.controls['title']?.invalid && (createForm.controls['title']?.dirty || createForm.controls['title'].touched)"
+                            class="danger-notice">
+                            <div *ngIf="createForm.controls['title'].errors?.['required']">Tiêu đề không được để trống
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <label class="col-md-3 col-lg-3 col-form-label" for="description">Nội dung thông báo</label>
+                    <div class="col-md-9 col-lg-8 col-table-reponsive p-0">
+                        <input class="form-control" placeholder="Mô tả" name="description"
+                            [(ngModel)]="notification.message" id="description" type="text" />
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <label class="col-md-3 col-lg-3 col-form-label" for="duration">Nhóm</label>
+                    <button (click)="handleOpenSectionModal()" type="button"
+                        class="ms-0 mt-0 col-md-8 btn input-type-select dropdown-toggle input-form-space d-flex justify-content-between align-items-center overflow-hidden">
+                        <span *ngIf="!(notification.groupModulesIds.length > 0)">Lựa chọn Nhóm</span>
+                        <span *ngIf="(notification.groupModulesIds.length > 0)">
+                            <ng-container *ngFor="let tag of groupModules;">
+                                <span *ngIf="tag.selected === true"
+                                    class="badge badge-soft-primary cursor-pointer mr-2">
+                                    {{ tag.name }}
+                                </span>
+                            </ng-container>
+                        </span>
+                        <i class="mdi mdi-chevron-down"></i>
+                    </button>
+                </div>
+            </div>
+
+
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-light waves-effect"
+                (click)="createSectionModalRef?.hide()">Đóng</button>
+            <button [disabled]="createForm.invalid && validateForm()" type="submit"
+                (click)="handleOnSubmitNotification()" class="btn btn-primary waves-effect waves-light ml-2">Xác
+                nhận</button>
+        </div>
+    </ng-template>
+</form>
+
+
+<ng-template #detailSectionTemplate>
+    <div class="modal-header">
+        <h5 class="modal-title mt-0" id="notificationpleModalScrollableTitle">Chi tiết thông báo</h5>
+        <button type="button" class="close" (click)="detailSectionModalRef?.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body overflow-hidden px-4">
+        <div class="form-group">
+            <div class="row">
+                <label class="col-md-3 col-lg-3 col-form-label" for="email">Id</label>
+                <div class="col-md-9 col-lg-8 col-table-reponsive p-0">
+                    <input disabled class="form-control" [(ngModel)]="notification.id" name="email" id="email"
+                        type="email" email />
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <label class="col-md-3 col-lg-3 col-form-label" for="email">Tiêu đề</label>
+                <div class="col-md-9 col-lg-8 col-table-reponsive p-0">
+                    <input disabled class="form-control" [(ngModel)]="notification.title" name="email" id="email"
+                        type="text" />
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <label class="col-md-3 col-lg-3 col-form-label" for="description">Nội dung thông báo</label>
+                <div class="col-md-9 col-lg-8 col-table-reponsive p-0">
+                    <input disabled class="form-control" [(ngModel)]="notification.message" name="description"
+                        id="description" type="text" />
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="row">
+                <label class="col-md-3 col-lg-3 col-form-label" for="duration">Nhóm</label>
+                <div class="ms-0 mt-0 col-md-8 btn input-type-select dropdown-toggle input-form-space d-flex justify-content-between align-items-center overflow-hidden">
+                    <span *ngIf="!(notification.groupModules.length > 0)">Không có nhóm  được chọn</span>
+                    <span *ngIf="(notification.groupModules.length > 0)">
+                        <ng-container *ngFor="let tag of notification.groupModules;">
+                            <span 
+                                class="badge badge-soft-primary cursor-pointer mr-2">
+                                {{ tag.name }}
+                            </span>
+                        </ng-container>
+                    </span>
+                    <i class="mdi mdi-chevron-down"></i>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-light waves-effect" (click)="detailSectionModalRef?.hide()">Đóng</button>
+    </div>
+</ng-template>
+
+
+
+<form (ngSubmit)="handleOnSubmitEditSection()" #createForm="ngForm">
+    <ng-template #editSectionTemplate>
+        <div class="modal-header">
+            <h5 class="modal-title mt-0" id="notificationpleModalScrollableTitle">Sửa thông báo</h5>
+            <button type="button" class="close" (click)="editSectionModalRef?.hide()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body overflow-hidden px-4">
+            <div class="form-group">
+                <div class="row">
+                    <label class="col-md-3 col-lg-3 col-form-label" for="id">ID<span
+                            class="text-danger">*</span></label>
+                    <div class="col-md-9 col-lg-8 col-table-reponsive p-0">
+                        <input class="form-control" placeholder="Độ ưu tiên" name="id" [(ngModel)]="notification.id"
+                            id="id" type="number" disabled />
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <label class="col-md-3 col-lg-3 col-form-label" for="title">Tiêu đề <span
+                            class="text-danger">*</span></label>
+                    <div class="col-md-9 col-lg-8 col-table-reponsive p-0">
+                        <input class="form-control" [(ngModel)]="notification.title" id="title" name="title" type="text"
+                            required placeholder="Tiêu đề" />
+                        <div *ngIf="createForm.controls['title']?.invalid && (createForm.controls['title']?.dirty || createForm.controls['title'].touched)"
+                            class="danger-notice">
+                            <div *ngIf="createForm.controls['title'].errors?.['required']">Tiêu đề không được để trống
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <label class="col-md-3 col-lg-3 col-form-label" for="description">Nội dung thông báo</label>
+                    <div class="col-md-9 col-lg-8 col-table-reponsive p-0">
+                        <input class="form-control" placeholder="Mô tả" name="description"
+                            [(ngModel)]="notification.message" id="description" type="text" />
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-light waves-effect" (click)="editSectionModalRef?.hide()">Đóng</button>
+            <button [disabled]="createForm.invalid && validateForm()" type="submit"
+                (click)="handleOnSubmitEditSection()" class="btn btn-primary waves-effect waves-light ml-2">Xác
+                nhận</button>
+        </div>
+    </ng-template>
+</form>
+
+<ng-template #sectionModalTemplate>
+    <div class="modal-header">
+        <h5 class="modal-title mt-0" id="exampleModalScrollableTitle">Lựa chọn nhóm muốn thông báo</h5>
+        <button type="button" class="close" (click)="handleCloseSectionModal()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div id="categories-tree" class="mt-1 px-0" role="tree">
+            <ng-container *ngFor="let groupModule of groupModules;">
+                <span (click)="groupModule.selected = !groupModule.selected"
+                    class="badge {{ groupModule.selected === true ? 'badge-soft-primary' : 'badge-soft-dark' }} cursor-pointer mr-2">
+                    {{ groupModule.name }}
+                </span>
+            </ng-container>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-light waves-effect" (click)="handleCloseSectionModal()">Đóng</button>
+        <button type="button" class="btn btn-primary waves-effect waves-light" (click)="handleChooseSection()">Xác
+            nhận</button>
+    </div>
+</ng-template>

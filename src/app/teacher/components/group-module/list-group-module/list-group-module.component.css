@@ -1,0 +1,38 @@
+.block{
+    background-color: #fff;
+    box-shadow: 0 1px 3px rgba(214, 221, 237, 0.5), 0 1px 2px rgba(214, 221, 237, 0.5);
+}
+
+.block.block-rounded > .block-header, .block.block-rounded > .nav-tabs{
+    border-top-left-radius: 0.25rem;
+    border-top-right-radius: 0.25rem;
+}
+
+.block-header-default{
+    background-color: #f8f9fc;
+}
+
+.block-header{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 1.25rem;
+    transition: opacity 0.25s ease-out;
+}
+
+.block-class-name{
+    font-size: 16px;
+}
+
+.block-content{
+    transition: opacity 0.25s ease-out;
+    width: 100%;
+    margin: 0 auto;
+    padding: 1.25rem 1.25rem 1px;
+    overflow-x: visible;
+}
+
+.dropdown-group-module-icon{
+    min-width: 22px;
+}

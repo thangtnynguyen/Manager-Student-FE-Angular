@@ -1,0 +1,141 @@
+<div class="row">
+    <div class="col-12">
+       <div
+          class="page-title-box d-flex align-items-center justify-content-between"
+          >
+          <h4 class="mb-0">Thông tin bài viết</h4>
+          <div class="page-title-right">
+             <ol class="breadcrumb m-0">
+                <li
+                   routerLink="/admin/dashboard"
+                   class="breadcrumb-item d-flex align-items-center"
+                   >
+                   <span>Trang chủ</span>
+                   <i class="breadcrumb-item-arrow fa-solid fa-angle-right"></i>
+                </li>
+                <li routerLink="/admin/post" class="breadcrumb-item d-flex align-items-center">
+                   <span>Quản lý bài viết</span>
+                   <i class="breadcrumb-item-arrow fa-solid fa-angle-right"></i>
+                </li>
+                <li class="breadcrumb-item active">
+                    <span>Thông tin bài viết</span>
+                 </li>
+             </ol>
+          </div>
+       </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12">
+       <div class="card">
+          <div class="card-body">
+            <form class="disable-form">
+                <div class="form-group">
+                    <div class="row">
+                        <label class="col-md-3 col-lg-3 col-form-label" for="idpost">Mã bài viết</label>
+                        <input class="col-md-9 col-lg-6 col-table-reponsive form-control" [(ngModel)]="post.id" name="idpost" id="idpost" type="text" disabled/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <label class="col-md-3 col-lg-3 col-form-label" for="name">Người đăng bài  <span class="text-danger">*</span></label>
+                        <div class="col-md-9 col-lg-6 col-table-reponsive p-0">
+                            <input disabled class="form-control" [(ngModel)]="post.user.name" name="name" id="name" type="text" placeholder="Họ và tên"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <label class="col-md-3 col-lg-3 col-form-label" for="title">Tiêu đề</label>
+                        <div class="col-md-9 col-lg-6 col-table-reponsive p-0">
+                            <input disabled class="form-control" [(ngModel)]="post.title" name="title" id="title" type="text" >
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <label class="col-md-3 col-lg-3 col-form-label" for="image">Ảnh post</label>
+                        <div class="col-md-9 col-lg-6 col-table-reponsive p-0">
+                            <img src="{{post.image}}" width="400px" height="220px" name="image" id="image" type="text" >
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <label class="col-md-3 col-lg-3 col-form-label" for="description">Mô tả</label>
+                        <div class="col-md-9 col-lg-6 col-table-reponsive p-0">
+                            <textarea disabled class="form-control" [(ngModel)]="post.description" name="description" id="description" type="text" cols="30" rows="5" ></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <label class="col-md-3 col-lg-3 col-form-label" for="content">Nội dung</label>
+                        <div class="col-md-9 col-lg-6 col-table-reponsive p-0">
+                            <textarea disabled class="form-control" [(ngModel)]="post.content" name="content" id="content" type="text" cols="30" rows="10" ></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="custom-control custom-switch ml-3" dir="ltr">
+                            <input type="checkbox" class="custom-control-input" id="status" name="status" [(ngModel)]="post.status" [checked]="post.status" disabled>
+                            <label class="custom-control-label" for="status">Công khai</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 col-lg-3 col-form-label" for="">Danh sách Comment:</label>
+                    <table id="datatable" class="table table-bordered dt-responsive nowrap mt-3" style="border-collapse: collapse; border-spacing: 0; width: 100%">
+                        <thead class="thead-light">
+                           <tr>
+                              <th class="order-sort" >
+                                Id
+                                <span><img src="../../../../../assets/sort.png" height="14.41" width="14.41" style="margin-top: -3px;" alt="icon-sort"></span>
+                              </th>
+                              <th>Nội dung </th>
+                              <th>Comment cha</th>
+                              <th>Số đánh giá</th>
+                              <th>Trạng thái</th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           <tr *ngFor="let comment of post.comments;">
+                              <td>{{ comment.id }}</td>
+                              <td>
+                                 <div class="d-flex align-items-center gap-2">
+                                    <div>
+                                       <span class="container-title">{{ comment.content }}</span>
+                                   </div>
+                                 </div>
+                              </td>
+                              <td>
+                                 <span class="container-description">{{ comment.parentCommentId }}</span>
+                              </td>
+                              <td>
+                                <span class="container-description">{{ comment.votersCount }}</span>
+                             </td>
+                              <td>
+                                 <div class="custom-control custom-switch mb-2" dir="ltr">
+                                     <input type="checkbox" class="custom-control-input" id="switch-{{ post.id }}" [checked]="post.status" disabled>
+                                     <label class="custom-control-label" for="switch-{{ post.id }}"></label>
+                                 </div>
+                              </td>
+                           </tr>
+                        </tbody>
+                     </table>
+                    
+                </div>
+                <div class="form-group">
+                    <div class="d-flex">
+                        <div class="ml-auto">
+                            <button routerLink="/admin/post" type="button" class="btn btn-secondary waves-effect waves-light">Quay lại</button>
+                        </div>
+                    </div>
+                </div>
+            </form>            
+          </div>
+       </div>
+    </div>
+ </div>
+

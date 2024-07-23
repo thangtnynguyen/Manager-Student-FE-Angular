@@ -1,0 +1,125 @@
+.modal-dialog {
+  display: flex;
+  justify-content: center;
+}
+
+.modal-content {
+  --width: 640px;
+  background: #fff;
+  border-radius: 8px;
+  max-width: calc(100vw - 32px);
+  position: relative;
+  width: var(--width);
+  height: 592px;
+  overflow-y: auto;
+  width: 520px;
+  padding: 0;
+}
+
+.auth-modal__close-btn {
+  align-items: center;
+  background: rgba(22, 24, 35, 0.03);
+  border-radius: 50%;
+  color: #333;
+  cursor: pointer;
+  display: flex;
+  font-size: 1.2rem;
+  height: 40px;
+  justify-content: center;
+  line-height: 0;
+  right: 16px;
+  top: 16px;
+  width: 40px;
+}
+
+.auth-modal__logo-btn {
+  border-radius: 8px;
+  height: 44px;
+  object-fit: cover;
+  width: 44px;
+}
+
+.auth-modal__title {
+  color: #292929;
+  font-size: 1.9rem;
+  font-weight: 700;
+  line-height: 1.4;
+  margin: 16px 0;
+}
+
+.auth-modal__sign-wrapper {
+  --height: 40px;
+  border: 2px solid #dce0e3;
+  border-radius: 44px;
+  display: inline-block;
+  height: var(--height);
+  line-height: var(--height);
+  position: relative;
+  text-align: center;
+  width: 320px;
+  background-color: #fff;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.auth-modal__sign-wrapper:hover {
+  background-color: #dce0e3;
+}
+
+.auth-modal__sign-icon {
+  left: 16px;
+  position: absolute;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+.auth-modal__sign-button {
+  color: #35414c;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  line-height: 40px;
+  outline: 0;
+  text-align: center;
+}
+
+.auth-modal__register {
+  font-size: 0.9rem;
+  line-height: 1.8;
+  margin-bottom: 0;
+  padding: 24px 16px 0;
+  /* position: absolute; */
+  bottom: 100px;
+}
+
+.auth-modal__register > span {
+  color: var(--primary-color);
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.auth-modal__term {
+  bottom: 8px;
+  color: #666;
+  font-size: 0.7rem;
+  left: 0;
+  /* position: absolute; */
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 16px;
+  width: min(360px, 100%);
+  text-align: center;
+}
+
+.auth-modal__term > span {
+  text-decoration: underline;
+}
+
+.style-bottom {
+  bottom: 72px;
+}

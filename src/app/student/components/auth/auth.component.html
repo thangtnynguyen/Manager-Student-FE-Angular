@@ -1,0 +1,87 @@
+<ng-template #template>
+	<div class="modal-header border-0 d-flex flex-column">
+		<div class="modal-header__icon d-flex justify-content-end {{
+        authView === authConstant.viewPhone ||
+        authView === authConstant.viewEmail
+          ? 'justify-content-between'
+          : ''
+      }} w-100">
+			<i *ngIf="
+          authView === authConstant.viewPhone ||
+          authView === authConstant.viewEmail
+        " (click)="
+          changeViewAuth(authConstant.titleDefault, authConstant.viewDefault)
+        " class="fa-solid fa-chevron-left auth-modal__close-btn"></i>
+			<i class="fa-solid fa-xmark auth-modal__close-btn" (click)="closeModal()"></i>
+		</div>
+		<div class="d-flex flex-column align-items-center w-100">
+			<img class="auth-modal__logo-btn" src="https://accounts.fullstack.edu.vn/assets/icon/f8_icon.png"
+				alt="F8" />
+			<h1 class="auth-modal__title">{{ titleContent }}</h1>
+		</div>
+	</div>
+	<div class="modal-body d-flex flex-column align-items-center">
+		<div *ngIf="authView === authConstant.viewDefault" class="modal-body__wrapper">
+			<div *ngIf="authAction === authConstant.loginAction" (click)="
+          changeViewAuth(
+            authConstant.titleLoginEmailPhone,
+            authConstant.viewPhone
+          )
+        " class="auth-modal__sign-wrapper">
+				<img class="auth-modal__sign-icon"
+					src="https://accounts.fullstack.edu.vn/assets/images/signin/personal-18px.svg"
+					alt="Đăng nhập với personal" /><span class="auth-modal__sign-button">Sử dụng email / số điện
+					thoại</span>
+			</div>
+			<div *ngIf="authAction === authConstant.registerAction" (click)="
+          changeViewAuth(
+            authConstant.titleRegisterDefault,
+            authConstant.viewRegisterPhone
+          )
+        " class="auth-modal__sign-wrapper">
+				<img class="auth-modal__sign-icon"
+					src="https://accounts.fullstack.edu.vn/assets/images/signin/personal-18px.svg"
+					alt="Đăng nhập với personal" /><span class="auth-modal__sign-button">Sử dụng email / số điện
+					thoại</span>
+			</div>
+			<app-auth-google></app-auth-google>
+			<app-auth-facebook></app-auth-facebook>
+			<app-auth-github></app-auth-github>
+		</div>
+		<div class="modal-body__wrapper">
+			<app-auth-email-phone *ngIf="
+          authView === authConstant.viewPhone ||
+          authView === authConstant.viewEmail ||
+          authView === authConstant.viewRegisterPhone ||
+          authView === authConstant.viewRegisterEmail
+        " [authView]="authView" (changeViewEvent)="changeViewAuth($event.title, $event.view)"
+				(changeStatusModalEvent)="closeModal()"></app-auth-email-phone>
+		</div>
+		<div class="modal-body__wrapper">
+			<div class="d-flex flex-column align-items-center">
+				<div class="auth-modal__register">
+					Bạn chưa có tài khoản?
+					<span *ngIf="authAction === authConstant.loginAction" (click)="
+              changeViewAuth(
+                authConstant.titleRegisterDefault,
+                authConstant.viewDefault
+              );
+              authAction = authConstant.registerAction
+            ">Đăng ký</span>
+					<span *ngIf="authAction === authConstant.registerAction" (click)="
+              changeViewAuth(
+                authConstant.titleDefault,
+                authConstant.viewDefault
+              );
+              authAction = authConstant.loginAction
+            ">Đăng nhập</span>
+				</div>
+				<div class="auth-modal__term">
+					Việc bạn tiếp tục sử dụng trang web này đồng nghĩa bạn đồng ý với
+					<span>điều khoản sử dụng</span>
+					của chúng tôi.
+				</div>
+			</div>
+		</div>
+	</div>
+</ng-template>

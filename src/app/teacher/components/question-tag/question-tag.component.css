@@ -1,0 +1,82 @@
+:host ::ng-deep .title-editor .ck-editor__editable_inline {
+    min-height: 100px;
+}
+
+.input-form-space{
+    margin-left: 12px;
+    width: calc(100% - 12px) !important;
+}
+
+.border-right-none{
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.border-left-none{
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.input-type-select{
+    border: 1px solid #ced4da;
+}
+
+.app-search .form-control {
+    border: 1px solid #ced4da !important;
+    height: 38px;
+    padding-left: 40px;
+    padding-right: 20px;
+    background-color: unset !important;
+    box-shadow: none;
+    border-radius: unset !important;
+}
+
+.input-type-select{
+    min-height: 38px !important;
+}
+
+.add-tag-btn{
+    border-radius: 100%;
+}
+
+.add-tag-input{
+    width: 160px;
+    font-size: 11px;
+}
+
+.container-description {
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200px;
+    /* Số ký tự tối đa bạn muốn hiển thị */
+}
+
+.container-title {
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100px;
+    /* Số ký tự tối đa bạn muốn hiển thị */
+}
+
+.container-image {
+    width: 100px;
+    height: 60px;
+    border-radius: 5px;
+}
+
+.col-sm-12 {
+    display: flex;
+}
+
+.col-sm-12 button:first-child {
+    background-color: rgb(70, 117, 226);
+}
+
+.col-sm-12 button {
+    min-width: 100px;
+    margin-left: 10px;
+}

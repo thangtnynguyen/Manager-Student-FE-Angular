@@ -1,0 +1,67 @@
+<div class="row" *ngIf="examresult==null">
+    <div class="container mt-3">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>
+                            {{exam.title}}
+                        </h2>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Tên Đề: {{exam.title}}</h5>
+                        <p class="card-text">Số câu hỏi:{{exam.questions?.length}} </p>
+                        <p class="card-text">Mô tả: {{exam.description}}</p>
+                        <p class="card-text">Thời gian bắt đầu: {{exam.startTime}}</p>
+                        <p class="card-text">Thời gian kết thúc: {{exam.endTime}}</p>
+                        <p class="card-text">Thời gian làm bài: {{exam.duration}}</p>
+                        <div style="display: flex; align-items: center;">
+                            <span class="card-text">Trạng thái: </span>
+                            <span *ngIf="statusButton(exam) === 1"
+                                class="btn btn-secondary btn-sm rounded-pill px-3 me-1 my-1 d-inline-flex align-items-center justify-content-center gap-2"
+                                disabled>
+                                Đã đóng
+                            </span>
+
+                            <span *ngIf="statusButton(exam) === 2"
+                                class="btn btn-success btn-sm rounded-pill px-3 me-1 my-1 d-inline-flex align-items-center justify-content-center gap-2"
+                                disabled>
+                                Đang mở
+                            </span>
+
+                            <span *ngIf="statusButton(exam) === 3"
+                                class="btn btn-info btn-sm rounded-pill px-3 me-1 my-1 d-inline-flex align-items-center justify-content-center gap-2"
+                                disabled>
+                                Chưa mở
+                            </span>
+                        </div>
+
+
+                        <div class="d-flex justify-content-center">
+                            <button routerLink="/test-exam/testing/{{exam.id}}" class="btn btn-primary"
+                                [disabled]="statusButton(exam) !== 2">Bắt đầu thi</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row d-flex justify-content-center" *ngIf="examresult != null">
+    <!-- Phần hiển thị điểm -->
+    <div class="col-md-6">
+        <h2 class="text-center">Bạn đã thi bài thi này rồi</h2>
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Điểm thi</h5>
+                <p class="card-text">Điểm: <span id="score">{{examresult.score}}</span></p>
+            </div>
+            <div class="text-center mb-3">
+                <button class="btn btn-primary" (click)="goBack()">Quay lại</button>
+            </div>
+        </div>
+    </div>
+</div>

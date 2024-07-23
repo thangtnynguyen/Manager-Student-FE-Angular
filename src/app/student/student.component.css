@@ -1,0 +1,193 @@
+@import url("~bootstrap/dist/css/bootstrap.min.css");
+@import url("~bootstrap-icons/font/bootstrap-icons.min.css");
+@import url('~ngx-toastr/toastr');
+/* @import url('./assets/css/index.css'); */
+
+:root {
+  --primary-color: #f05123;
+  --black-color: #000;
+  --white-color: #fff;
+  --gray-color: #666;
+  --text-color: #333;
+  --plum-color: #b80257;
+  --fb-color: #4080ff;
+  --mail-color: #f47425;
+  --invalid-color: #f33a58;
+  --desc-color: #0000008a;
+  --first-color: #1dbfaf;
+  --second-color: #1dbfaf;
+  --button-color: #1dbfaf;
+  --button-image: linear-gradient(70.06deg, #2cccff -5%, #22dfbf 106%);
+  --system-ui: system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  --font-code: "SF Mono", monospace;
+  --home-slideshow-left-space: 116px;
+  --home-section-left-space: 160px;
+}
+
+*,
+::after,
+::before {
+  box-sizing: inherit;
+}
+
+:root,
+:host {
+  --fa-font-solid: normal 900 1em/1 "Font Awesome 6 Solid";
+  --fa-font-regular: normal 400 1em/1 "Font Awesome 6 Regular";
+  --fa-font-light: normal 300 1em/1 "Font Awesome 6 Light";
+  --fa-font-thin: normal 100 1em/1 "Font Awesome 6 Thin";
+  --fa-font-duotone: normal 900 1em/1 "Font Awesome 6 Duotone";
+  --fa-font-brands: normal 400 1em/1 "Font Awesome 6 Brands";
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  line-height: 1.15;
+}
+
+body {
+  font-family: var(--system-ui);
+  text-rendering: optimizeLegibility;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  overflow-y: auto;
+  overscroll-behavior: none;
+  touch-action: manipulation;
+  -webkit-user-drag: none;
+  -ms-content-zooming: none;
+}
+
+@media (min-width: 1024px) {
+  html::-webkit-scrollbar {
+    border-radius: 0;
+    height: 8px;
+    width: 8px;
+  }
+}
+
+@media (min-width: 1024px) {
+  html ::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.15);
+    border-radius: 4px;
+  }
+}
+
+@media (min-width: 1024px) {
+}
+html ::-webkit-scrollbar-track {
+  background-color: transparent;
+  border-radius: 0;
+}
+
+::selection {
+  background-color: var(--primary-color);
+  color: #fff;
+}
+
+button,
+input {
+  overflow: visible;
+}
+
+button,
+input,
+optgroup,
+select,
+textarea {
+  font-family: inherit;
+  font-size: 100%;
+  line-height: 1.15;
+  margin: 0;
+}
+
+a {
+  text-decoration: none;
+}
+
+ul,
+li {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.cursor-pointer {
+  cursor: pointer !important;
+}
+
+.student-header__default-title {
+  color: #242424;
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin-right: auto;
+  word-wrap: break-word;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  color: #292929;
+  display: -webkit-box;
+  overflow: hidden;
+}
+
+.student-paragraphs__default-text {
+  font-size: 0.9rem;
+}
+
+.overflow-unset {
+  overflow: unset !important;
+}
+
+.toast-error{
+  background-color: #fff !important;
+  color: #000 !important;
+}
+
+.ngx-toastr{
+  position: relative;
+    min-height: var(--toastify-toast-min-height);
+    box-sizing: border-box;
+    margin-bottom: 1rem;
+    padding: 12px 16px !important;
+    border-radius: 4px;
+    box-shadow: 0 1px 10px 0 rgba(0,0,0,.1),0 2px 15px 0 rgba(0,0,0,.05) !important;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    max-height: 120px !important;
+    overflow: hidden;
+    font-family: var(--toastify-font-family);
+    cursor: pointer !important;
+    direction: ltr;
+    font-size: 0.9rem;
+}
+
+.toast-error .toast-progress{
+  background-color: red !important;
+  opacity: 0.5 !important;
+}
+
+/* front-size */
+.fs-13{
+  font-size: 13px !important;
+}
+
+.fs-14{
+  font-size: 14px !important;
+}
+
+.fs-15{
+  font-size: 15px !important;
+}
+
+.fs-16{
+  font-size: 16px !important;
+}
+
+.fs-17{
+  font-size: 17px !important;
+}
+
+.fs-18{
+  font-size: 18px !important;
+}

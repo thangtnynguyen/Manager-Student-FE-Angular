@@ -1,0 +1,84 @@
+<div class="row">
+    <div class="col-12">
+       <div
+          class="page-title-box d-flex align-items-center justify-content-between"
+          >
+          <h4 class="mb-0">Thông tin giáo viên</h4>
+          <div class="page-title-right">
+             <ol class="breadcrumb m-0">
+                <li
+                   routerLink="/admin/dashboard"
+                   class="breadcrumb-item d-flex align-items-center"
+                   >
+                   <span>Trang chủ</span>
+                   <i class="breadcrumb-item-arrow fa-solid fa-angle-right"></i>
+                </li>
+                <li routerLink="/admin/teacher" class="breadcrumb-item d-flex align-items-center">
+                   <span>Quản lý giáo viên</span>
+                   <i class="breadcrumb-item-arrow fa-solid fa-angle-right"></i>
+                </li>
+                <li class="breadcrumb-item active">
+                    <span>Thông tin giáo viên</span>
+                 </li>
+             </ol>
+          </div>
+       </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12">
+       <div class="card">
+          <div class="card-body">
+            <form class="disable-form">
+                <div class="form-group">
+                    <div class="row">
+                        <label class="col-md-3 col-lg-3 col-form-label" for="idTeacher">Mã giáo viên</label>
+                        <input class="col-md-9 col-lg-6 col-table-reponsive form-control" [(ngModel)]="teacher.teacherId" name="idTeacher" id="idTeacher" type="text" disabled/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <label class="col-md-3 col-lg-3 col-form-label" for="name">Họ và tên <span class="text-danger">*</span></label>
+                        <div class="col-md-9 col-lg-6 col-table-reponsive p-0">
+                            <input disabled class="form-control" [(ngModel)]="teacher.name" name="name" id="name" type="text" placeholder="Họ và tên"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <label class="col-md-3 col-lg-3 col-form-label" for="email">Email</label>
+                        <div class="col-md-9 col-lg-6 col-table-reponsive p-0">
+                            <input disabled class="form-control" [(ngModel)]="teacher.email" name="email" id="email" type="email" email/>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <label class="col-md-3 col-lg-3 col-form-label" for="phone">Số điện thoại</label>
+                        <div class="col-md-9 col-lg-6 col-table-reponsive p-0">
+                            <input disabled class="form-control" [(ngModel)]="teacher.phone" name="phone" id="phone" type="tel" pattern="[0-9]{10,12}" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="custom-control custom-switch ml-3" dir="ltr">
+                            <input type="checkbox" class="custom-control-input" id="status" name="status" [(ngModel)]="teacher.status" [checked]="teacher.status" disabled>
+                            <label class="custom-control-label" for="status">Trạng thái</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="d-flex">
+                        <div class="ml-auto">
+                            <button routerLink="/admin/teacher" type="button" class="btn btn-secondary waves-effect waves-light">Quay lại</button>
+                        </div>
+                    </div>
+                </div>
+            </form>            
+          </div>
+       </div>
+    </div>
+    <!-- end col -->
+ </div>
+

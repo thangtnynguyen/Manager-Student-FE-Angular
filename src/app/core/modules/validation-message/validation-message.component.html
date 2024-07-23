@@ -1,0 +1,10 @@
+<div *ngIf="form?.controls?.[field]?.invalid && (form?.controls?.[field]?.dirty || form?.controls?.[field]?.touched)" class="danger-notice">
+    <ng-container *ngFor="let validation of messages[field]">
+        <div *ngIf="form?.controls?.[field]?.errors?.[validation?.type]"> 
+            {{validation.message}}
+        </div>
+    </ng-container>
+</div>
+
+
+

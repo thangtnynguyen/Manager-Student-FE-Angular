@@ -1,0 +1,99 @@
+<header id="page-topbar">
+    <div class="navbar-header">
+        <div class="d-flex">
+            <!-- LOGO -->
+            <div class="navbar-brand-box bg-dark-ui">
+                <a [routerLink]="Page.Dashboard" class="logo logo-dark">
+                    <span class="logo-sm">
+                        <img src="assets/images/logo-sm-light.png" alt="" height="22">
+                    </span>
+                    <span class="logo-lg">
+                        <img src="assets/images/logo-light.png" alt="" height="20">
+                    </span>
+                </a>
+            </div>
+
+            <!-- Hide -->
+            <button type="button" class="btn btn-sm px-3 font-size-24 header-item waves-effect" id="vertical-menu-btn">
+                <i class="ri-menu-2-line align-middle"></i>
+            </button>
+
+            <!-- Hide -->
+            <form class="app-search d-none d-lg-block">
+                <div class="position-relative">
+                    <input type="text" class="form-control" placeholder="Tìm kiếm...">
+                    <span class="fa-solid fa-magnifying-glass ri-search-line"></span>
+                </div>
+            </form>
+        </div>
+
+        <div class="d-flex">
+
+            <div class="dropdown d-inline-block d-lg-none ml-2">
+                <button type="button" class="btn header-item noti-icon waves-effect" id="page-header-search-dropdown"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="ri-search-line"></i>
+                </button>
+                <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right p-0"
+                    aria-labelledby="page-header-search-dropdown">
+        
+                    <form class="p-3">
+                        <div class="form-group m-0">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Search ...">
+                                <div class="input-group-append">
+                                    <button class="btn btn-primary" type="submit"><i class="ri-search-line"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="dropdown d-none d-lg-inline-block ml-1">
+                <button type="button" class="btn header-item noti-icon waves-effect"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <!-- <i class="ri-apps-2-line"></i> -->
+                    <i class="fa-solid fa-grip-vertical"></i>
+                </button>
+            </div>
+
+            <div class="dropdown d-none d-lg-inline-block ml-1">
+                <button type="button" class="btn header-item noti-icon waves-effect" data-toggle="fullscreen">
+                    <i class="fa-solid fa-expand"></i>
+                </button>
+            </div>
+
+            <div class="dropdown d-inline-block">
+                <button type="button" class="btn header-item noti-icon waves-effect" id="page-header-notifications-dropdown"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fa-regular fa-bell"></i>
+                    <span class="noti-dot"></span>
+                </button>
+            </div>
+
+            <div class="dropdown d-inline-block user-dropdown-item" dropdown>
+                <button type="button" class="btn header-item waves-effect" dropdownToggle>
+                    <img class="rounded-circle header-profile-user user-dropdown-item" src="{{ App.baseApiUrl + userCurrent.avatarUrl }}"
+                        alt="Header Avatar">
+                    <span class="d-none d-xl-inline-block ml-2 user-dropdown-item">{{ userCurrent.name }}</span>
+                    <i class="mdi mdi-chevron-down d-none d-xl-inline-block user-dropdown-item"></i>
+                </button>
+                <div class="dropdown-menu dropdown-menu-right" *dropdownMenu>
+                    <span routerLink="/account/update" class="dropdown-item cursor-pointer"><i class="ri-user-line align-middle mr-1"></i>Cập nhật thông tin</span>
+                    <div class="dropdown-divider"></div>
+                    <span class="dropdown-item text-danger cursor-pointer logout-button" (click)="logout()">
+                        <i class="ri-shut-down-line align-middle mr-1 text-danger"></i>
+                        Đăng xuất
+                    </span>
+                </div>
+            </div>
+
+            <div class="dropdown d-inline-block">
+                <button type="button" class="btn header-item noti-icon right-bar-toggle waves-effect">
+                    <i class="ri-settings-2-line"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</header>

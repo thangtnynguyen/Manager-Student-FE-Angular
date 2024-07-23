@@ -1,0 +1,103 @@
+.offcanvas {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 600px;
+    height: 100%;
+    background-color: #f8f9fa;
+    padding: 20px;
+    z-index: 99999;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+  }
+
+.main-offcanvas{
+    background-color: white;
+}
+
+.block.block-fx-pop {
+    box-shadow: 0 0.5rem 2rem #d1d8ea;
+    opacity: 1;
+}
+
+.btn-checkbox-classperiod{
+    outline: none;
+    border: none;
+    background-color: transparent;
+}
+
+.check-box-school-day{
+    width: 20px;
+    height: 26px;
+    border-radius: 50%;
+    border: 1px solid #a2a2a2;
+    transition: 0.3s;
+}
+
+.check-box-school-day:hover{
+    border: 1px solid #666666;
+    background-color: #f1f1f1;
+}
+
+.table-schedule .custom-control{
+    display: table-cell;
+}
+
+.modal-class-period{
+    top: 10%;
+}
+
+.modal-class-period .modal-content{
+    background-color: rgba(187, 186, 204, 0.8);
+    box-shadow: 0px 3px 4px 0px;
+}
+
+.chip-schedule{
+    padding: 2px 8px 2px 6px;
+    border-radius: 14px;
+    border: 1px solid #ccc;
+    background-color: #f1f1f1;
+    transition: 0.3s;
+    display: flex;
+    align-items: center;
+}
+
+.btn-schip-module{
+    border-radius: 50%;
+    width: 14px;
+    height: 24px;
+    border: 1px solid #b2b2b2;
+}
+
+.btn-schip-module:hover{
+    border: 1px solid #6a6a6a;
+    background-color: #fff;
+}
+.btn-submit-schedule button.p-button.p-component{
+    border-radius: 8px;
+}
+
+#class-schedule, #add-class-schedule{
+    transition: 0.5s;
+}
+
+#add-class-schedule{
+    left: 200%;
+}
+
+.modal-backdrop.fade.show{
+    opacity: 0;
+}
+
+.btn-attendence{
+    top: 12px;
+    right: 26px;
+}

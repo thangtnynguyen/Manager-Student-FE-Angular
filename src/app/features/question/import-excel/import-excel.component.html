@@ -1,0 +1,16 @@
+<div class="row">
+    <div class="block-content tab-content">
+       <div id="form-upload" method="POST" enctype="multipart/form-data">
+          <div class="mb-4">
+              <label class="form-label" for="js-ckeditor">Nội dung</label>
+              <input (change)="onFileSelected($event)" class="form-control" type="file" id="file-cau-hoi" accept=".xlsx, .xls, .csv" required="">
+          </div>
+          <div class="mb-4">
+              <em>Vui lòng soạn câu hỏi  theo đúng định dạng. <a href="../../../../../assets/files/ImportQuestions.xlsx">Tải về file mẫu Excel</a></em>
+          </div>
+          <div class="mb-4 d-flex justify-content-between">
+              <button (click)="handleImportQuestionGroupModule()" type="submit" class="btn btn-hero btn-primary" id="nhap-file"><i class="fa fa-cloud-arrow-up"></i> Thêm vào hệ thống</button>
+          </div>
+       </div>
+    </div>
+  </div>

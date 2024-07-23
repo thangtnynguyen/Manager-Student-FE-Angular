@@ -1,0 +1,35 @@
+.container-description {
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200px;
+    /* Số ký tự tối đa bạn muốn hiển thị */
+}
+
+.container-title {
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100px;
+    /* Số ký tự tối đa bạn muốn hiển thị */
+}
+
+.container-image {
+    width: 100px;
+    height: 60px;
+    border-radius: 5px;
+}
+
+.col-sm-12 {
+    display: flex;
+}
+
+.col-sm-12 button:first-child {
+    background-color: rgb(70, 117, 226);
+}
+
+.col-sm-12 button {
+    min-width: 150px;
+}

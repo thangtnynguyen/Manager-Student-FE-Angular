@@ -1,0 +1,227 @@
+@import url("./assets/css/bootstrap.css");
+@import url("~bootstrap-icons/font/bootstrap-icons.min.css");
+@import url("./assets/css/app.css");
+@import url('~sweetalert2/dist/sweetalert2.min.css');
+@import "~@ng-select/ng-select/themes/default.theme.css";
+@import url('~ngx-toastr/toastr');
+
+.bg-dark-ui{
+    background-color: #252b3b;
+}
+
+#sidebar-menu ul li a:hover {
+    color: #d7e4ec;
+}
+
+#sidebar-menu ul li a{
+    padding: .625rem 1rem;
+}
+
+#sidebar-menu ul li a.active {
+    color: #d7e4ec!important;
+}
+
+.menu-title{
+    color: #8590a5 !important;
+}
+
+.breadcrumb-item + .breadcrumb-item::before{
+    display: none;
+}
+
+.breadcrumb-item-arrow{
+    padding-left: 0.5rem;
+    font-size: 13px;
+}
+
+.breadcrumb-item{
+    cursor: pointer;
+}
+
+.page-content{
+    padding-bottom: 0px;
+    min-height: calc(100vh - 60px);
+}
+
+.custom-switch .custom-control-input:disabled:checked ~ .custom-control-label::before{
+    background-color: rgba(86, 100, 210, 1);
+}
+
+.page-item{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.page-link{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 32px;
+    width: 32px;
+    font-size: 13px;
+    padding-top: 11px;
+    border-radius: 100% !important;
+}
+
+.order-sort{
+    cursor: pointer;
+}
+
+.order-sort-active{
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+@media (max-width: 768px) {
+    .col-table-reponsive{
+        width: calc(100% - 12px);
+        margin-left: 12px;
+    }
+}
+
+.danger-notice{
+    color: red;
+    font-size: 12px !important;
+}
+
+.danger-notice > div{
+    margin-top: 6px;
+}
+
+button[type="submit"] {
+    cursor: pointer;
+}
+
+.toast-error{
+    background-color: #fff !important;
+    color: #000 !important;
+}
+
+.toast-success{
+    background-color: #fff !important;
+    color: #000 !important;
+}
+
+.ngx-toastr{
+    position: relative;
+      min-height: var(--toastify-toast-min-height);
+      box-sizing: border-box;
+      margin-bottom: 1rem;
+      padding: 12px 16px !important;
+      border-radius: 4px;
+      box-shadow: 0 1px 10px 0 rgba(0,0,0,.1),0 2px 15px 0 rgba(0,0,0,.05) !important;
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-pack: justify;
+      justify-content: space-between;
+      max-height: 120px !important;
+      overflow: hidden;
+      font-family: var(--toastify-font-family);
+      cursor: pointer !important;
+      direction: ltr;
+      font-size: 0.9rem;
+  }
+  
+  .toast-error .toast-progress{
+    background-color: red !important;
+    opacity: 0.5 !important;
+  }
+
+  .toast-success .toast-progress{
+    background-color: green !important;
+    opacity: 0.5 !important;
+  }
+
+.lds-dual-ring:after{
+    border: 2px solid #3848ca;
+    border-color: #3848ca transparent #3848ca transparent;
+}
+
+.form-control:disabled{
+    background-color: #e9ecef;
+    opacity: 1;
+}
+
+.custom-control-input[disabled] ~ .custom-control-label, .custom-control-input:disabled ~ .custom-control-label{
+    color: unset;
+}
+
+.navigation-menu-main.active i{
+    color: #d7e4ec!important;
+}
+
+.navigation-menu-main:hover i{
+    color: #d7e4ec!important;
+}
+
+#sidebar-menu ul li a{
+    padding: .625rem 1rem .625rem 1.75rem;
+}
+
+#sidebar-menu ul li a i{
+    font-size: 15px;
+}
+
+#sidebar-menu ul li ul.sub-menu li a{
+    padding: .4rem 1.5rem .4rem 4rem;
+}
+
+/* font-weight */
+.fw-100{
+    font-weight: 100 !important;
+}
+
+/* table */
+.select-checkbox-column{
+    width: 20px;
+}
+
+/* nav */
+.nav-justified .nav-item, .nav-justified>.nav-link{
+    flex-basis: unset !important;
+}
+
+#sidebar-menu ul li ul.sub-menu li a:hover{
+    color: #d7e4ec;
+}
+
+/* input modal */
+
+/* image */
+.img-preview-small{
+    max-height: 140px;
+}
+
+.img-preview-small{
+    max-height: 140px;
+}
+
+/* table */
+.selected-col{
+    width: 20px !important;
+}
+
+.image-item-lg{
+    max-height: 60px;
+    max-width: 120px;
+}
+
+.ellipsis-content {
+    word-wrap: break-word;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    color: #292929;
+    display: -webkit-box;
+    overflow: hidden;
+    max-width: 100px;
+}
+
+/* button */
+.group-action__right button{
+    height: fit-content !important;
+}
+

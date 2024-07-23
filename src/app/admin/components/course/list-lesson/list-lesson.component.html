@@ -1,0 +1,432 @@
+<div class="row">
+   <div class="col-12">
+      <div class="page-title-box d-flex align-items-center justify-content-between">
+         <h4 class="mb-0">Quản lý Lesson</h4>
+         <div class="page-title-right">
+            <ol class="breadcrumb m-0">
+               <li routerLink="/admin/dashboard" class="breadcrumb-item d-flex align-items-center">
+                  <span>Trang chủ</span>
+                  <i class="breadcrumb-item-arrow fa-solid fa-angle-right"></i>
+               </li>
+               <li class="breadcrumb-item active">
+                  <span>Quản lý Lesson</span>
+               </li>
+            </ol>
+         </div>
+      </div>
+   </div>
+</div>
+
+<div class="row">
+   <div class="col-12">
+      <div class="card">
+         <div class="card-body">
+            <div class="group-action">
+               <div class="row">
+                  <div class="group-action__left col-xl-10 col-md-9 col-sm-12">
+                     <div class="row">
+                        <div class="form-group col-md-4">
+                           <input class="form-control" type="text" placeholder="Tiêu đề"
+                              [(ngModel)]="queryParameters.title" />
+                        </div>
+                        <div class="form-group col-md-4">
+                           <input class="form-control" type="text" placeholder="Nội dung"
+                              [(ngModel)]="queryParameters.content" />
+                        </div>
+
+                        <div class="form-group col-md-1">
+                           <button (click)="handleSearchLessons()" type="button"
+                              class="btn btn-primary waves-effect waves-light">
+                              <i class="fa-solid fa-magnifying-glass"></i>
+                           </button>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="group-action__right col-xl-2 col-md-3 col-sm-12">
+                     <button type="button" class="btn btn-success waves-effect waves-light"
+                        (click)="handleOpenCreateLessonModal()">
+                        <i class="fa-solid fa-plus mr-1"></i> Thêm mới
+                     </button>
+                  </div>
+                  <div class="group-action__right col-xl-2 col-md-4 col-sm-12">
+                     <button [@fadeInOut]="selectedlessons.length > 0 ? 'visible' : 'hidden'" type="button"
+                        class="btn btn-danger waves-effect waves-light align-items-center"
+                        (click)="handleOnDeleteMultiple()">
+                        <i class="fa-solid fa-trash mr-1"></i> Xoá {{ selectedlessons.length}} bản ghi
+                     </button>
+                  </div>
+               </div>
+            </div>
+            <div class="table-data overflow-auto">
+               <table id="datatable" class="table table-bordered dt-responsive nowrap mt-3"
+                  style="border-collapse: collapse; border-spacing: 0; width: 100%">
+                  <thead class="thead-light">
+                     <tr>
+                        <th class="selected-col">
+                           <div class="custom-control custom-checkbox">
+                              <input (change)="selectAlllessons($event)"
+                                 [checked]="selectedlessons.length === lessons.length && selectedlessons.length > 0"
+                                 type="checkbox" class="custom-control-input" id="select-box" title="select-box"
+                                 placeholder="select-box">
+                              <label class="custom-control-label" for="select-box">&nbsp;</label>
+                           </div>
+                        </th>
+                        <th class="order-sort" (click)="handleOnSortAndOrderChange(constant.order.id)"
+                           [ngClass]="{'order-sort-active': paging?.orderBy === constant.order.id }">
+                           Id
+                           <span *ngIf="paging?.orderBy === constant.order.id"
+                              class="order-sort-group test-{{paging?.orderBy}}">
+                              <i *ngIf="paging?.sortBy === constant.sort.desc" class="bi bi-sort-down"></i>
+                              <i *ngIf="paging?.sortBy === constant.sort.asc" class="bi bi-sort-up"></i>
+                           </span>
+                           <span *ngIf="!(paging?.orderBy === constant.order.id)" class="test-{{paging?.orderBy}}"><img
+                                 src="../../../../../assets/sort.png" height="14.41" width="14.41"
+                                 style="margin-top: -3px;" alt="icon-sort"></span>
+                        </th>
+                        <th>Tên bài giảng</th>
+                        <th>Ngày tạo</th>
+                        <th>Trạng thái</th>
+                        <th>Hành động</th>
+                     </tr>
+                  </thead>
+                  <tbody>
+                     <ng-container *ngIf="lessons.length > 0">
+                        <tr *ngFor="let lesson of lessons;">
+                           <td>
+                              <div class="custom-control custom-checkbox">
+                                 <input id="select-box-{{ lesson.id }}" type="checkbox" class="custom-control-input">
+                                 <label class="custom-control-label" for="select-box-{{ lesson.id }}">&nbsp;</label>
+                              </div>
+                           </td>
+                           <td>{{ lesson.id }}</td>
+                           <td>{{ lesson.content }}</td>
+                           <td>{{ lesson.createdAt | date:'dd/MM/yyyy' }}</td>
+                           <td>
+                              <span class="badge {{ lesson.isPublished ? 'badge-success' : 'badge-warning' }}">{{
+                                 lesson.isPublished ? 'Đã được duyệt' : 'Chưa được duyệt' }}</span>
+                           </td>
+
+                           <td>
+                           <td>
+                              <span class="text-info cursor-pointer" (click)="handleOpenDetailLessonModal(lesson)"><i
+                                    class="fa-solid fa-eye"></i></span>
+                              <span class="text-warning cursor-pointer ml-2"
+                                 [routerLink]="['/admin/teacher/edit', lesson.id]"><i
+                                    class="fa-solid fa-pen"></i></span>
+                              <span class="text-danger cursor-pointer ml-2" (click)="handleDeleteItem(lesson.id)"><i
+                                    class="fa-solid fa-trash"></i></span>
+                              <span class="text-primary cursor-pointer ml-2"
+                                 [routerLink]="['/admin/course/lesson/content', lesson.id]"><i
+                                    class="fa-solid fa-briefcase"></i></span>
+                           </td>
+                        </tr>
+
+                     </ng-container>
+                     <ng-container *ngIf="!(lessons.length > 0)">
+                        <tr>
+                           <td class="text-center" colspan="8">Không có bản ghi nào</td>
+                        </tr>
+                     </ng-container>
+                  </tbody>
+               </table>
+            </div>
+
+            <div class="table-filter d-flex justify-content-between align-items-center mt-2">
+               <div class="page-index">
+                  <ul class="pagination pagination-rounded">
+                     <li class="page-item" (click)="handleOnChangePage(paging.pageIndex - 1)"
+                        [class.disabled]="paging.pageIndex === 1 || lessons.length === 0">
+                        <span class="page-link"><i class="fa-solid fa-angle-left"></i></span>
+                     </li>
+
+                     <ng-container *ngIf="lessons.length > 0">
+                        <li *ngFor="let page of [].constructor(paging.totalPages); let i = index" class="page-item"
+                           (click)="handleOnChangePage(i + 1)" [class.active]="paging.pageIndex === i + 1">
+                           <span class="page-link">{{ i + 1 }}</span>
+                        </li>
+                     </ng-container>
+
+                     <li class="page-item" (click)="handleOnChangePage(paging.pageIndex + 1)"
+                        [class.disabled]="paging.pageIndex === paging.totalPages || lessons.length === 0">
+                        <span class="page-link"><i class="fa-solid fa-angle-right"></i></span>
+                     </li>
+                  </ul>
+               </div>
+               <div class="per-page">
+                  Hiển thị
+                  <select class="mx-1" (change)="handleOnPerPageChange($event)">
+                     <option *ngFor="let item of config.perPageOptions;" [ngValue]="item.value"
+                        [attr.selected]="item.value === paging.pageSize ? true : null">{{ item.label }}</option>
+                  </select>
+                  / {{ paging.totalRecords }} tổng số bản ghi
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+
+<form (ngSubmit)="handleOnSubmitCreateLesson()" #createForm="ngForm">
+   <ng-template #createLessonTemplate>
+      <div class="modal-header">
+         <h5 class="modal-title mt-0" id="exampleModalScrollableTitle">Tạo mới Lesson</h5>
+         <button type="button" class="close" (click)="createLessonModalRef?.hide()">
+            <span aria-hidden="true">&times;</span>
+         </button>
+      </div>
+      <div class="modal-body">
+         <div class="form-group">
+            <div class="row">
+               <label class="col-md-3 col-lg-3 col-form-label" for="title">Tiêu đề <span
+                     class="text-danger">*</span></label>
+               <div class="col-md-9 col-lg-8 col-table-reponsive p-0">
+                  <input class="form-control" [(ngModel)]="lesson.title" id="title" name="title" type="text" required
+                     placeholder="Tiêu đề" />
+                  <div
+                     *ngIf="createForm.controls['title']?.invalid && (createForm.controls['title']?.dirty || createForm.controls['title'].touched)"
+                     class="danger-notice">
+                     <div *ngIf="createForm.controls['title'].errors?.['required']">Tiêu đề không được để trống</div>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="form-group">
+            <div class="row">
+               <label class="col-md-3 col-lg-3 col-form-label" for="description">Nội dung</label>
+               <div class="col-md-9 col-lg-8 col-table-reponsive p-0">
+                  <input class="form-control" placeholder="Nội dung" name="description" [(ngModel)]="lesson.content"
+                     id="description" type="text" />
+               </div>
+            </div>
+         </div>
+         <div class="form-group">
+            <div class="row">
+               <div class="custom-control custom-switch ml-3" dir="ltr">
+                  <input type="checkbox" class="custom-control-input" id="status" name="status"
+                     [(ngModel)]="lesson.isPublished" [checked]="lesson.isPublished">
+                  <label class="custom-control-label" for="status">Công khai</label>
+               </div>
+            </div>
+         </div>
+         <div class="form-group">
+            <div class="row">
+               <label class="col-md-3 col-lg-3 col-form-label" for="linkTo">Id khóa học</label>
+               <div class="col-md-9 col-lg-8 col-table-reponsive p-0">
+                  <input class="form-control" name="linkTo" [(ngModel)]="lesson.courseId" placeholder="Id khóa học"
+                     id="linkTo" type="text" disabled />
+               </div>
+            </div>
+         </div>
+       
+
+
+      </div>
+      <div class="modal-footer">
+         <button type="button" class="btn btn-light waves-effect" (click)="createLessonModalRef?.hide()">Đóng</button>
+         <button [disabled]="createForm.invalid && validateForm()" type="submit" (click)="handleOnSubmitCreateLesson()"
+            class="btn btn-primary waves-effect waves-light ml-2">Xác nhận</button>
+      </div>
+   </ng-template>
+</form>
+
+
+<ng-template #detailLessonTemplate>
+   <div class="modal-header">
+      <h5 class="modal-title mt-0" id="exampleModalScrollableTitle">Chi tiết Lesson</h5>
+      <button type="button" class="close" (click)="detailLessonModalRef?.hide()">
+         <span aria-hidden="true">&times;</span>
+      </button>
+   </div>
+   <div class="modal-body">
+      <div class="form-group">
+         <div class="row">
+            <label class="col-md-3 col-lg-3 col-form-label" for="email">Id</label>
+            <div class="col-md-9 col-lg-8 col-table-reponsive p-0">
+               <input disabled class="form-control" [(ngModel)]="lesson.id" name="email" id="email" type="email"
+                  email />
+            </div>
+         </div>
+      </div>
+      <div class="form-group">
+         <div class="row">
+            <label class="col-md-3 col-lg-3 col-form-label" for="email">Tiêu đề</label>
+            <div class="col-md-9 col-lg-8 col-table-reponsive p-0">
+               <input disabled class="form-control" [(ngModel)]="lesson.title" name="email" id="email" type="text" />
+            </div>
+         </div>
+      </div>
+      <div class="form-group">
+         <div class="row">
+            <label class="col-md-3 col-lg-3 col-form-label" for="email">Nội dung</label>
+            <div class="col-md-9 col-lg-8 col-table-reponsive p-0">
+               <input disabled class="form-control" [(ngModel)]="lesson.content" name="email" id="email" type="text" />
+            </div>
+         </div>
+      </div>
+      <div class="form-group">
+         <div class="row">
+            <label class="col-md-3 col-lg-3 col-form-label" for="email">Công khai</label>
+            <div class="col-md-9 col-lg-8 col-table-reponsive d-flex align-items-center p-0">
+               <input disabled class="form-control" value="{{lesson.isPublished }}" name="email" id="email"
+                  type="text" />
+            </div>
+         </div>
+      </div>
+      <div class="form-group">
+         <div class="row">
+            <label class="col-md-3 col-lg-3 col-form-label" for="email">Id khóa học</label>
+            <div class="col-md-9 col-lg-8 col-table-reponsive d-flex flex-column justify-content-center p-0">
+               <input disabled class="form-control" value="{{lesson.courseId}}" name="email" id="email" type="text" />
+               <div class="fs-12 mt-1">Thuộc tính dạng json</div>
+            </div>
+         </div>
+      </div>
+      <div class="form-group">
+         <div class="row">
+            <label class="col-md-3 col-lg-3 col-form-label" for="email">Tạo lúc</label>
+            <div class="col-md-9 col-lg-8 col-table-reponsive d-flex align-items-center p-0">
+               <input disabled class="form-control" value="{{lesson.createdAt| date:'dd/MM/yyyy' }}" name="email"
+                  id="email" type="text" />
+            </div>
+         </div>
+      </div>
+   </div>
+   <div class="modal-footer">
+      <button type="button" class="btn btn-light waves-effect" (click)="detailLessonModalRef?.hide()">Đóng</button>
+   </div>
+</ng-template>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <div class="row">
+    <div class="col-12">
+       <div
+          class="page-title-box d-flex align-items-center justify-content-between"
+          >
+          <h4 class="mb-0">Quản lý bài giảng</h4>
+          <div class="page-title-right">
+             <ol class="breadcrumb m-0">
+                <li
+                   routerLink="/admin/dashboard"
+                   class="breadcrumb-item d-flex align-items-center"
+                   >
+                   <span>Trang chủ</span>
+                   <i class="breadcrumb-item-arrow fa-solid fa-angle-right"></i>
+                </li>
+                <li class="breadcrumb-item d-flex align-items-center">
+                   <span>Quản lý khoá học</span>
+                   <i class="breadcrumb-item-arrow fa-solid fa-angle-right"></i>
+                </li>
+                <li class="breadcrumb-item active">
+                    <span>Nội dung khoá học</span>
+                 </li>
+             </ol>
+          </div>
+       </div>
+    </div>
+</div>
+
+<div class="row">
+   <div class="col-12">
+      <div class="card">
+         <div class="card-body">
+            <div class="group-action">
+               <div class="row">
+                  <div class="group-action__left col-xl-10 col-md-9 col-sm-12">
+                     <div class="row">
+                        <div class="form-group col-md-4">
+                           <input
+                              class="form-control"
+                              type="text"
+                              placeholder="Tên bài giảng"
+                              />
+                        </div>
+                        <div class="form-group col-md-3">
+                           <select class="form-control">
+                              <option value="">Trạng thái</option>
+                              <option value="true">Hoạt động</option>
+                              <option value="false">Không hoạt động</option>
+                           </select>
+                        </div>
+                        <div class="form-group col-md-1">
+                           <button
+                              type="button"
+                              class="btn btn-primary waves-effect waves-light"
+                              >
+                           <i class="fa-solid fa-magnifying-glass"></i>
+                           </button>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="group-action__right col-xl-2 col-md-3 col-sm-12">
+                     <button
+                        type="button"
+                        class="btn btn-success waves-effect waves-light"
+                        routerLink="/admin/teacher/create"
+                        >
+                     <i class="fa-solid fa-plus mr-1"></i> Thêm mới
+                     </button>
+                  </div>
+               </div>
+            </div>
+            <div class="table-data overflow-auto">
+               <table id="datatable" class="table table-bordered dt-responsive nowrap mt-3" style="border-collapse: collapse; border-spacing: 0; width: 100%">
+                  <thead class="thead-light">
+                     <tr>
+                         <th style="width: 20px;">
+                          <div class="custom-control custom-checkbox">
+                              <input type="checkbox" class="custom-control-input" id="select-box" title="select-box" placeholder="select-box">
+                              <label class="custom-control-label" for="select-box">&nbsp;</label>
+                          </div>
+                        </th>
+                        <th>Id</th>
+                        <th>Tên bài giảng</th>
+                        <th>Ngày tạo</th>
+                        <th>Trạng thái</th>
+                        <th>Hành động</th>
+                     </tr>
+                  </thead>
+                  <tbody>
+                     <tr *ngFor="let lesson of lessons;">
+                       <td>
+                          <div class="custom-control custom-checkbox">
+                              <input id="select-box-{{ lesson.id }}" type="checkbox" class="custom-control-input">
+                              <label class="custom-control-label" for="select-box-{{ lesson.id }}">&nbsp;</label>
+                          </div>
+                       </td>
+                        <td>{{ lesson.id }}</td>
+                        <td>{{ lesson.content }}</td>
+                        <td>{{ lesson.createdAt | date:'dd/MM/yyyy' }}</td>
+                        <td>
+                           <span class="badge {{ lesson.isPublished ? 'badge-success' : 'badge-warning' }}">{{ lesson.isPublished ? 'Đã được duyệt' : 'Chưa được duyệt' }}</span>
+                        </td>
+
+                        <td>
+                           <span class="text-info cursor-pointer"><i class="fa-solid fa-eye"></i></span>
+                           <span class="text-primary cursor-pointer ml-2" [routerLink]="['/admin/course/lesson/content', lesson.id]"><i class="fa-solid fa-briefcase"></i></span>
+                           <span class="text-warning cursor-pointer ml-2"><i class="fa-solid fa-pen"></i></span>
+                           <span class="text-danger cursor-pointer ml-2"><i class="fa-solid fa-trash"></i></span>
+                        </td>
+                     </tr>
+                  </tbody>
+               </table>
+            </div>
+         </div>
+      </div>
+   </div>
+</div> -->

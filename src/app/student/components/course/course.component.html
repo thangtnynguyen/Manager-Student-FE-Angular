@@ -1,0 +1,186 @@
+<div *ngIf="isInitialized && (!authService.isAuthenticated || !course.isRegister)" class="App_withSidebarContent">
+    <section class="index-module_grid index-module_fullWidth" style="max-width: 1920px">
+        <div class="DefaultLayout_container">
+            <div class="container-body">
+                <section class="index-module_row">
+                    <section
+                        class="index-module_col__lap4 index-module_c-12 index-module_col__tab3 index-module_col__mobie">
+                        <div class="DefaultLayout_container-top">
+                            <h1 class="DefaultLayout_heading student-header__default-title my-4">
+                                {{ course.title }}
+                            </h1>
+                            <div class="MarkdownParser_wrapper DefaultLayout_desc" [innerHTML]="course.description">
+                            </div>
+                            <h1 class="content-title student-header__default-title mt-4 mb-0">
+                                Nội dung khoá học
+                            </h1>
+                            <div class="CurriculumOfCourse_subHeadWrapper__Hkcns my-2">
+                                <ul class="content-course-left ps-0">
+                                    <li class="CurriculumOfCourse_hiddenMobile__iP-4s">
+                                        <strong>{{ course.lessons.length }} </strong> chương
+                                    </li>
+                                    <li class="content-course-dot">
+                                        •
+                                    </li>
+                                    <li>
+                                        <strong>{{ course.numberLessonContent }} </strong> bài học
+                                    </li>
+                                    <li class="content-course-dot">
+                                        •
+                                    </li>
+                                    <li>
+                                        <span>Thời lượng <strong>{{ course.totalEstimatedStudyTime }}</strong></span>
+                                    </li>
+                                </ul>
+                                <div *ngIf="!areAllLessonsCollapsed()" (click)="handleOnCollapseAllLesson(true)"
+                                    class="content-course-right">Mở rộng tất cả</div>
+                                <div *ngIf="areAllLessonsCollapsed()" (click)="handleOnCollapseAllLesson(false)"
+                                    class="content-course-right">Thu gọn tất cả</div>
+                            </div>
+                            <div class="main-content">
+                                <ng-container *ngFor="let lesson of course.lessons; let i = index;">
+                                    <div class="main-content-item mb-2" (click)="lesson.collapse = !lesson.collapse">
+                                        <span class="main-content-item__title">
+                                            <i class="fa-solid fa-plus me-2"></i>
+                                            <strong>{{ i + 1 }}. {{ lesson.title }}</strong>
+                                        </span>
+                                        <span class="main-content-item__title-number">{{ lesson.lessonContents.length }}
+                                            bài học</span>
+                                    </div>
+                                    <ng-container *ngIf="lesson.collapse === true">
+                                        <div class="main-content-item-sub mb-2"
+                                            *ngFor="let lessonContent of lesson.lessonContents; let lessonContentIndex = index;">
+                                            <span class="main-content-item__title">
+                                                <i class="fa-solid fa-circle-play me-2"></i>
+                                                <span>{{ lessonContentIndex + 1 }}. {{ lessonContent.title }}</span>
+                                            </span>
+                                            <span class="main-content-item__title-number">{{
+                                                lessonContent.estimatedStudyTime | timeSpan }}</span>
+                                        </div>
+                                    </ng-container>
+                                </ng-container>
+                            </div>
+
+                            <div class="MarkdownParser_wrapper DefaultLayout_desc" [innerHTML]="course.content">
+                            </div>
+                        </div>
+                    </section>
+                    <section
+                        class="index-module_col__lap4 index-module_c-8 index-module_col__tab3 index-module_col__mobie">
+                        <div class="course-pro__item col p-0">
+                            <div class="course-pro__item-wrapper">
+                                <div class="course-pro__item-link cursor-pointer">
+                                    <button type="button">Xem video giới thiệu</button>
+                                    <div class="course-pro__item-link__img position-relative">
+                                        <img class="img-fluid" [src]="config.system.baseUrl + course.imageUrl"
+                                            alt="HTML CSS Pro" />
+                                        <div class="position-absolute overley"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-center mt-2" (click)="handleOnRegisterCourse()">
+                                <a class="navbar-actions__login-btn">Tham gia khoá học</a>
+                            </div>
+                            <div class="d-flex justify-content-center mt-2">
+                                <ul class="description-course-page ps-0">
+                                    <li>Tổng số <strong>{{ course.lessons.length }}</strong> bài học</li>
+                                    <li>Thời lượng <strong> {{ course.totalEstimatedStudyTime }} </strong></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </section>
+                </section>
+            </div>
+        </div>
+    </section>
+</div>
+
+<div *ngIf="isInitialized && (authService.hasPermisson(constant.permisson.student) && course.isRegister)"
+    class="course-learing">
+    <div class="LearningContainer pt-4">
+        <div class="LearningContainer_left" >
+            <div style="padding-right: 40px;padding-left: 40px;background-color: black;">
+                <iframe width="100%" height="400" [src]="currentVideoUrl" title="YouTube video player" frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowfullscreen></iframe>
+            </div>
+            <div class="LearningContainer_left_bottom">
+                <div>
+                    <h3 class="mt-3">Bạn sẽ làm được gì sau khóa học?</h3>
+                    <p class="fs-14">Cập nhật tháng 11 năm 2022</p>
+                    <div class="content-course">
+                        <div class="fs-16">
+                            <p>Tham gia các cộng đồng để cùng học hỏi, chia sẻ và "thám thính" xem F8 sắp có gì mới nhé!
+                            </p>
+                            <ul>
+                                <li>Fanpage: <a href="https://www.facebook.com/f8vnofficial" target="_blank"
+                                        rel="noreferrer">https://www.facebook.com/f8vnofficial</a></li>
+                                <li>Group: <a href="https://www.facebook.com/groups/649972919142215" target="_blank"
+                                        rel="noreferrer">https://www.facebook.com/groups/649972919142215</a></li>
+                                <li>Youtube: <a
+                                        href="/external-url?continue=https%3A%2F%2Fwww.youtube.com%2FF8VNOfficial"
+                                        target="_blank" rel="noreferrer">https://www.youtube.com/F8VNOfficial</a></li>
+                                <li>Sơn Đặng: <a href="/external-url?continue=https%3A%2F%2Fwww.facebook.com%2Fsondnf8"
+                                        target="_blank" rel="noreferrer">https://www.facebook.com/sondnf8</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="LearningContainer_right mt-0 px-3">
+            <div class="progress-user-course">
+                <!-- <span>0%</span> -->
+                <span><i class="fa-solid fa-book"></i> 0/{{ course.numberLessonContent }} bài học</span>
+                <span class="ms-3"><i class="fa-solid fa-note-sticky"></i> Ghi chú</span>
+            </div>
+            <div class="ContainerTitle">
+                <h4 class="fs-16 px-2 py-2">Nội dung khóa học</h4>
+                <div class="LearingFollow">
+                    <div class="Detail_item lesson-item" *ngFor="let lesson of course.lessons; let i = index;">
+                        <div class="Detail_chapter" (click)="lesson.collapse = !lesson.collapse">
+                            <h4 class="Detail_chapter_title">
+                                <div class="Detail_title_period d-flex align-items-center">
+                                    <div class="Detail_title">
+                                        <strong class="fs-16">{{ i + 1 }}. {{ lesson.title }}</strong>
+                                        <div class="TrackItem_Time">0/{{lesson.lessonContents.length}} | Bài học</div>
+                                    </div>
+                                    <span class="title_countCourse">
+                                        <i class="fa-solid fa-caret-down"></i>
+                                    </span>
+                                    <!-- <i class="fa-solid fa-caret-up"></i> -->
+                                </div>
+                            </h4>
+                        </div>
+                        <div class="Detail_plus" *ngIf="lesson.collapse === true">
+                            <div class="Detail_chapter_plus"
+                                *ngFor="let lessonContent of lesson.lessonContents; let lessonContentIndex = index;">
+                                <div class="Detail_chapter_lessonItem"
+                                    (click)="selectLesson(i, lessonContentIndex,lessonContent.videoUrl)"
+                                    [class.selected]="selectedLessonContent.lessonIndex === i && selectedLessonContent.contentIndex === lessonContentIndex">
+                                    <span class="lessonItem_hasIcon">
+                                        <div class="title_lessonName">{{ lessonContentIndex + 1 }}. {{
+                                            lessonContent.title }}</div>
+                                    </span>
+                                    <span class="title_lessonName_countTime">
+                                        <i class="fa-regular fa-file me-2"></i>11:23</span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="LearningContainer_bottom">
+        <button type="button" class="btn btn-outline-dark">Quay lại</button>
+        <button type="button" class="btn btn-outline-danger ms-2">Bài tiếp theo</button>
+    </div>
+
+    
+</div>
+
+<app-auth></app-auth>

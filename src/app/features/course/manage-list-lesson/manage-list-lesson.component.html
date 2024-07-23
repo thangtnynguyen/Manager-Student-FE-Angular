@@ -1,0 +1,359 @@
+<app-breadcrumb [breadcrumbs]="breadcrumb"></app-breadcrumb>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="d-flex justify-content-between align-items-center card-header">
+                <h4 class="mt-0">Chương {{ section.priority }}: {{ section.title }}</h4>
+                <div>
+                    <button
+                    type="button"
+                    class="btn btn-success waves-effect waves-light"
+                    (click)="handleOpenCreateSectionModal()"
+                    >
+                    <i class="fa-solid fa-plus mr-1"></i> Thêm mới
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <ng-container *ngIf="section.lessons.length > 0">
+                    <table id="datatable-buttons" class="table table-striped dt-responsive nowrap dataTable no-footer dtr-inline" style="border-collapse: collapse; border-spacing: 0px; width: 100%;" role="grid" aria-describedby="datatable-buttons_info">
+                        <tbody>
+                            <tr *ngFor="let lesson of section?.lessons; let i = index" role="row" class="odd">
+                                <td class="sorting_1 dtr-control row">
+                                    <h6 class="text-primary cursor-pointer col-9">Bài {{ i + 1 }}: {{ lesson.title }}</h6>
+                                    <div class="action-lesson col-3 text-end">
+                                        <span class="text-info cursor-pointer" (click)="handleOpenContentModal(lesson)"><i class="fa-solid fa-book"></i></span>
+                                        <span class="text-warning cursor-pointer ml-2" (click)="handleOpenEditSectionModal(lesson)"><i class="fa-solid fa-pen"></i></span>
+                                        <span class="text-danger cursor-pointer ml-2" (click)="handleDeleteSection(lesson.id)"><i class="fa-solid fa-trash"></i></span>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </ng-container>
+
+                <ng-container *ngIf="!(section.lessons.length > 0)">
+                    <div class="d-flex justify-content-center my-4">Không có bản ghi nào!</div>
+                </ng-container>
+            </div>
+        </div>
+    </div>
+</div>
+
+<form (ngSubmit)="handleOpenCreateSectionModal()" #createForm="ngForm">
+    <ng-template #createTemplate>
+        <div class="modal-header">
+            <h5 class="modal-title mt-0" id="exampleModalScrollableTitle">Thêm bài học</h5>
+            <button type="button" class="close" (click)="createModalRef?.hide()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <div class="row">
+                  <label class="col-md-3 col-lg-3 col-form-label" for="name">Tên bài học <span class="text-danger">*</span></label>
+                  <div class="col-md-9 col-lg-8 col-table-reponsive p-0">
+                    <input class="form-control" [(ngModel)]="lesson.title" name="title" id="title" type="text" required/>
+                    <div *ngIf="createForm.controls['title']?.invalid && (createForm.controls['title']?.dirty || createForm.controls['title'].touched)" class="danger-notice">
+                        <div *ngIf="createForm.controls['title'].errors?.['required']">Tên bài học không được để trống</div>
+                    </div>
+                  </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                  <label class="col-md-3 col-lg-3 col-form-label" for="name">Độ ưu tiên <span class="text-danger">*</span></label>
+                  <div class="col-md-9 col-lg-8 col-table-reponsive p-0">
+                    <input class="form-control" [(ngModel)]="lesson.priority" (ngModelChange)="onPriorityChange($event,Action.Add)" name="priority" id="priority" type="number" required/>
+                    <div *ngIf="validateCreateForm.priority.inValidNumber || createForm.controls['priority']?.invalid && (createForm.controls['priority']?.dirty || createForm.controls['title'].touched)" class="danger-notice">
+                        <div *ngIf="createForm.controls['priority'].errors?.['required']">Độ ưu tiên không được để trống</div>
+                        <div *ngIf="validateCreateForm.priority.inValidNumber && !createForm.controls['priority'].errors?.['required']">Chương số phải là số lớn hơn 0</div>
+                    </div>
+                  </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                  <label class="col-md-3 col-lg-3 col-form-label" for="name">Mô tả</label>
+                  <div class="col-md-9 col-lg-8 col-table-reponsive p-0">
+                    <ckeditor
+                        [config]="classicEditorConfig" 
+                        [editor]="classicEditor"
+                        (change)="handleChangeDataCkeditor($event,lesson)" 
+                        (ready)="initEditor($event)"
+                        data="{{section.content}}">
+                    </ckeditor>
+                  </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <label class="col-md-3 col-lg-3 col-form-label" for="name">Trạng thái</label>
+                    <div class="col-md-9 col-lg-8 col-table-reponsive p-0 d-flex align-items-center">
+                        <div class="custom-control custom-switch" dir="ltr">
+                            <input type="checkbox" class="custom-control-input" id="status" name="status" [(ngModel)]="lesson.status" [checked]="lesson.status">
+                            <label class="custom-control-label" for="status"></label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-light waves-effect" (click)="createModalRef?.hide()">Đóng</button>
+            <button [disabled]="createForm.invalid || validateCreateForm.priority.inValidNumber" (click)="handleOnSubmitCreateSection()" type="submit" class="btn btn-primary waves-effect waves-light ml-2">Xác nhận</button>
+        </div>
+     </ng-template>
+</form>
+
+<form (ngSubmit)="handleOpenCreateSectionModal()" #editForm="ngForm">
+    <ng-template #editTemplate>
+        <div class="modal-header">
+            <h5 class="modal-title mt-0" id="exampleModalScrollableTitle">Thêm bài học</h5>
+            <button type="button" class="close" (click)="editModalRef?.hide()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <div class="row">
+                  <label class="col-md-3 col-lg-3 col-form-label" for="name">Tên bài học <span class="text-danger">*</span></label>
+                  <div class="col-md-9 col-lg-8 col-table-reponsive p-0">
+                    <input class="form-control" [(ngModel)]="lesson.title" name="title" id="title" type="text" required/>
+                    <div *ngIf="editForm.controls['title']?.invalid && (editForm.controls['title']?.dirty || editForm.controls['title'].touched)" class="danger-notice">
+                        <div *ngIf="editForm.controls['title'].errors?.['required']">Tên bài học không được để trống</div>
+                    </div>
+                  </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                  <label class="col-md-3 col-lg-3 col-form-label" for="name">Độ ưu tiên <span class="text-danger">*</span></label>
+                  <div class="col-md-9 col-lg-8 col-table-reponsive p-0">
+                    <input class="form-control" [(ngModel)]="lesson.priority" (ngModelChange)="onPriorityChange($event,Action.Edit)" name="priority" id="priority" type="number" required/>
+                    <div *ngIf="validateEditForm.priority.inValidNumber || editForm.controls['priority']?.invalid && (editForm.controls['priority']?.dirty || editForm.controls['title'].touched)" class="danger-notice">
+                        <div *ngIf="editForm.controls['priority'].errors?.['required']">Độ ưu tiên không được để trống</div>
+                        <div *ngIf="validateEditForm.priority.inValidNumber && !editForm.controls['priority'].errors?.['required']">Chương số phải là số lớn hơn 0</div>
+                    </div>
+                  </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                  <label class="col-md-3 col-lg-3 col-form-label" for="name">Mô tả</label>
+                  <div class="col-md-9 col-lg-8 col-table-reponsive p-0">
+                    <ckeditor
+                        [config]="classicEditorConfig" 
+                        [editor]="classicEditor"
+                        (change)="handleChangeDataCkeditor($event,lesson)" 
+                        (ready)="initEditor($event)"
+                        data="{{section.content}}">
+                    </ckeditor>
+                  </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <label class="col-md-3 col-lg-3 col-form-label" for="name">Trạng thái</label>
+                    <div class="col-md-9 col-lg-8 col-table-reponsive p-0 d-flex align-items-center">
+                        <div class="custom-control custom-switch" dir="ltr">
+                            <input type="checkbox" class="custom-control-input" id="status" name="status" [(ngModel)]="lesson.status" [checked]="lesson.status">
+                            <label class="custom-control-label" for="status"></label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-light waves-effect" (click)="editModalRef?.hide()">Đóng</button>
+            <button [disabled]="editForm.invalid || validateEditForm.priority.inValidNumber" (click)="handleOnSubmitEditSection()" type="submit" class="btn btn-primary waves-effect waves-light ml-2">Xác nhận</button>
+        </div>
+     </ng-template>
+</form>
+
+<form (ngSubmit)="handleOpenCreateSectionModal()" #contentForm="ngForm"  >
+    <ng-template #contentTemplate>
+        <div class="modal-header">
+            <h5 class="modal-title mt-0" id="exampleModalScrollableTitle">Tài liệu bài học</h5>
+            <button type="button" class="close" (click)="contentModalRef?.hide()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <ng-container *ngIf="lesson?.lessonContents?.length > 0">
+                    <table id="datatable-buttons" class="table table-striped dt-responsive nowrap dataTable no-footer dtr-inline" style="border-collapse: collapse; border-spacing: 0px; width: 100%;" role="grid" aria-describedby="datatable-buttons_info">
+                        <tbody>
+                            <tr *ngFor="let content of lesson?.lessonContents; let i = index" role="row" class="odd">
+                                <td class="sorting_1 dtr-control row">
+                                    <h6 class="text-primary cursor-pointer col-9">
+                                        <i *ngIf="content?.type === TypeFile.Link" class="fa-solid fa-link"></i>
+                                        <i *ngIf="content?.type === TypeFile.File" class="fa-regular fa-file me-1"></i>
+                                        <i *ngIf="content?.type === TypeFile.Video" class="fa-regular fa-circle-play"></i>
+                                        {{ content?.title }}
+                                    </h6>
+                                    <div class="action-lesson col-3 text-end">
+                                        <span *ngIf="content.type === TypeFile.File" class="text-info cursor-pointer ml-2" (click)="handleOpenLinkDownload(content)"><i class="fa-solid fa-download"></i></span>
+                                        <span *ngIf="content.type === TypeFile.Link" class="text-info cursor-pointer ml-2" (click)="handleOpenLinkWeb(content)"><i class="fa-solid fa-earth-americas"></i></span>
+                                        <span *ngIf="content.type === TypeFile.Video" class="text-info cursor-pointer ml-2" (click)="handleOpenLinkVideo(content)"><i class="fa-brands fa-youtube"></i></span>
+                                        <span class="text-warning cursor-pointer ml-2" (click)="handleEditLessonContent(content)"><i class="fa-solid fa-pen"></i></span>
+                                        <span class="text-danger cursor-pointer ml-2" (click)="handleDeleteContent(content.id)"><i class="fa-solid fa-trash"></i></span>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </ng-container>
+
+                <ng-container *ngIf="!(lesson?.lessonContents?.length > 0)">
+                    <div class="d-flex justify-content-center my-4">Không có bản ghi nào!</div>
+                </ng-container>
+            </div>
+
+            <div *ngIf="statusActionLessonContent !== null" class="form-group">
+                <div class="row">
+                    <div class="col-4">
+                            <label class="col-form-label me-3" for="name">Tiêu đề <span class="text-danger">*</span></label>
+                                <div class="col-table-reponsive p-0">
+                                    <input class="form-control" [(ngModel)]="lessonContent.title" name="title" id="title" type="text" required/>
+                                    <div *ngIf="contentForm.controls['title']?.invalid && (contentForm.controls['title']?.dirty || contentForm.controls['title'].touched)" class="danger-notice">
+                                        <div *ngIf="contentForm.controls['title'].errors?.['required']">Tên tài liệu không được để trống</div>
+                                    </div>
+                                </div>
+                    </div>
+                    <div class="col-4">
+                        <label class="col-form-label me-3" for="name">Độ ưu tiên <span class="text-danger">*</span></label>
+                            <div class="col-table-reponsive p-0">
+                                <input class="form-control" [(ngModel)]="lessonContent.priority" name="priority" id="priority" type="text" required/>
+                                <div *ngIf="contentForm.controls['priority']?.invalid && (contentForm.controls['priority']?.dirty || contentForm.controls['title'].touched)" class="danger-notice">
+                                    <div *ngIf="contentForm.controls['priority'].errors?.['required']">Độ ưu tiên không được để trống</div>
+                                </div>
+                            </div>
+                    </div>
+                    <div class="col-4">
+                            <label class="col-form-label me-3" for="name">Loại tài liệu</label>
+                            <select class="custom-select" name="fileType" [(ngModel)]="lessonContent.type">
+                                <option *ngFor="let type of getTypeFileValues()" [ngValue]="type">{{ getTypeFileDisplayName(type) }}</option>
+                            </select>
+                    </div>
+                </div>
+                <div *ngIf="lessonContent.type === TypeFile.Link" class="row">
+                    <div class="col-4">
+                        <label class="col-form-label me-3" for="name">Đường dẫn</label>
+                        <div class="col-table-reponsive p-0">
+                            <input class="form-control" [(ngModel)]="lessonContent.fileUrl" name="fileUrl" id="fileUrl" type="text" required/>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="lessonContent.type === TypeFile.File" class="row">
+                    <div class="col-4">
+                        <label class="col-form-label me-3" for="name">File</label>
+                        <div class="custom-file">
+                            <input (change)="handleChangeFile($event)" type="file" name="image" id="image" class="custom-file-input" id="customFile" multiple="false">
+                            <label class="custom-file-label" for="customFile">Chọn file</label>
+                        </div>
+                    </div>
+                    <div class="mt-2">
+                        <span>{{ lessonContent.fileName }}</span>
+                    </div>
+                </div>
+                <div *ngIf="lessonContent.type === TypeFile.Video" class="row">
+                    <div class="col-4">
+                        <label class="col-form-label me-3" for="name">Id video youtube</label>
+                        <div class="col-table-reponsive p-0">
+                            <input class="form-control" [(ngModel)]="lessonContent.videoUrl" (ngModelChange)="handleVideoUrlChange()" name="fileUrl" id="fileUrl" type="text" required/>
+                        </div>
+                    </div>
+                </div>
+                <iframe *ngIf="lessonContent.type === TypeFile.Video && lessonContent.videoUrl" class="mt-3" width="220" height="120" [src]="safeUrl" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                <div class="row">
+                    <div class="col-4">
+                        <label class="col-form-label" for="name">Yêu cầu thời gian?</label>
+                        <div class="col-table-reponsive p-0 d-flex align-items-center">
+                            <div class="custom-control custom-switch" dir="ltr">
+                                <input type="checkbox" class="custom-control-input" id="status" name="status" [(ngModel)]="lessonContent.requiedTime" [checked]="lessonContent.requiedTime" (change)="onCheckboxChange($event)">
+                                <label class="custom-control-label" for="status"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div *ngIf="lessonContent.requiedTime" class="col-4">
+                        <label class="col-form-label me-3" for="name">Thời gian (phút)</label>
+                        <div class="col-table-reponsive p-0">
+                            <input class="form-control" [(ngModel)]="lessonContent.estimatedCompletionTime" name="estimatedStudyTime" id="estimatedStudyTime" type="number" required/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <button *ngIf="statusActionLessonContent === null" type="button" class="btn btn-success waves-effect waves-light" (click)="handleAddLessonContent()">
+                    <i class="fa-solid fa-plus"></i>
+                </button>
+                <button *ngIf="statusActionLessonContent === Action.Edit" type="button" class="btn btn-primary waves-effect waves-light me-2" [disabled]="!isDisableSubmitLessonContent()" (click)="submitEditLessonContent()">
+                    <i class="fa-solid fa-wrench"></i>
+                </button>
+                <button *ngIf="statusActionLessonContent === Action.Add" type="button" class="btn btn-primary waves-effect waves-light me-2"  [disabled]="!isDisableSubmitLessonContent()" (click)="submitAddLessonContent()">
+                    <i class="fa-solid fa-check"></i>
+                </button>
+                <button *ngIf="statusActionLessonContent === Action.Add || statusActionLessonContent === Action.Edit" type="button" class="btn btn-danger waves-effect waves-light" (click)="setDefaultLessonContentValues()">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- <div class="form-group">
+                <div class="row">
+                  <label class="col-md-3 col-lg-3 col-form-label" for="name">Độ ưu tiên <span class="text-danger">*</span></label>
+                  <div class="col-md-9 col-lg-8 col-table-reponsive p-0">
+                    <input class="form-control" [(ngModel)]="lesson.priority" (ngModelChange)="onPriorityChange($event,Action.Add)" name="priority" id="priority" type="number" required/>
+                    <div *ngIf="validateCreateForm.priority.inValidNumber || createForm.controls['priority']?.invalid && (createForm.controls['priority']?.dirty || createForm.controls['title'].touched)" class="danger-notice">
+                        <div *ngIf="createForm.controls['priority'].errors?.['required']">Độ ưu tiên không được để trống</div>
+                        <div *ngIf="validateCreateForm.priority.inValidNumber && !createForm.controls['priority'].errors?.['required']">Chương số phải là số lớn hơn 0</div>
+                    </div>
+                  </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                  <label class="col-md-3 col-lg-3 col-form-label" for="name">Mô tả</label>
+                  <div class="col-md-9 col-lg-8 col-table-reponsive p-0">
+                    <ckeditor
+                        [config]="classicEditorConfig" 
+                        [editor]="classicEditor"
+                        (change)="handleChangeDataCkeditor($event,lesson)" 
+                        (ready)="initEditor($event)"
+                        data="{{section.content}}">
+                    </ckeditor>
+                  </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <label class="col-md-3 col-lg-3 col-form-label" for="name">Trạng thái</label>
+                    <div class="col-md-9 col-lg-8 col-table-reponsive p-0 d-flex align-items-center">
+                        <div class="custom-control custom-switch" dir="ltr">
+                            <input type="checkbox" class="custom-control-input" id="status" name="status" [(ngModel)]="lesson.status" [checked]="lesson.status">
+                            <label class="custom-control-label" for="status"></label>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-light waves-effect" (click)="contentModalRef?.hide()">Đóng</button>
+            <!-- <button [disabled]="createForm.invalid || validateCreateForm.priority.inValidNumber" (click)="handleOnSubmitCreateSection()" type="submit" class="btn btn-primary waves-effect waves-light ml-2">Xác nhận</button> -->
+        </div>
+     </ng-template>
+</form>
+
+

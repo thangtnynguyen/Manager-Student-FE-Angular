@@ -1,0 +1,321 @@
+<div class="row">
+    <div class="col-12">
+       <div
+          class="page-title-box d-flex align-items-center justify-content-between"
+          >
+          <h4 class="mb-0">Thêm mới câu hỏi</h4>
+          <div class="page-title-right">
+             <ol class="breadcrumb m-0">
+                <li
+                   routerLink="/admin/dashboard"
+                   class="breadcrumb-item d-flex align-items-center"
+                   >
+                   <span>Trang chủ</span>
+                   <i class="breadcrumb-item-arrow fa-solid fa-angle-right"></i>
+                </li>
+                <li routerLink="/admin/question" class="breadcrumb-item d-flex align-items-center">
+                   <span>Quản lý câu hỏi</span>
+                   <i class="breadcrumb-item-arrow fa-solid fa-angle-right"></i>
+                </li>
+                <li class="breadcrumb-item active">
+                    <span>Thêm mới câu hỏi</span>
+                 </li>
+             </ol>
+          </div>
+       </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+       <div class="card">
+          <div class="card-body">
+            <ul class="nav nav-tabs nav-tabs-custom nav-justified d-inline-flex" role="tablist">
+                <li *ngFor="let questionType of questionContant.types;" class="nav-item cursor-pointer">
+                    <a class="nav-link {{questionType.key === question.type ? 'active' : ''}}">
+                        <span class="d-block d-sm-none"><i class="fas fa-home"></i></span>
+                        <span class="d-none d-sm-block">{{ questionType.value }}</span> 
+                    </a>
+                </li>
+            </ul>
+
+            <form (ngSubmit)="onSubmit()" #form="ngForm" class="mt-3">
+                <div class="form-group">
+                    <div class="row">
+                        <label class="col-md-12 col-lg-6 col-form-label" for="idTeacher">Chương</label>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <div class="row">
+                                <!-- <button (click)="handleOpenQuestionCategoryTreeModal()" type="button" class="btn input-type-select dropdown-toggle input-form-space d-flex justify-content-between align-items-center">
+                                    <span>{{ questionCategory.name }}</span> <i class="mdi mdi-chevron-down"></i>
+                                </button> -->
+                                <select (blur)="validateFormSuccess.touchSection = true" name="sectionId" class="custom-select input-type-select input-form-space"  [(ngModel)]="question.sectionId">
+                                    <option [selected]="question.sectionId === null || question.sectionId === 0" [ngValue]="0">Chương</option>
+                                    <option *ngFor="let section of sections;" value="{{ section.id }}">{{ section.title }}</option>
+                                </select>
+
+                                <div *ngIf="question.sectionId === 0 && question.sectionId !== null && validateFormSuccess.touchSection" class="danger-notice">
+                                    <div *ngIf="question.sectionId === 0 && question.sectionId !== null && validateFormSuccess.touchSection">Chương câu hỏi không được để trống!</div>
+                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="row">
+                        <label class="col-md-12 col-lg-6 col-form-label" for="idTeacher">Độ khó</label>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <div class="row">
+                                <select (blur)="validateFormSuccess.touchDiff = true" name="touchDiff" class="custom-select input-type-select input-form-space"  [(ngModel)]="question.difficulty">
+                                    <option [selected]="question.difficulty === null || question.difficulty === 0" [ngValue]="0">Độ khó</option>
+                                    <option *ngFor="let section of questionContant.difficulties;" value="{{ section.key }}">{{ section.value }}</option>
+                                </select>
+
+                                <div *ngIf="question.difficulty === 0 && question.difficulty !== null && validateFormSuccess.touchDiff" class="danger-notice">
+                                    <div *ngIf="question.difficulty === 0 && question.difficulty !== null && validateFormSuccess.touchDiff">Độ khó câu hỏi không được để trống!</div>
+                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="row">
+                        <label class="col-md-12 col-lg-6 col-form-label" for="idTeacher">Nội dung câu hỏi</label>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 col-lg-8">
+                            <ckeditor (ready)="onReady($event)" id="editor" [config]="config.classicEditorConfig" [editor]="classicEditor" class="title-editor" (change)="handleChangeQuestionAnswer($event,question,questionContant.typeCkeditor.questionTitle)" (blur)="validateCkeditorField('title',null,null)"></ckeditor>
+                            <div *ngIf="!validateForm.title" class="danger-notice">
+                                <div *ngIf="!validateForm.title">Nội dung không được để trống</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <label class="col-md-12 col-lg-6 col-form-label" for="idTeacher">Đáp án câu hỏi</label>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 col-lg-8">
+                            <div class="question-answer">
+                                <div class="question-answer-item mb-4" *ngFor="let question of question.questionAnswers; let index = index">
+                                    <div class="font-weight-bold mb-1">({{ question.charIndex }})</div>
+                                    <div class="d-flex gap-2">
+                                        <div class="question-answer-item-left">
+                                            <ckeditor [config]="config.classicEditorConfig" [editor]="classicEditor" (change)="handleChangeQuestionAnswer($event,question,questionContant.typeCkeditor.questionAnswerContent,index)" (blur)="validateCkeditorField('questionAnswer',question,index)"></ckeditor>
+                                            <div *ngIf="validateForm.questionAnswers[index]" class="danger-notice">
+                                                <div *ngIf="validateForm.questionAnswers[index]">Nội dung câu trả lời không được để trống</div>
+                                            </div>
+                                        </div>  
+                                        <div class="question-answer-item-right">
+                                            <i class="fa-solid fa-trash text-danger cursor-pointer" (click)="handleOnDeleteAnswerQuesion(index)"></i>
+                                            <i class="fa-solid fa-chevron-up text-primary cursor-pointer" (click)="handleMoveQuestion(index, 'up')"></i>
+                                            <i class="fa-solid fa-chevron-down text-primary cursor-pointer" (click)="handleMoveQuestion(index, 'down')"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="add-question-answer-btn btn btn-primary" (click)="handleAddQuestionAnswer()">
+                                Thêm câu trả lời
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <label class="col-md-12 col-lg-6 col-form-label" for="idTeacher">Câu trả lời đúng</label>
+                    </div>                                                                                                                                                                                                                                                                                                                                                                     
+
+                    <div class="add-question-answer-correct d-flex gap-4">
+                        <div class="custom-control custom-radio" *ngFor="let answer of question.questionAnswers; let index = index">
+                          <input 
+                            type="radio" 
+                            id="verification-type-{{ index }}" 
+                            name="question-answer" 
+                            class="custom-control-input" 
+                            [checked]="answer.isCorrect"
+                            (change)="handleOnChangeCorrectAnswerQuestion(answer)">
+                          <label class="custom-control-label font-weight-normal" for="verification-type-{{ index }}">{{ answer.charIndex }}</label>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12 col-lg-8 mt-2">
+                            <div class="alert alert-danger mb-0" role="alert">
+                                Sau khi kỳ thi kết thúc, nếu sửa đổi câu trả lời cho các câu hỏi, điểm số sẽ không thay đổi tương ứng theo câu trả lời mới!
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="row">
+                        <label class="col-md-12 col-lg-6 col-form-label" for="idTeacher">Điểm khả dụng</label>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <div class="row">
+                                <input [value]="getMaxScoreQuestionAnswers()" type="number" placeholder="Điểm" class="form-control input-form-space" disabled>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <div class="d-flex gap-3">
+                        <div class="custom-control custom-radio" *ngFor="let typeScore of questionContant.typeScores; let index = index">
+                            <input 
+                              type="radio" 
+                              id="score-answer-regular-{{index}}" 
+                              name="score-answer-regular" 
+                              class="custom-control-input" 
+                              [checked]="typeScoreAnswer === typeScore.value"
+                              [value]="typeScore.value"
+                              [(ngModel)]="typeScoreAnswer"
+                              >
+                            <label class="custom-control-label font-weight-normal" for="score-answer-regular-{{index}}">{{ typeScore.title }}</label>
+                          </div>
+                    </div>
+
+                    <div class="d-flex" [@fadeInOut]="typeScoreAnswer === 2 ? 'visible' : 'hidden'" id="accordion">
+                        <div class="col-12 col-lg-8 mt-2">
+                            <div class="row">
+                                <div class="col-3 mt-2" *ngFor="let answer of question.questionAnswers; let index = index">
+                                    <div class="mb-1">Điểm lựa chọn ({{answer.charIndex}})</div>
+                                    <div>
+                                        <input [(ngModel)]="question.questionAnswers[index].score" name="phone" id="phone" type="number" placeholder="Điểm" class="form-control">
+                                        <div *ngIf="!question.questionAnswers[index].score || question.questionAnswers[index].score < 0" class="danger-notice">
+                                            <div *ngIf="!question.questionAnswers[index].score || question.questionAnswers[index].score < 0">Điểm không được để trống</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="row">
+                        <label class="col-md-12 col-lg-6 col-form-label" for="idTeacher">Thẻ tag</label>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <div class="row">
+                                <button (click)="handleOpenQuestionTagModal()" type="button" class="btn input-type-select dropdown-toggle input-form-space d-flex justify-content-between align-items-center">
+                                    <span *ngIf="!(question.questionTags.length > 0)">Lựa chọn tag câu hỏi</span>
+                                    <span *ngIf="(question.questionTags.length > 0)">
+                                        <ng-container *ngFor="let tag of questionTags;">
+                                            <span *ngIf="tag.selected === true" class="badge badge-soft-primary cursor-pointer mr-2">
+                                                {{ tag.name }}
+                                            </span>
+                                        </ng-container>
+                                    </span> 
+                                    <i class="mdi mdi-chevron-down"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="row">
+                        <label class="col-md-12 col-lg-6 col-form-label" for="idTeacher">Ghi chú</label>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 col-lg-8">
+                            <ckeditor (ready)="onReady($event)" id="editor" [config]="config.classicEditorConfig" [editor]="classicEditor" class="title-editor" (change)="handleChangeQuestionAnswer($event,question,questionContant.typeCkeditor.questionFeedback)"></ckeditor>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="d-flex">
+                        <div class="ml-auto">
+                            <button routerLink="/admin/question" type="button" class="btn btn-secondary waves-effect waves-light">Quay lại</button>
+                            <button [disabled]="isInvalidForm() || question.sectionId === 0 || question.sectionId === null || question.difficulty === 0 || question.difficulty === null" type="submit" class="btn btn-success waves-effect waves-light ml-2">Xác nhận</button>
+                        </div>
+                    </div>
+                </div>
+            </form>            
+          </div>
+       </div>
+    </div>
+    <!-- end col -->
+ </div>
+
+<ng-template #questionCategoryTreeTemplate>
+    <div class="modal-header">
+        <h5 class="modal-title mt-0" id="exampleModalScrollableTitle">Lựa chọn loại câu hỏi</h5>
+        <button type="button" class="close" (click)="handleCloseQuestionCategoryTreeModal()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="app-search form-search d-none d-lg-block pt-0 pb-0">
+            <div class="position-relative">
+              <input (input)="handleChangeSearchCategory()" [(ngModel)]="questionCategorySearch" name="searchCategory" id="searchCategory" type="text" placeholder="Tìm kiếm" class="form-control">
+              <span class="fa-solid fa-magnifying-glass ri-search-line"></span>
+            </div>
+        </div>
+        <div id="categories-tree" class="mt-3 px-0" role="tree">
+            <!-- <app-question-category-tree [categoriesSelect]="questionCategoriesSelect" [search]="questionCategorySearch" [type]="questionCategoryConstant.questionCategoryTreeType" [categories]="questionCategories"></app-question-category-tree> -->
+            <app-add-question-category-tree [categories]="questionCategoryTree" [search]="questionCategorySearch"></app-add-question-category-tree>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-light waves-effect" (click)="handleCloseQuestionCategoryTreeModal()">Đóng</button>
+        <button type="button" class="btn btn-primary waves-effect waves-light" (click)="handleChooseQuestionCategoryId()">Xác nhận</button>
+    </div>
+</ng-template>
+
+<ng-template #questionCategoryTagTemplate>
+    <div class="modal-header">
+        <h5 class="modal-title mt-0" id="exampleModalScrollableTitle">Lựa chọn thẻ tag câu hỏi</h5>
+        <button type="button" class="close" (click)="handleCloseQuestionTagModal()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="app-search form-search d-none d-lg-block pt-0 pb-0">
+            <div class="position-relative">
+              <input (input)="handleChangeSearchCategory()" [(ngModel)]="questionTagsSearch" name="searchCategory" id="searchCategory" type="text" placeholder="Tìm kiếm" class="form-control">
+              <span class="fa-solid fa-magnifying-glass ri-search-line"></span>
+            </div>
+        </div>
+        <div id="categories-tree" class="mt-3 px-0" role="tree">
+            <ng-container *ngFor="let tag of questionTags;">
+                <span *ngIf="tag.name.toLowerCase().includes(questionTagsSearch.toLowerCase())" (click)="tag.selected = !tag.selected" class="badge {{ tag.selected === true ? 'badge-soft-primary' : 'badge-soft-dark' }} cursor-pointer mr-2">
+                    {{ tag.name }}
+                </span>
+            </ng-container>
+            <span class="add-question-tag-container">
+                <ng-container *ngIf="!isAddQuestionTag">
+                    <span class="badge badge-success add-tag-btn rounded-circle cursor-pointer">
+                        <i class="fa-solid fa-plus add-tag-btn"></i>
+                    </span>
+                </ng-container>
+                <ng-container *ngIf="isAddQuestionTag">
+                    <span class="add-question-tag" (click)="handleDocumentClick($event)">
+                        <input name="searchCategory" [(ngModel)]="questionTagName" id="searchCategory" type="text" placeholder="Tên thẻ tag" class="form-control form-control-sm d-inline add-tag-input">
+                        <span class="badge badge-success rounded cursor-pointer ml-2" (click)="handleSubmitCreateQuestionTag()">
+                            <i class="fa-solid fa-check submit-add-tag-question"></i>
+                        </span>
+                        <span class="badge badge-danger rounded cursor-pointer ml-2">
+                            <i class="fa-solid fa-xmark"></i>
+                        </span>
+                    </span>
+                </ng-container>
+            </span>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-light waves-effect" (click)="handleCloseQuestionTagModal()">Đóng</button>
+        <button type="button" class="btn btn-primary waves-effect waves-light" (click)="handleChooseQuestionTags()">Xác nhận</button>
+    </div>
+</ng-template>
+

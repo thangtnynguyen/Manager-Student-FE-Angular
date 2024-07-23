@@ -1,0 +1,106 @@
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0">Danh sách thẻ tag</h4>
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li routerLink="/admin/question" class="breadcrumb-item d-flex align-items-center">
+                        <span>Trang chủ</span>
+                        <i class="breadcrumb-item-arrow fa-solid fa-angle-right"></i>
+                    </li>
+                    <li class="breadcrumb-item active">
+                        <span>Quản lý thẻ tag</span>
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+           <div class="card-body">
+            <div class="group-action">
+                <div class="row">
+        
+                    <div class="group-action__right col-xl-12 col-md-12 col-sm-12">
+                        <button [@fadeInOut]="selectedCategoriesTag.length > 0 ? 'visible' : 'hidden'" type="button"
+                            class="btn btn-primary gap-2 waves-effect waves-light align-items-center"
+                            style="line-height: 24px; text-align: center;" (click)="handleOnDeleteMultiple()">
+                            <i class="fa-solid fa-trash"></i>{{ selectedCategoriesTag.length}} bản ghi
+                        </button>
+                        <button [@fadeInOut]="selectedCategoriesTag.length === 1 ? 'visible' : 'hidden'" type="button"
+                            class="btn btn-primary gap-2 waves-effect waves-light align-items-center"
+                            style="line-height: 24px; text-align: center;" (click)="handleOpenQuestionTagModal()">
+                            <i class="fa-solid fa-trash"></i>Sửa tag '{{selectedCategoriesTagEdit.name}}'
+                        </button>
+        
+        
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="app-search form-search d-none d-lg-block pt-0 pb-0">
+                    <div class="position-relative">
+                        <input (input)="handleChangeSearchCategory()" [(ngModel)]="questionTagsSearch" name="searchCategory"
+                            id="searchCategory" type="text" placeholder="Tìm kiếm" class="form-control">
+                        <span class="fa-solid fa-magnifying-glass ri-search-line"></span>
+                    </div>
+                </div>
+                <div id="categories-tree" class="mt-3 px-0" role="tree">
+                    <ng-container *ngFor="let tag of questionTags;">
+                        <span *ngIf="tag.name.toLowerCase().includes(questionTagsSearch.toLowerCase())"
+                            (click)="tag.selected = !tag.selected" (click)="getquestionTagIDSelect(tag)"
+                            class="badge {{ tag.selected === true ? 'badge-soft-primary' : 'badge-soft-dark' }} cursor-pointer mr-2">
+                            {{ tag.name }}
+                        </span>
+                    </ng-container>
+                    <span class="add-question-tag-container">
+                        <ng-container *ngIf="!isAddQuestionTag">
+                            <span class="badge badge-success add-tag-btn rounded-circle cursor-pointer">
+                                <i class="fa-solid fa-plus add-tag-btn"></i>
+                            </span>
+                        </ng-container>
+                        <ng-container *ngIf="isAddQuestionTag">
+                            <span class="add-question-tag" (click)="handleDocumentClick($event)">
+                                <input name="searchCategory" [(ngModel)]="questionTagName" id="searchCategory" type="text"
+                                    placeholder="Tên thẻ tag" class="form-control form-control-sm d-inline add-tag-input">
+                                <input name="searchCategory" [(ngModel)]="questionTagType" id="searchCategory" type="number"
+                                    placeholder="Loại thẻ tag" class="form-control form-control-sm d-inline add-tag-input">
+                                <span class="badge badge-success rounded cursor-pointer ml-2"
+                                    (click)="handleSubmitCreateQuestionTag()">
+                                    <i class="fa-solid fa-check submit-add-tag-question"></i>
+                                </span>
+                                <span class="badge badge-danger rounded cursor-pointer ml-2">
+                                    <i class="fa-solid fa-xmark"></i>
+                                </span>
+                            </span>
+                        </ng-container>
+                    </span>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- edit -->
+<ng-template #questionCategoryTagTemplate>
+    <div class="modal-header">
+        <h5 class="modal-title mt-0" id="exampleModalScrollableTitle">Lựa chọn thẻ tag câu hỏi</h5>
+        <button type="button" class="close" (click)="handleCloseQuestionTagModal()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <input name="searchCategory" [(ngModel)]="selectedCategoriesTagEdit.name" id="searchCategory" type="text"
+            placeholder="Tên thẻ tag" class="form-control form-control-sm d-inline add-tag-input">
+        <input name="searchCategory" [(ngModel)]="selectedCategoriesTagEdit.type" id="searchCategory" type="number"
+            placeholder="Loại thẻ tag" class="form-control form-control-sm d-inline add-tag-input">
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-light waves-effect" (click)="handleCloseQuestionTagModal()">Đóng</button>
+        <button type="button" class="btn btn-light waves-effect" (click)="handleSubmitEditQuestionTag()">Xác nhận</button>
+    </div>
+</ng-template>

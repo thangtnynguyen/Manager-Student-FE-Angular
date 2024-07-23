@@ -1,0 +1,111 @@
+<div class="row">
+    <div class="col-12">
+       <div
+          class="page-title-box d-flex align-items-center justify-content-between"
+          >
+          <h4 class="mb-0">Thêm mới giáo viên</h4>
+          <div class="page-title-right">
+             <ol class="breadcrumb m-0">
+                <li
+                   routerLink="/admin/dashboard"
+                   class="breadcrumb-item d-flex align-items-center"
+                   >
+                   <span>Trang chủ</span>
+                   <i class="breadcrumb-item-arrow fa-solid fa-angle-right"></i>
+                </li>
+                <li routerLink="/admin/teacher" class="breadcrumb-item d-flex align-items-center">
+                   <span>Quản lý giáo viên</span>
+                   <i class="breadcrumb-item-arrow fa-solid fa-angle-right"></i>
+                </li>
+                <li class="breadcrumb-item active">
+                    <span>Thêm mới giáo viên</span>
+                 </li>
+             </ol>
+          </div>
+       </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12">
+       <div class="card">
+          <div class="card-body">
+            <form (ngSubmit)="onSubmit()" #form="ngForm">
+                <div class="form-group">
+                    <div class="row">
+                        <label class="col-md-3 col-lg-3 col-form-label" for="idTeacher">Mã giáo viên</label>
+                        <input class="col-md-9 col-lg-6 col-table-reponsive form-control" [(ngModel)]="teacher.teacherId" name="idTeacher" id="idTeacher" type="text" placeholder="Mã giáo viên"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <label class="col-md-3 col-lg-3 col-form-label" for="name">Họ và tên <span class="text-danger">*</span></label>
+                        <div class="col-md-9 col-lg-6 col-table-reponsive p-0">
+                            <input class="form-control" [(ngModel)]="teacher.name" name="name" id="name" type="text" placeholder="Họ và tên" required/>
+                            <div *ngIf="form.controls['name']?.invalid && (form.controls['name']?.dirty || form.controls['name'].touched)" class="danger-notice">
+                                <div *ngIf="form.controls['name'].errors?.['required']">Tên không được để trống</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <label class="col-md-3 col-lg-3 col-form-label" for="email">Email</label>
+                        <div class="col-md-9 col-lg-6 col-table-reponsive p-0">
+                            <input class="form-control" [(ngModel)]="teacher.email" name="email" id="email" type="email" placeholder="Email" email/>
+                            <div *ngIf="(form.controls['email']?.dirty || form.controls['email']?.touched)" class="danger-notice">
+                                <div *ngIf="form.controls['email'].errors?.['email']">Định dạng email không đúng</div>
+                                <div *ngIf="validVerificationType() === -1">Email không được để trống</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <label class="col-md-3 col-lg-3 col-form-label" for="phone">Số điện thoại</label>
+                        <div class="col-md-9 col-lg-6 col-table-reponsive p-0">
+                            <input class="form-control" [(ngModel)]="teacher.phone" name="phone" id="phone" type="tel" placeholder="Số điện thoại" pattern="[0-9]{10,12}" />
+                            <div *ngIf="(form.controls['phone']?.dirty || form.controls['phone']?.touched)" class="danger-notice">
+                                <div *ngIf="form.controls['phone'].hasError('pattern')">Định dạng số điện thoại không đúng</div>
+                                <div *ngIf="validVerificationType() === -2">Số điện thoại không được để trống</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <label class="col-md-3 col-lg-3 col-form-label" for="verificationType">Kiểu xác thực</label>
+                        <div class="col-md-9 col-lg-6 col-table-reponsive d-flex align-items-center gap-4">
+                            <div class="custom-control custom-radio">
+                                <input type="radio" id="verification-type-email" name="verificationType" class="custom-control-input" [(ngModel)]="teacher.verificationType" [value]="2" checked="">
+                                <label class="custom-control-label font-weight-normal" for="verification-type-email">Email</label>
+                            </div>
+                            <div class="custom-control custom-radio">
+                                <input type="radio" id="verification-type-phone" name="verificationType" class="custom-control-input" [(ngModel)]="teacher.verificationType" [value]="1">
+                                <label class="custom-control-label font-weight-normal" for="verification-type-phone">Số điện thoại</label>
+                            </div>  
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="custom-control custom-switch ml-3" dir="ltr">
+                            <input type="checkbox" class="custom-control-input" id="status" name="status" [(ngModel)]="teacher.status" [checked]="teacher.status">
+                            <label class="custom-control-label" for="status">Trạng thái</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="d-flex">
+                        <div class="ml-auto">
+                            <button routerLink="/admin/teacher" type="button" class="btn btn-secondary waves-effect waves-light">Quay lại</button>
+                            <button [disabled]="form.invalid || validVerificationType() !== 1" type="submit" class="btn btn-success waves-effect waves-light ml-2">Xác nhận</button>
+                        </div>
+                    </div>
+                </div>
+            </form>            
+          </div>
+       </div>
+    </div>
+    <!-- end col -->
+ </div>
+

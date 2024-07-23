@@ -1,0 +1,9 @@
+.p-toast-detail {
+    max-width: 100px !important;
+    word-wrap: break-word !important;
+}
+
+.p-toast .p-toast-message .p-toast-message-content .p-toast-detail{
+    max-width: 100px !important;
+    word-wrap: break-word !important;
+}

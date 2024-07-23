@@ -1,0 +1,43 @@
+<div class="course-pro my-4">
+  <div class="course-pro__header">
+    <div class="course-pro__number-student">
+      <strong>{{totalNumberRegistrations| number: '1.0-3'}}+</strong> người khác đã học
+    </div>
+    <div
+      class="course-pro__header-title__wrapper w-100 d-flex justify-content-between"
+    >
+      <h2 class="course-pro__header-title mt-0">
+        <span>Khoá học miễn phí </span>
+      </h2>
+      <div>
+        <span>Xem lộ trình</span>
+        <i class="fa-solid fa-angle-right"></i>
+      </div>
+    </div>
+  </div>
+
+  <div class="course-pro__body">
+    <div class="course-pro__body-wrapper row mt-2">
+      <div *ngFor="let course of courses;" [routerLink]="['/course', course.slug]" class="course-pro__item col col-xl-3 col-lg-4 p-0">
+        <div class="course-pro__item-wrapper">
+          <div class="course-pro__item-link cursor-pointer">
+            <button type="button">Xem khoá học</button>
+            <div class="course-pro__item-link__img position-relative">
+              <img
+                class="img-fluid"
+                src="{{baseUrlApi + course.imageUrl}}"
+                alt="HTML CSS Pro"
+              />
+              <div class="position-absolute overley"></div>
+            </div>
+          </div>
+          <h3 class="course-pro__item-title mt-2">{{ course.title }}</h3>
+          <div class="course-pro__item-user-join">
+            <i class="fa-solid fa-users me-1"></i>
+              {{ course.numberRegistrations | number: '1.0-3' }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

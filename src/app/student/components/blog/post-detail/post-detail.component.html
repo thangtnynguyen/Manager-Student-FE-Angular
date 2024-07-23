@@ -1,0 +1,9 @@
+<!-- <p>post-detail works {{ slug }}!</p> -->
+
+<h2 class="my-3">{{ post.title }}</h2>
+
+<img src="{{ post.image }}" />
+
+<div class="content" [innerHTML]="post.content">
+
+</div>

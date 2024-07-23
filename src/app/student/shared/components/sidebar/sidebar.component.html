@@ -1,0 +1,27 @@
+<div class="sidebar__wrapper">
+  <div class="sidebar__create-post__btn"><i class="bi bi-plus-lg"></i></div>
+  <div class="sidebar__content">
+    <div class="sidebar__item" routerLink="/">
+      <div
+        class="sidebar__item-content"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+      >
+        <i class="bi bi-house-fill"></i>
+        <span>Trang chủ</span>
+      </div>
+    </div>
+    <div class="sidebar__item" routerLink="/learning-path">
+      <div class="sidebar__item-content" routerLinkActive="active">
+        <i class="bi bi-sign-merge-right-fill"></i>
+        <span>Lộ trình</span>
+      </div>
+    </div>
+    <div class="sidebar__item" routerLink="/blog">
+      <div class="sidebar__item-content" routerLinkActive="active">
+        <i class="bi bi-newspaper"></i>
+        <span>Bài viết</span>
+      </div>
+    </div>
+  </div>
+</div>

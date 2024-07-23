@@ -1,0 +1,142 @@
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0">Thông tin câu hỏi</h4>
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li routerLink="/admin/dashboard" class="breadcrumb-item d-flex align-items-center">
+                        <span>Trang chủ</span>
+                        <i class="breadcrumb-item-arrow fa-solid fa-angle-right"></i>
+                    </li>
+                    <li routerLink="/admin/question" class="breadcrumb-item d-flex align-items-center">
+                        <span>Quản lý câu hỏi</span>
+                        <i class="breadcrumb-item-arrow fa-solid fa-angle-right"></i>
+                    </li>
+                    <li class="breadcrumb-item active">
+                        <span>Thông tin câu hỏi</span>
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <form class="disable-form">
+                    <div class="form-group">
+                        <div class="row">
+                            <label class="col-md-3 col-lg-3 col-form-label" for="idquestion">Chương</label>
+                            <div class="col-md-9 col-lg-6 col-table-reponsive p-0">
+                                <div disabled class="form-control" [innerHTML]="question.section.title"
+                                name="name" id="name" type="text" placeholder="Loại câu hỏi"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="row">
+                            <label class="col-md-3 col-lg-3 col-form-label" for="idquestion">Độ khó</label>
+                            <div class="col-md-9 col-lg-6 col-table-reponsive p-0">
+                                <div disabled class="form-control" [innerHTML]="question.difficultyName"
+                                name="name" id="name" type="text" placeholder="Loại câu hỏi"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="row">
+                            <label class="col-md-3 col-lg-3 col-form-label" for="idquestion">Nội dung câu hỏi</label>
+                            <div class="col-md-9 col-lg-6 col-table-reponsive p-0">
+                                <div disabled class="form-control" [innerHTML]="question.title"
+                                name="name" id="name" type="text" placeholder="Loại câu hỏi"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="margin-top: 50px !important;">
+                        <div class="row">
+                            <label class="col-md-3 col-lg-3 col-form-label" for="description">Nội dung đáp án</label>
+                            <div class="col-md-9 col-lg-6 col-table-reponsive p-0">
+
+                                <tbody>
+                                    <tr *ngFor="let questionAnswer of question.questionAnswers; let i = index">
+                                        <td>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <div>
+                                                    <div style="display: flex;">
+                                                        <span class="container-correct {{ questionAnswer.isCorrect ? 'text-success' : 'text-danger' }}">{{ handleConvert(i)}} .
+                                                        </span>
+                                                        <span class="{{ questionAnswer.isCorrect ? 'text-success' : 'text-danger' }}" [innerHTML]="questionAnswer.content"></span>
+                                                        <div style="margin-left: 30px;">
+                                                            <span class="container-correct badge {{ questionAnswer.isCorrect ? 'badge-success' : 'badge-danger' }}"
+                                                                [innerHTML]="questionAnswer.score+' điểm'"></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+
+                                    </tr>
+                                    <tr *ngFor="let questionAnswer of question.questionAnswers; let i = index">
+                                        <div *ngIf="questionAnswer.isCorrect===true">
+                                            <!-- <label for="">Đáp án đúng: </label>
+                                            <br>
+                                            <div class="left" style="display: flex;">
+                                                <span class="container-correct"> {{ handleConvert(i)}} . </span>
+                                                <span [innerHTML]="questionAnswer.content"></span>
+                                            </div> -->
+                                            <div >
+                                                <span class="container-correct">Điểm khả dụng: </span>
+                                                <br>
+                                                <span class="container-correct left"
+                                                    [innerHTML]="getMaxScoreQuestionAnswers()+' điểm'"></span>
+                                            </div>
+                                        </div>
+                                    </tr>
+                                </tbody>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="row">
+                            <label class="col-md-3 col-lg-3 col-form-label" for="name">Thẻ tag</label>
+                            <div class="col-md-9 col-lg-6 col-table-reponsive p-0">
+                                <div disabled class="form-control">
+                                    <span>
+                                        <ng-container *ngFor="let tag of this.question.questionTags;">
+                                            <span class="badge badge-soft-primary cursor-pointer mr-2">
+                                                {{ tag.tag.name }}
+                                            </span>
+                                        </ng-container>
+                                    </span> 
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="row">
+                            <label class="col-md-3 col-lg-3 col-form-label" for="title">Ghi chú</label>
+                            <div class="col-md-9 col-lg-6 col-table-reponsive p-0">
+                                <div disabled class="form-control" [innerHTML]="question.feedback" name="title" id="title"
+                                    type="text"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="d-flex">
+                            <div class="ml-auto">
+                                <button routerLink="/admin/question" type="button"
+                                    class="btn btn-secondary waves-effect waves-light">Quay lại</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

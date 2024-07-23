@@ -1,0 +1,21 @@
+/* .test p{
+    margin-top: 100px !important;
+    background-color: aqua;
+    font-size: 100px !important;
+
+} */
+/* .test{
+    background-color: aqua !important;
+    font-size: 10px !important;
+} */
+.container-correct{
+    font-weight: 600;
+}
+.container-correct.boder{
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 1px;
+}
+.left{
+    margin-left: 30px;
+}

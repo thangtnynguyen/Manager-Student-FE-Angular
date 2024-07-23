@@ -1,0 +1,28 @@
+.position-left-3{
+    left: -14px;
+}
+
+.tree-li.active > span{
+    font-weight: 700;
+}
+
+.question-category-menu{
+    background-color: white !important;
+    z-index: 10;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    left: 32px;
+    top: 22px;
+    padding: 12px 0;
+    border-radius: 8px;
+    line-height: 24px;
+    font-weight: 500 !important;
+    min-width: 160px;
+}
+
+.question-category-menu > div{
+    padding: 0 14px;
+}
+
+.question-category-menu > div:hover{
+    background-color: #D2E3C8;
+}

@@ -1,0 +1,347 @@
+/* The end General ! */
+
+/*--------------------------------------------------------------
+# Header
+--------------------------------------------------------------*/
+/* Header login */
+
+/* :root {
+  --primary-color: #f05123;
+  --primary-color-2: #f04f23a4;
+  --primary-color-hover: #d97053ce;
+  --bs-border-primary: #f04f23cf;
+} */
+
+#header .wrapperLogo {
+  height: 50px;
+}
+
+.header_wrap {
+  height: inherit;
+  padding-right: calc(4rem * 0.75);
+  padding-left: calc(4rem * 0.75);
+}
+
+.Footer_top-logo {
+  border-radius: 8px;
+  flex-shrink: 0;
+  height: 38px;
+  object-fit: contain;
+  width: 38px;
+}
+.actionSlogans {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-left: 16px;
+}
+
+.header a.navLogo {
+  padding-right: 12px;
+  border-radius: 8px;
+  transition: all 0.3s;
+}
+
+.header a.navLogo:hover {
+  background: #fdbb7820;
+}
+
+/*  Search input */
+
+.Search_wrapper {
+  position: relative;
+  width: 420px;
+  height: 42px;
+  padding: 0;
+  flex: 1 1 0;
+  border-radius: 9999px;
+  border: 1px solid var(--bs-gray-200);
+  transition: border-color 0.2s ease-in-out;
+  overflow: hidden;
+}
+.Search_wrapper:hover,
+.Search_wrapper:focus-within {
+  border-color: var(--bs-gray-500);
+}
+
+.gcse-search {
+  width: 100%;
+  padding: 0 20px;
+  border: none;
+  outline: none;
+}
+
+.gsc-search-button {
+  position: absolute;
+  cursor: pointer;
+  top: 50%;
+  transform: translateY(-50%);
+}
+button.gsc-search-button {
+  position: relative;
+  left: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  filter: contrast(1);
+}
+
+.gsc-search-button-v2 svg {
+  fill: #a1b9ed !important;
+  width: 20px;
+  height: 20px;
+}
+
+.gsc-search-button-v2:hover,
+.gsc-search-button-v2:focus {
+  color: var(--primary-color);
+  background-color: transparent !important;
+  background-image: none;
+}
+
+.gsc-search-button-v2:hover svg,
+.gsc-search-button-v2:focus svg {
+  fill: unset;
+  fill: var(--primary-color) !important;
+}
+
+.btn {
+  display: inline-grid;
+  place-items: center center !important;
+  min-width: 124px;
+  padding: 4px 16px 6px 16px;
+  text-align: center;
+  vertical-align: middle;
+
+  line-height: 1.5;
+  font-weight: 500;
+  font-size: 1.1rem;
+  white-space: nowrap;
+  text-decoration: none;
+  color: var(--bs-white);
+
+  border-radius: 999px;
+  background-color: transparent;
+  border: 2px solid var(--bs-gray-300);
+
+  transition: all 0.2s ease;
+  transition: color 0.25s ease-in-out, background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+
+  cursor: pointer;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+}
+
+.btn-login {
+  display: grid;
+  place-items: center center !important;
+  color: var(--bs-white);
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+.btn-login:hover {
+  color: var(--bs-white);
+  background-color: var(--primary-color-hover);
+  border-color: var(--primary-color-hover);
+}
+.btn-login:focus {
+  color: var(--bs-white);
+  background-color: var(--primary-color-hover);
+  border-color: var(--bs-border-primary);
+  box-shadow: 0 0 0 0.05rem rgba(49, 132, 253, 0.5);
+}
+
+/*  */
+.navbar-wrapper {
+  height: 66px;
+  align-items: center;
+  background-color: #fff;
+  border-bottom: 1px solid #e8ebed;
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.4rem;
+  left: 0;
+  padding: 0 28px;
+  position: -webkit-sticky;
+  position: fixed;
+  right: 0;
+  top: 0;
+  z-index: 20;
+}
+
+.navbar-logo {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-collapse__icon,
+.navbar-search__icon {
+  display: none;
+}
+
+.navbar-collapse__icon > i::before {
+  font-weight: 700 !important;
+}
+
+.navbar-logo > a {
+  display: flex;
+}
+
+.navbar-logo > a > img {
+  border-radius: 8px;
+  flex-shrink: 0;
+  height: 38px;
+  object-fit: contain;
+  width: 38px;
+}
+
+.navbar-logo__title {
+  color: #000;
+  font-size: 0.9rem;
+  font-weight: 700;
+  margin-left: 16px;
+}
+
+.navbar-body {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+
+.search-wrapper {
+  border: 2px solid #e8e8e8;
+  border-radius: 20px;
+  height: 36px;
+  padding: 0 16px 0 8px;
+  transition: border-color 0.2s ease-in-out;
+  flex: 1 1;
+  width: 360px;
+  position: relative;
+}
+.search-wrapper__input {
+  border: none;
+  caret-color: #444;
+  flex: 1 1;
+  height: 100%;
+  outline: none;
+  padding: 0 4px;
+  font-size: 0.8rem;
+  position: absolute;
+  top: 0;
+  left: 36px;
+  min-width: 300px;
+}
+
+.search-wrapper__input-icon {
+  background-image: url("../../../assets/svg/search-icon.svg");
+  background-color: #fff;
+  background-position: 50%;
+  background-repeat: no-repeat;
+  background-size: 18px;
+  border-radius: 50%;
+  height: 36px;
+  opacity: 0.7;
+  transition: opacity 0.2s ease-in-out;
+  width: 30px;
+}
+
+.navbar-actions {
+  align-items: center;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.navbar-actions > a {
+  background-color: var(--primary-color);
+  border-radius: 999px;
+  color: #fff;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 8px 18px;
+  text-decoration: none;
+}
+
+.navbar-action__my-learn{
+  background-color: transparent;
+  color: #333;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 8px;
+}
+
+.navbar-action__notify{
+  background-color: transparent;
+  color: rgb(112, 112, 112);
+  cursor: pointer;
+  font-size: 1.2rem;
+  font-weight: 600;
+  padding: 8px;
+  cursor: pointer;
+}
+
+.navbar-actions__portal{
+  display: flex;
+  align-items: center;
+}
+
+.navbar-action__avatar > img{
+  border-radius: 50%;
+  height: 28px;
+  object-fit: cover;
+  width: 28px;
+  cursor: pointer;
+}
+
+@media (max-width: 1023px) {
+  .navbar-wrapper {
+    justify-content: flex-start;
+  }
+
+  .navbar-logo {
+    display: none;
+  }
+
+  .navbar-collapse__icon {
+    display: block;
+    margin-right: 32px;
+  }
+
+  .navbar-actions {
+    margin-left: auto;
+  }
+}
+
+@media (max-width: 739px) {
+  .navbar-wrapper {
+    justify-content: flex-end;
+  }
+
+  .navbar-body {
+    display: none;
+  }
+
+  .navbar-actions {
+    margin-left: unset;
+    margin-left: 32px;
+  }
+
+  .navbar-collapse__icon {
+    margin: 0;
+  }
+
+  .navbar-search__icon {
+    display: block;
+    margin-left: auto;
+  }
+
+  .navbar-search__icon > i::before {
+    font-weight: 700 !important;
+  }
+}

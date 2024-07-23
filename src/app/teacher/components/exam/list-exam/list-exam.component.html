@@ -1,0 +1,312 @@
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0">Quản lý đề thi</h4>
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li routerLink="/teacher/dashboard" class="breadcrumb-item d-flex align-items-center">
+                        <span>Trang chủ</span>
+                        <i class="breadcrumb-item-arrow fa-solid fa-angle-right"></i>
+                    </li>
+                    <li class="breadcrumb-item active">
+                        <span>Quản lý đề thi</span>
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="group-action__left col-xl-10 col-md-9 col-sm-12">
+        <div class="row">
+            <div class="form-group col-md-6">
+                <input
+                   class="form-control"
+                   type="text"
+                   placeholder="Tên nhóm"
+                   [(ngModel)]="queryParameters.title"
+                   />
+            </div>
+             <div class="form-group col-md-1">
+                <button
+                   type="button"
+                   class="btn btn-primary waves-effect waves-light"
+                   (click)="handleSearchExams()"
+                   >
+                <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+             </div>
+        </div>
+    </div>
+     <div class="group-action__right col-xl-2 col-md-3 col-sm-12 d-flex justify-content-end">
+        <button
+           type="button"
+           class="btn btn-success waves-effect waves-light"
+           routerLink="/teacher/exam/create"
+           >
+        <i class="fa-solid fa-plus mr-1"></i> Thêm mới
+        </button>
+     </div>
+</div>
+
+<div class="row">
+    <ng-container *ngIf="(exams.length > 0)">
+        <div class="col-12" *ngFor="let exam of exams;">
+            <div class="block-content bg-white box-shadow-exam block-content-full border-start border-3 border-danger py-3">
+                <div class="d-md-flex justify-content-md-between align-items-md-center">
+                    <div class="p-1 p-md-3">
+                        <h3 class="h4 fw-bold mb-3">
+                            <a href="./test/detail/21" class="text-dark link-fx">{{exam.title}}</a>
+                        </h3>
+                        <p class="fs-sm text-muted mb-0">
+                            <i class="fa fa-clock me-1"></i> Diễn ra từ <span>{{ formatAMPM(exam.startTime) + ' ' + formatDate(exam.startTime) }}</span> đến <span>{{ formatAMPM(exam.endTime) + ' ' + formatDate(exam.endTime) }}</span>
+                        </p>
+                    </div>
+                    <div class="p-1 p-md-3">
+                        <span *ngIf="statusButton(exam) === 1" class="btn btn-secondary btn-sm rounded-pill px-3 me-1 my-1 d-inline-flex align-items-center justify-content-center gap-2" disabled>
+                            Đã đóng
+                        </span>
+
+                        <span *ngIf="statusButton(exam) === 2" class="btn btn-success btn-sm rounded-pill px-3 me-1 my-1 d-inline-flex align-items-center justify-content-center gap-2" disabled>
+                            Đang mở
+                        </span>
+
+                        <span *ngIf="statusButton(exam) === 3" class="btn btn-info btn-sm rounded-pill px-3 me-1 my-1 d-inline-flex align-items-center justify-content-center gap-2" disabled>
+                            Chưa mở
+                        </span>
+
+                        <span class="btn btn-primary btn-sm btn-alt-success rounded-pill px-3 me-1 my-1 d-inline-flex align-items-center justify-content-center" [routerLink]="['/teacher/exam/detail', exam.id]" >
+                            <i class="fa fa-eye opacity-50 me-2"></i>
+                            <span>Xem chi tiết</span>
+                        </span>
+                        <span class="btn btn-primary btn-sm btn-alt-success rounded-pill px-3 me-1 my-1 d-inline-flex align-items-center justify-content-center" [routerLink]="['/teacher/exam/transcript', exam.id]" >
+                            <i class="fa fa-square-poll-vertical opacity-50 me-2"></i>
+                            <span>Bảng điểm</span>
+                        </span>
+                        <span data-role="dethi" data-action="update" class="btn btn-sm btn-warning rounded-pill px-3 me-1 my-1 show d-inline-flex align-items-center justify-content-center" [routerLink]="['/teacher/exam/edit', exam.id]">
+                            <i class="fa fa-wrench opacity-50 me-2"></i>
+                            <span>Chỉnh sửa</span>
+                        </span>
+                        <span data-role="dethi" data-action="delete" class="btn btn-sm btn-danger rounded-pill px-3 my-1 btn-delete show d-inline-flex align-items-center justify-content-center" href="javascript:void(0)" (click)="handleDeleteItem(exam.id)">
+                            <i class="fa fa-times opacity-50 me-2"></i>
+                            <span>Xoá đề</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-filter d-flex justify-content-between align-items-center my-3">
+            <div class="page-index">
+               <ul class="pagination pagination-rounded">
+                  <li class="page-item" (click)="handleOnChangePage(paging.pageIndex - 1)" [class.disabled]="paging.pageIndex === 1 || exams.length === 0">
+                    <span class="page-link"><i class="fa-solid fa-angle-left"></i></span>
+                  </li>
+                
+                  <ng-container *ngIf="exams.length > 0">
+                    <li *ngFor="let page of [].constructor(paging.totalPages); let i = index" class="page-item" (click)="handleOnChangePage(i + 1)" [class.active]="paging.pageIndex === i + 1">
+                      <span class="page-link">{{ i + 1 }}</span>
+                    </li>
+                  </ng-container>
+                
+                  <li class="page-item" (click)="handleOnChangePage(paging.pageIndex + 1)" [class.disabled]="paging.pageIndex === paging.totalPages || exams.length === 0">
+                    <span class="page-link"><i class="fa-solid fa-angle-right"></i></span>
+                  </li>
+                </ul>
+            </div>
+            <div class="per-page">
+               Hiển thị 
+               <select class="mx-1" (change)="handleOnPerPageChange($event)">
+                  <option *ngFor="let item of config.perPageOptions;" [ngValue]="item.value" [attr.selected]="item.value === paging.pageSize ? true : null">{{ item.label }}</option>
+               </select>
+               / {{ paging.totalRecords }} tổng số bản ghi
+            </div>
+          </div>
+    </ng-container>
+
+    <ng-container *ngIf="!(exams.length > 0)">
+        <tr>
+           <td class="text-center my-4 d-flex justify-content-center">Không có bản ghi nào</td>
+        </tr>
+    </ng-container>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <form (ngSubmit)="handleOnSubmitCreateExam()" #createForm="ngForm">
+    <ng-template #createExamTemplate>
+        <div class="modal-header">
+            <h5 class="modal-title mt-0" id="exampleModalScrollableTitle">Tạo mới exam</h5>
+            <button type="button" class="close" (click)="createExamModalRef?.hide()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <div class="row">
+                    <label class="col-md-3 col-lg-3 col-form-label" for="title">Tiêu đề <span
+                            class="text-danger">*</span></label>
+                    <div class="col-md-9 col-lg-8 col-table-reponsive p-0">
+                        <input class="form-control" [(ngModel)]="exam.title" id="title" name="title" type="text"
+                            required placeholder="Tiêu đề" />
+                        <div *ngIf="createForm.controls['title']?.invalid && (createForm.controls['title']?.dirty || createForm.controls['title'].touched)"
+                            class="danger-notice">
+                            <div *ngIf="createForm.controls['title'].errors?.['required']">Tiêu đề không được để trống
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <label class="col-md-3 col-lg-3 col-form-label" for="description">Mô tả</label>
+                    <div class="col-md-9 col-lg-8 col-table-reponsive p-0">
+                        <input class="form-control" placeholder="Nội dung" name="description" [(ngModel)]="exam.description"
+                            id="description" type="text" />
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <label class="col-md-3 col-lg-3 col-form-label" for="linkTo">Thời gian làm bài</label>
+                    <div class="col-md-9 col-lg-8 col-table-reponsive p-0">
+                        <input class="form-control" name="linkTo" [(ngModel)]="exam.duration" placeholder="Thời gian làm bài"
+                            id="linkTo" type="text"  />
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <label class="col-md-3 col-lg-3 col-form-label" for="linkTo">Chọn câu hỏi</label>
+                   
+
+
+
+
+                </div>
+            </div>
+
+
+
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-light waves-effect" (click)="createExamModalRef?.hide()">Đóng</button>
+            <button [disabled]="createForm.invalid && validateForm()" type="submit" (click)="handleOnSubmitCreateExam()"
+                class="btn btn-primary waves-effect waves-light ml-2">Xác nhận</button>
+        </div>
+    </ng-template>
+</form>
+
+
+<ng-template #detailExamTemplate>
+    <div class="modal-header">
+        <h5 class="modal-title mt-0" id="exampleModalScrollableTitle">Chi tiết exam</h5>
+        <button type="button" class="close" (click)="detailExamModalRef?.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="form-group">
+            <div class="row">
+                <label class="col-md-3 col-lg-3 col-form-label" for="email">Id</label>
+                <div class="col-md-9 col-lg-8 col-table-reponsive p-0">
+                    <input disabled class="form-control" [(ngModel)]="exam.id" name="email" id="email" type="email"
+                        email />
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <label class="col-md-3 col-lg-3 col-form-label" for="email">Tiêu đề</label>
+                <div class="col-md-9 col-lg-8 col-table-reponsive p-0">
+                    <input disabled class="form-control" [(ngModel)]="exam.title" name="email" id="email" type="text" />
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <label class="col-md-3 col-lg-3 col-form-label" for="email">Mô tả</label>
+                <div class="col-md-9 col-lg-8 col-table-reponsive p-0">
+                    <input disabled class="form-control" [(ngModel)]="exam.description" name="email" id="email"
+                        type="text" />
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <label class="col-md-3 col-lg-3 col-form-label" for="duration">Thời gian làm bài</label>
+                <div class="col-md-9 col-lg-8 col-table-reponsive p-0">
+                    <input disabled class="form-control" [(ngModel)]="exam.duration" name="duration" id="duration"
+                        type="text" />
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <label class="col-md-3 col-lg-3 col-form-label" for="email">Danh sách câu hỏi</label>
+
+                <div class="table-data overflow-auto">
+                    <table id="datatable" class="table table-bordered dt-responsive nowrap mt-3"
+                        style="border-collapse: collapse; border-spacing: 0; width: 100%">
+                        <thead class="thead-light">
+                            <tr>
+                               <th>Id</th>
+                                <th>Tiêu đề</th>
+                                <th>Ghi chú</th>
+                                <th>Loại câu hỏi</th>
+                                <th>Danh mục câu hỏi</th>
+                                <th>Số điểm</th>
+                                <th>Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <ng-container *ngIf="exam.questions.length > 0">
+                                <tr *ngFor="let question of exam.questions;">
+
+                                    <td>{{ question.id }}</td>
+                                    <td [innerHTML]="question.title"></td>
+                                    <td [innerHTML]="question.feedback"></td>
+                                    <td>{{ questionHelper.getTypeQuestion(question.type) }}</td>
+                                    <td>{{ question.questionCategoryName }}</td>
+                                    <td>{{ question.score }}</td>
+                                    <td>
+                                        <span class="text-info cursor-pointer"
+                                            [routerLink]="['/teacher/question/detail', question.id]"><i
+                                                class="fa-solid fa-eye"></i></span>
+
+                                    </td>
+                                </tr>
+                            </ng-container>
+                            <ng-container *ngIf="!(exam.questions.length > 0)">
+                                <tr>
+                                    <td class="text-center" colspan="8">Không có bản ghi nào</td>
+                                </tr>
+                            </ng-container>
+                        </tbody>
+                    </table>
+                </div>
+
+
+            </div>
+        </div>
+       
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-light waves-effect" (click)="detailExamModalRef?.hide()">Đóng</button>
+    </div>
+</ng-template> -->

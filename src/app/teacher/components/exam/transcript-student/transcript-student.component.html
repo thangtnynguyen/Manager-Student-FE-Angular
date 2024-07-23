@@ -1,0 +1,398 @@
+
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0">Quản lý bảng điểm</h4>
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li routerLink="/teacher/dashboard" class="breadcrumb-item d-flex align-items-center">
+                        <span>Trang chủ</span>
+                        <i class="breadcrumb-item-arrow fa-solid fa-angle-right"></i>
+                    </li>
+                    <li class="breadcrumb-item active">
+                        <span>Quản lý bảng điểm</span>
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-0 flex-md-grow-1" id="chitietdethi">
+    <div class="content content-full">
+        <div class="block block-rounded">
+            <ul class="nav nav-tabs nav-tabs-alt align-items-center" role="tablist">
+                <li class="nav-item">
+                    <button class="nav-link active" id="bang-diem-tab" data-bs-toggle="tab" data-bs-target="#bang-diem"
+                        role="tab" aria-controls="bang-diem" aria-selected="true">Bảng
+                        điểm</button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link" id="thong-ke-tab" data-bs-toggle="tab" data-bs-target="#thong-ke"
+                        role="tab" aria-controls="thong-ke" aria-selected="false">Thống kê</button>
+                </li>
+
+            </ul>
+            <div class="block-content tab-content">
+                <div class="tab-pane active" id="bang-diem" role="tabpanel" aria-labelledby="bang-diem-tab"
+                    tabindex="0">
+                    <div>
+                        <div class="group-action">
+                            <div class="row">
+                                <div class="group-action__left col-xl-10 col-md-9 col-sm-12">
+
+                                    <div class="row">
+                                        <div class="form-group col-md-3">
+                                            <input class="form-control" type="text" placeholder="Tên sinh viên"
+                                                [(ngModel)]="search.studentName" />
+                                        </div>
+
+                                        <div class="form-group col-md-3">
+                                            <select class="custom-select" [(ngModel)]="search.groupModuleId">
+                                                <option
+                                                    [selected]="search.groupModuleId === null || search.groupModuleId === 0"
+                                                    [ngValue]="0">Tất cả</option>
+                                                <option *ngFor="let groupModule of groupModules;"
+                                                    value="{{ groupModule.id }}">{{ groupModule.name }}</option>
+                                            </select>
+                                        </div>
+
+
+                                        <div class="form-group col-md-3">
+                                            <select class="custom-select" [(ngModel)]="search.type">
+                                                <!-- <option [selected]="search.type === null || search.type === 0"
+                                                [ngValue]="1">Tất cả</option> -->
+                                                <option *ngFor="let examResultType of examResultConstant.types;"
+                                                    value="{{ examResultType.key }}">{{ examResultType.value }}</option>
+                                            </select>
+                                        </div>
+
+
+                                        <div class="form-group col-md-1">
+                                            <button type="button" class="btn btn-primary waves-effect waves-light"
+                                                (click)="handleSubmitSearch()">
+                                                <i class="fa-solid fa-magnifying-glass"></i>
+                                            </button>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div class="group-action__right col-xl-2 col-md-3 col-sm-12">
+                                    <button type="button" class="btn btn-success waves-effect waves-light">
+                                        <i class="fa-solid fa-file me-1"></i> Xuất bảng điểm
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-data overflow-auto">
+                        <table id="datatable" class="table table-bordered dt-responsive nowrap mt-3"
+                            style="border-collapse: collapse; border-spacing: 0; width: 100%">
+                            <thead class="thead-light">
+                                <tr class="table-col-title">
+                                    <th class="title-column">MSSV</th>
+                                    <th class="title-column">Họ tên</th>
+                                    <!-- <th class="title-column">Điểm</th> -->
+                                    <th class="order-sort" (click)="handleOnSortAndOrderChange(constant.order.score)"
+                                        [ngClass]="{'order-sort-active': paging?.orderBy === constant.order.score }">
+                                        Điểm
+                                        <span *ngIf="paging?.orderBy === constant.order.score"
+                                            class="order-sort-group test-{{paging?.orderBy}}">
+                                            <i *ngIf="paging?.sortBy === constant.sort.desc"
+                                                class="bi bi-sort-down"></i>
+                                            <i *ngIf="paging?.sortBy === constant.sort.asc" class="bi bi-sort-up"></i>
+                                        </span>
+                                        <span *ngIf="!(paging?.orderBy === constant.order.score)"
+                                            class="test-{{paging?.orderBy}}"><img src="../../../../../assets/sort.png"
+                                                height="14.41" width="14.41" style="margin-top: -3px;"
+                                                alt="icon-sort"></span>
+                                    </th>
+                                    <th class="title-column">Thời gian vào thi</th>
+                                    <th class="title-column">Thời gian thi</th>
+                                    <!-- <th class="title-column">Số lần thoát</th> -->
+                                    <th class="order-sort" (click)="handleOnSortAndOrderChange(constant.order.numberchangetab)"
+                                        [ngClass]="{'order-sort-active': paging?.orderBy === constant.order.numberchangetab }">
+                                        Số lần thoát
+                                        <span *ngIf="paging?.orderBy === constant.order.numberchangetab"
+                                            class="order-sort-group test-{{paging?.orderBy}}">
+                                            <i *ngIf="paging?.sortBy === constant.sort.desc"
+                                                class="bi bi-sort-down"></i>
+                                            <i *ngIf="paging?.sortBy === constant.sort.asc" class="bi bi-sort-up"></i>
+                                        </span>
+                                        <span *ngIf="!(paging?.orderBy === constant.order.numberchangetab)"
+                                            class="test-{{paging?.orderBy}}"><img src="../../../../../assets/sort.png"
+                                                height="14.41" width="14.41" style="margin-top: -3px;"
+                                                alt="icon-sort"></span>
+                                    </th>
+                                    <th class="text-center">Hành động</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <ng-container *ngIf="examResults.length > 0">
+                                    <tr *ngFor="let examResult of examResults;">
+                                        <td>{{ examResult.studentId }}</td>
+                                        <td [innerHTML]="examResult.studentName"></td>
+                                        <td>{{ examResult.score ||"Chưa thi" }}</td>
+                                        <td *ngIf="examResult.startTime">{{ formatAMPM(examResult.startTime) + ' ' +
+                                            formatDate(examResult.startTime) ||"Chưa thi" }}</td>
+                                        <td *ngIf="!examResult.startTime">{{"Chưa thi" }}</td>
+                                        <td>{{ examResult.durationTime ||"Chưa thi" }}</td>
+                                        <!-- <td>{{ examResult.numberCorrectAnswers }}</td> -->
+                                        <td>{{ examResult.numberChangeTab ||"Chưa thi"}}</td>
+
+                                        <td>
+                                            <span class="text-info cursor-pointer">
+                                                <i class="fa-solid fa-eye"></i></span>
+                                            <span class="text-warning cursor-pointer ml-2">
+                                                <i class="fa-solid fa-file me-1"></i></span>
+                                            <!-- <span class="text-danger cursor-pointer ml-2">
+                                                <i class="fa-solid fa-trash"></i></span> -->
+                                        </td>
+                                    </tr>
+                                </ng-container>
+                                <ng-container *ngIf="!(examResults.length > 0)">
+                                    <tr>
+                                        <td class="text-center" colspan="8">Không có bản ghi nào</td>
+                                    </tr>
+                                </ng-container>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="table-filter d-flex justify-content-between align-items-center mt-2">
+                        <div class="page-index">
+                            <ul class="pagination pagination-rounded">
+                                <li class="page-item" (click)="setPage(pageIndex - 1)"
+                                    [class.disabled]="pageIndex === 1 || examResults.length === 0">
+                                    <span class="page-link"><i class="fa-solid fa-angle-left"></i></span>
+                                </li>
+
+                                <ng-container *ngIf="examResults.length > 0">
+                                    <li *ngFor="let page of [].constructor(totalPages); let i = index" class="page-item"
+                                        (click)="setPage(i + 1)" [class.active]="pageIndex === i + 1">
+                                        <span class="page-link">{{ i + 1 }}</span>
+                                    </li>
+                                </ng-container>
+
+                                <li class="page-item" (click)="setPage(pageIndex + 1)"
+                                    [class.disabled]="pageIndex === totalPages || examResults.length === 0">
+                                    <span class="page-link"><i class="fa-solid fa-angle-right"></i></span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="per-page">
+                            Hiển thị
+                            <select class="mx-1" (change)="onPerPageChange($event)">
+                                <option *ngFor="let item of config.perPageOptions;" [ngValue]="item.value"
+                                    [attr.selected]="item.value === +search.pageSize ? true : null">{{ item.label }}
+                                </option>
+                            </select>
+                            bản ghi
+                        </div>
+                    </div>
+
+
+                </div>
+                <!-- <div class="tab-pane" id="thong-ke" role="tabpanel" aria-labelledby="thong-ke-tab" tabindex="0">
+                    <button class="btn btn-alt-secondary dropdown-toggle btn-filtered-by-static mb-3"
+                        id="dropdown-filter-static" type="button" data-bs-toggle="dropdown" aria-expanded="false">Tất
+                        cả</button>
+                    <ul class="dropdown-menu mt-1" aria-labelledby="dropdown-filter-static">
+                        <li><a class="dropdown-item filtered-by-static active" href="javascript:void(0)" data-id="0">Tất
+                                cả</a></li>
+
+                    </ul>
+                    <div class="row">
+                        <div class="col-md-6 col-xl-3">
+                            <div class="block block-rounded block-fx-shadow">
+                                <div
+                                    class="block-content block-content-full d-flex align-items-center justify-content-between">
+                                    <div class="me-3">
+                                        <p class="fs-lg fw-semibold mb-0" id="da_nop">40</p>
+                                        <p class="text-muted mb-0">Thí sinh đã nộp</p>
+                                    </div>
+                                    <div class="item item-circle bg-body-light">
+                                        <i class="fa fa-user-check text-primary"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-xl-3">
+                            <div class="block block-rounded block-fx-shadow">
+                                <div
+                                    class="block-content block-content-full d-flex align-items-center justify-content-between">
+                                    <div class="me-3">
+                                        <p class="fs-lg fw-semibold mb-0" id="chua_nop">31</p>
+                                        <p class="text-muted mb-0">Thí sinh chưa nộp</p>
+                                    </div>
+                                    <div class="item item-circle bg-body-light">
+                                        <i class="fa fa-user-pen text-primary"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-xl-3">
+                            <div class="block block-rounded block-fx-shadow">
+                                <div
+                                    class="block-content block-content-full d-flex align-items-center justify-content-between">
+                                    <div class="me-3">
+                                        <p class="fs-lg fw-semibold mb-0" id="khong_thi">12</p>
+                                        <p class="text-muted mb-0">Thí sinh không thi</p>
+                                    </div>
+                                    <div class="item item-circle bg-body-light">
+                                        <i class="fa fa-user-xmark text-primary"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-xl-3">
+                            <div class="block block-rounded block-fx-shadow">
+                                <div
+                                    class="block-content block-content-full d-flex align-items-center justify-content-between">
+                                    <div class="me-3">
+                                        <p class="fs-lg fw-semibold mb-0" id="diem_trung_binh">3.1</p>
+                                        <p class="text-muted mb-0">Điểm trung bình</p>
+                                    </div>
+                                    <div class="item item-circle bg-body-light">
+                                        <i class="fa fa-gauge text-primary"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-xl-3">
+                            <div class="block block-rounded block-fx-shadow">
+                                <div
+                                    class="block-content block-content-full d-flex align-items-center justify-content-between">
+                                    <div class="me-3">
+                                        <p class="fs-lg fw-semibold mb-0" id="diem_duoi_1">1</p>
+                                        <p class="text-muted mb-0">Số thí sinh điểm <= 1</p>
+                                    </div>
+                                    <div class="item item-circle bg-body-light">
+                                        <i class="fa fa-face-sad-cry text-primary"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-xl-3">
+                            <div class="block block-rounded block-fx-shadow">
+                                <div
+                                    class="block-content block-content-full d-flex align-items-center justify-content-between">
+                                    <div class="me-3">
+                                        <p class="fs-lg fw-semibold mb-0" id="diem_duoi_5">80</p>
+                                        <p class="text-muted mb-0">Số thí sinh điểm <= 5</p>
+                                    </div>
+                                    <div class="item item-circle bg-body-light">
+                                        <i class="fa fa-thumbs-down text-primary"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-xl-3">
+                            <div class="block block-rounded block-fx-shadow">
+                                <div
+                                    class="block-content block-content-full d-flex align-items-center justify-content-between">
+                                    <div class="me-3">
+                                        <p class="fs-lg fw-semibold mb-0" id="diem_lon_5">80</p>
+                                        <p class="text-muted mb-0">Số thí sinh điểm >= 5</p>
+                                    </div>
+                                    <div class="item item-circle bg-body-light">
+                                        <i class="fa fa-award text-primary"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-xl-3">
+                            <div class="block block-rounded block-fx-shadow">
+                                <div
+                                    class="block-content block-content-full d-flex align-items-center justify-content-between">
+                                    <div class="me-3">
+                                        <p class="fs-lg fw-semibold mb-0" id="diem_cao_nhat">7</p>
+                                        <p class="text-muted mb-0">Điểm cao nhất</p>
+                                    </div>
+                                    <div class="item item-circle bg-body-light">
+                                        <i class="fa fa-users text-primary"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="chart-container mt-4" style="position: relative; height:40vh">
+                        <canvas id="myChart"></canvas>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+<div class="modal fade" id="modal-cau-hoi" tabindex="-1" role="dialog" aria-labelledby="modal-cau-hoi"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Chi tiết đề thi</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body pb-1">
+                <div id="list-examResult"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-primary" data-bs-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasSetting" aria-labelledby="offcanvasExampleLabel">
+    <div class="offcanvas-header">
+        <h4 class="offcanvas-title" id="offcanvasExampleLabel"></h4>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body content-side">
+        <div>
+            <h5 class="mb-3">THÔNG TIN ĐỀ THI</h5>
+            <ul class="list-unstyled text-dark fs-sm">
+                <li class="mb-1 fs-base"><i class="text-primary fa fa-file-signature me-2"></i><span>Tên đề:
+                    </span>
+                </li>
+                <li class="mb-1 fs-base"><i class="text-primary fa fa-clock me-2"></i><span>Thời gian tạo:
+                    </span>
+                </li>
+            </ul>
+            <h5 class="mb-3">MÔN THI</h5>
+            <p class="mb-3"></p>
+            <h5 class="mb-3">GIAO CHO</h5>
+            <ul class="nav nav-pills nav-justified push">
+
+            </ul>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-show-test" tabindex="-1" role="dialog" aria-labelledby="modal-cau-hoi"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Chi tiết kết quả</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body pb-1">
+                <div id="content-file">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-alt-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-sm btn-primary" data-bs-dismiss="modal">Done</button>
+            </div>
+        </div>
+    </div>
+</div>

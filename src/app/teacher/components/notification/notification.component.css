@@ -1,0 +1,13 @@
+
+.box-shadow-exam{
+    box-shadow: 0 0.5rem 2rem #d1d8ea;
+}
+
+.col-12{
+    margin: 10px 0;
+    /* background-color: aquamarine; */
+}
+
+.card-body{
+    background-color: aliceblue;
+}

@@ -1,0 +1,380 @@
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0">Quản lý role</h4>
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li routerLink="/admin/dashboard" class="breadcrumb-item d-flex align-items-center">
+                        <span>Trang chủ</span>
+                        <i class="breadcrumb-item-arrow fa-solid fa-angle-right"></i>
+                    </li>
+                    <li class="breadcrumb-item active">
+                        <span>Quản lý role</span>
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="group-action">
+                    <div class="row">
+                        <div class="group-action__left col-xl-10 col-md-9 col-sm-12">
+                            <div class="row">
+                                <div class="form-group col-md-4">
+                                    <input class="form-control" type="text" placeholder="Tên"
+                                        [(ngModel)]="queryParameters.name" />
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <input class="form-control" type="text" placeholder="Mô tả"
+                                        [(ngModel)]="queryParameters.description" />
+                                </div>
+
+                                <div class="form-group col-md-1">
+                                    <button (click)="handleSearchRoles()" type="button"
+                                        class="btn btn-primary waves-effect waves-light">
+                                        <i class="fa-solid fa-magnifying-glass"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="group-action__right col-xl-2 col-md-3 col-sm-12">
+                            <button type="button" class="btn btn-success waves-effect waves-light"
+                                (click)="handleOpenCreateroleModal()">
+                                <i class="fa-solid fa-plus mr-1"></i> Thêm mới
+                            </button>
+                        </div>
+                        <div class="group-action__right col-xl-2 col-md-4 col-sm-12">
+                            <button [@fadeInOut]="selectedroles.length > 0 ? 'visible' : 'hidden'" type="button"
+                                class="btn btn-danger waves-effect waves-light align-items-center"
+                                (click)="handleOnDeleteMultiple()">
+                                <i class="fa-solid fa-trash mr-1"></i> Xoá {{ selectedroles.length}} bản ghi
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-data overflow-auto">
+                    <table id="datatable" class="table table-bordered dt-responsive nowrap mt-3"
+                        style="border-collapse: collapse; border-spacing: 0; width: 100%">
+                        <thead class="thead-light">
+                            <tr>
+                                <th class="selected-col">
+                                    <div class="custom-control custom-checkbox">
+                                        <input (change)="selectAllroles($event)"
+                                            [checked]="selectedroles.length === roles.length && selectedroles.length > 0"
+                                            type="checkbox" class="custom-control-input" id="select-box"
+                                            title="select-box" placeholder="select-box">
+                                        <label class="custom-control-label" for="select-box">&nbsp;</label>
+                                    </div>
+                                </th>
+                                <th class="order-sort" (click)="handleOnSortAndOrderChange(constant.order.id)"
+                                    [ngClass]="{'order-sort-active': paging?.orderBy === constant.order.id }">
+                                    Id
+                                    <span *ngIf="paging?.orderBy === constant.order.id"
+                                        class="order-sort-group test-{{paging?.orderBy}}">
+                                        <i *ngIf="paging?.sortBy === constant.sort.desc" class="bi bi-sort-down"></i>
+                                        <i *ngIf="paging?.sortBy === constant.sort.asc" class="bi bi-sort-up"></i>
+                                    </span>
+                                    <span *ngIf="!(paging?.orderBy === constant.order.id)"
+                                        class="test-{{paging?.orderBy}}"><img src="../../../../../assets/sort.png"
+                                            height="14.41" width="14.41" style="margin-top: -3px;"
+                                            alt="icon-sort"></span>
+                                </th>
+                                <th>Tên Vai trò</th>
+                                <th>Mô tả </th>
+                                <th>Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <ng-container *ngIf="roles.length > 0">
+                                <tr *ngFor="let role of roles;">
+                                    <td>
+                                        <div class="custom-control custom-checkbox">
+                                            <input (change)="toggleSelection(role.id)" id="select-box-{{ role.id }}"
+                                                [checked]="isSelected(role.id)" type="checkbox"
+                                                class="custom-control-input">
+                                            <label class="custom-control-label"
+                                                for="select-box-{{ role.id }}">&nbsp;</label>
+                                        </div>
+                                    </td>
+                                    <td>{{ role.id }}</td>
+                                    <td>{{ role.name }}</td>
+                                    <td>{{ role.description }}</td>
+
+                                    <td>
+                                        <span class="text-info cursor-pointer"
+                                            (click)="handleOpenDetailRoleModal(role)"><i
+                                                class="fa-solid fa-eye"></i></span>
+                                        <span class="text-warning cursor-pointer ml-2"
+                                            (click)="handleOpenEditroleModal(role)"><i
+                                                class="fa-solid fa-pen"></i></span>
+                                        <span class="text-danger cursor-pointer ml-2"
+                                            (click)="handleDeleteItem(role.id)"><i class="fa-solid fa-trash"></i></span>
+                                    </td>
+                                </tr>
+
+                            </ng-container>
+                            <ng-container *ngIf="!(roles.length > 0)">
+                                <tr>
+                                    <td class="text-center" colspan="8">Không có bản ghi nào</td>
+                                </tr>
+                            </ng-container>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="table-filter d-flex justify-content-between align-items-center mt-2">
+                    <div class="page-index">
+                        <ul class="pagination pagination-rounded">
+                            <li class="page-item" (click)="handleOnChangePage(paging.pageIndex - 1)"
+                                [class.disabled]="paging.pageIndex === 1 || roles.length === 0">
+                                <span class="page-link"><i class="fa-solid fa-angle-left"></i></span>
+                            </li>
+
+                            <ng-container *ngIf="roles.length > 0">
+                                <li *ngFor="let page of [].constructor(paging.totalPages); let i = index"
+                                    class="page-item" (click)="handleOnChangePage(i + 1)"
+                                    [class.active]="paging.pageIndex === i + 1">
+                                    <span class="page-link">{{ i + 1 }}</span>
+                                </li>
+                            </ng-container>
+
+                            <li class="page-item" (click)="handleOnChangePage(paging.pageIndex + 1)"
+                                [class.disabled]="paging.pageIndex === paging.totalPages || roles.length === 0">
+                                <span class="page-link"><i class="fa-solid fa-angle-right"></i></span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="per-page">
+                        Hiển thị
+                        <select class="mx-1" (change)="handleOnPerPageChange($event)">
+                            <option *ngFor="let item of config.perPageOptions;" [ngValue]="item.value"
+                                [attr.selected]="item.value === paging.pageSize ? true : null">{{ item.label }}</option>
+                        </select>
+                        / {{ paging.totalRecords }} tổng số bản ghi
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<form (ngSubmit)="handleOnSubmitCreateRole()" #createForm="ngForm">
+    <ng-template #createRoleTemplate>
+        <div class="modal-header">
+            <h5 class="modal-title mt-0" id="exampleModalScrollableTitle">Tạo mới role</h5>
+            <button type="button" class="close" (click)="createRoleModalRef?.hide()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <div class="row">
+                    <label class="col-md-3 col-lg-3 col-form-label" for="name">Tên <span
+                            class="text-danger">*</span></label>
+                    <div class="col-md-9 col-lg-8 col-table-reponsive p-0">
+                        <input class="form-control" [(ngModel)]="role.name" id="name" name="name" type="text" required
+                            placeholder="Tên vai trò" />
+                        <div *ngIf="createForm.controls['name']?.invalid && (createForm.controls['name']?.dirty || createForm.controls['name'].touched)"
+                            class="danger-notice">
+                            <div *ngIf="createForm.controls['name'].errors?.['required']">Tên vai trò không được để
+                                trống
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <label class="col-md-3 col-lg-3 col-form-label" for="description">Mô tả</label>
+                    <div class="col-md-9 col-lg-8 col-table-reponsive p-0">
+                        <input class="form-control" placeholder="Mô tả" name="description"
+                            [(ngModel)]="role.description" id="description" type="text" />
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <label class="col-md-3 col-lg-3 col-form-label" for="description">Quyền</label>
+                    <div class="tree">
+                        <ng-container
+                            *ngTemplateOutlet="recursiveTree; context: { $implicit: permissions }"></ng-container>
+                        <ng-template #recursiveTree let-items>
+                            <div class="tree-item" *ngFor="let item of items">
+                                <div class="flex-row">
+                                    <input type="checkbox" [(ngModel)]="item.selected" name="{{item.displayName}}"
+                                        (change)="onCheckboxChange(item, item.selected)" />
+                                    <div class="name">{{ item.displayName }}</div>
+                                </div>
+                                <div *ngIf="item.children.length > 0" class="children">
+                                    <ng-container
+                                        *ngTemplateOutlet="recursiveTree; context: { $implicit: item.children }"></ng-container>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-light waves-effect" (click)="createRoleModalRef?.hide()">Đóng</button>
+            <button [disabled]="createForm.invalid && validateForm()" type="submit" (click)="handleOnSubmitCreateRole()"
+                class="btn btn-primary waves-effect waves-light ml-2">Xác
+                nhận</button>
+        </div>
+    </ng-template>
+</form>
+
+
+<ng-template #detailRoleTemplate>
+    <div class="modal-header">
+        <h5 class="modal-title mt-0" id="exampleModalScrollableTitle">Chi tiết role</h5>
+        <button type="button" class="close" (click)="detailRoleModalRef?.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="form-group">
+            <div class="row">
+                <label class="col-md-3 col-lg-3 col-form-label" for="email">Id</label>
+                <div class="col-md-9 col-lg-8 col-table-reponsive p-0">
+                    <input disabled class="form-control" [(ngModel)]="role.id" name="email" id="email" type="email"
+                        email />
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <label class="col-md-3 col-lg-3 col-form-label" for="name">Tên vai trò</label>
+                <div class="col-md-9 col-lg-8 col-table-reponsive p-0">
+                    <input disabled class="form-control" [(ngModel)]="role.name" name="name" id="name" type="text" />
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <label class="col-md-3 col-lg-3 col-form-label" for="description">Mô tả</label>
+                <div class="col-md-9 col-lg-8 col-table-reponsive p-0">
+                    <input disabled class="form-control" [(ngModel)]="role.description" name="description"
+                        id="description" type="text" />
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <label class="col-md-3 col-lg-3 col-form-label" for="description">Quyền</label>
+                <div class="tree">
+                    <ng-container
+                        *ngTemplateOutlet="recursiveTree; context: { $implicit: role.permissions }"></ng-container>
+                    <ng-template #recursiveTree let-permissions>
+                        <div *ngFor="let item of permissions" class="tree-item">
+                            <div class="flex-row">
+                                <div class="name">{{ item.displayName }}</div>
+                            </div>
+                            <div *ngIf="item.children.length > 0" class="children">
+                                <ng-container
+                                    *ngTemplateOutlet="recursiveTree; context: { $implicit: item.children }"></ng-container>
+                            </div>
+                        </div>
+                    </ng-template>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-light waves-effect" (click)="detailRoleModalRef?.hide()">Đóng</button>
+    </div>
+</ng-template>
+
+
+
+<form (ngSubmit)="handleOnSubmitEditRole()" #createForm="ngForm">
+    <ng-template #editRoleTemplate>
+        <div class="modal-header">
+            <h5 class="modal-title mt-0" id="exampleModalScrollableTitle">sửa  role</h5>
+            <button type="button" class="close" (click)="editRoleModalRef?.hide()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <div class="row">
+                    <label class="col-md-3 col-lg-3 col-form-label" for="email">Id</label>
+                    <div class="col-md-9 col-lg-8 col-table-reponsive p-0">
+                        <input disabled class="form-control" [(ngModel)]="role.id" name="email" id="email" type="email"
+                            email />
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <label class="col-md-3 col-lg-3 col-form-label" for="name">Tên vai trò <span
+                            class="text-danger">*</span></label>
+                    <div class="col-md-9 col-lg-8 col-table-reponsive p-0">
+                        <input class="form-control" [(ngModel)]="role.name" id="name" name="name" type="text"
+                            required placeholder="Tên" />
+                        <div *ngIf="createForm.controls['name']?.invalid && (createForm.controls['name']?.dirty || createForm.controls['name'].touched)"
+                            class="danger-notice">
+                            <div *ngIf="createForm.controls['name'].errors?.['required']">Tên  không được để trống
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <label class="col-md-3 col-lg-3 col-form-label" for="description">Mô tả</label>
+                    <div class="col-md-9 col-lg-8 col-table-reponsive p-0">
+                        <input class="form-control" placeholder="Mô tả" name="description"
+                            [(ngModel)]="role.description" id="description" type="text" />
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-light waves-effect" (click)="editRoleModalRef?.hide()">Đóng</button>
+            <button [disabled]="createForm.invalid && validateForm()" type="submit" (click)="handleOnSubmitEditRole()"
+                class="btn btn-primary waves-effect waves-light ml-2">Xác
+                nhận</button>
+        </div>
+    </ng-template>
+</form>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- dạng cây -->
+<!-- <div class="form-group">
+                <div class="row">
+                    <label class="col-md-3 col-lg-3 col-form-label" for="description">Quyền</label>
+                    <div class="tree">
+                        <ng-container
+                            *ngTemplateOutlet="recursiveTree; context: { $implicit: permissions }"></ng-container>
+                        <ng-template #recursiveTree let-items>
+                            <div class="tree-item" *ngFor="let item of items">
+                                <div class="name">{{ item.displayName }}</div>
+                                <div *ngIf="item.children.length > 0" class="children">
+                                    <ng-container
+                                        *ngTemplateOutlet="recursiveTree; context: { $implicit: item.children }"></ng-container>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </div>
+                </div>
+            </div> -->

@@ -1,0 +1,452 @@
+<form
+  *ngIf="authView === authConstant.viewPhone"
+  (ngSubmit)="onSubmitFormLoginPhone()"
+>
+  <div class="d-flex justify-content-between align-items-center">
+    <label class="auth-phone__label">Số điện thoại</label>
+    <label
+      (click)="
+        changeViewEvent.emit({
+          title: authConstant.titleLoginEmailPhone,
+          view: authConstant.viewEmail
+        })
+      "
+      class="auth-phone__label"
+      >Đăng nhập với email</label
+    >
+  </div>
+  <div class="auth-phone__input-wrapper overflow-unset position-relative mb-3">
+    <div class="auth-phone__input d-flex align-items-center">
+      <div class="auth-phone__input-select">
+        <div
+          class="auth-phone__input-select__phone"
+          (click)="openSelectPhoneCountry = !openSelectPhoneCountry"
+        >
+          <span *ngIf="countryCurrent"
+            >{{ countryCurrent.code }} {{ countryCurrent.dial_code }}
+            <i
+              *ngIf="!openSelectPhoneCountry"
+              class="fa-solid fa-angle-down"
+            ></i>
+            <i *ngIf="openSelectPhoneCountry" class="fa-solid fa-angle-up"></i>
+          </span>
+        </div>
+      </div>
+      <input
+        class="auth-phone__input-form"
+        placeholder="Số điện thoại"
+        name="phone"
+        maxlength="12"
+        oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+        [(ngModel)]="loginPhoneForm.phone"
+      />
+    </div>
+    <div *ngIf="openSelectPhoneCountry" class="auth-phone__select">
+      <div class="auth-phone__select-search">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input
+          [(ngModel)]="numberPhoneSearch"
+          name="numberPhoneSearch"
+          type="text"
+          placeholder="Tìm kiếm"
+          (input)="onSearchPhone()"
+        />
+      </div>
+      <div class="auth-phone__select-list-item">
+        <div *ngFor="let item of countryData" class="auth-phone__select-item">
+          <div
+            *ngIf="item.enable !== false"
+            class="auth-phone__select-item-text"
+            (click)="countryCurrent = item; openSelectPhoneCountry = false"
+          >
+            {{ item?.name }} {{ item?.dial_code }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="auth-phone__input-wrapper mb-2">
+    <div class="auth-phone__input d-flex align-items-center w-100">
+      <input
+        class="auth-phone__input-form"
+        type="text"
+        placeholder="Nhập mã xác nhận"
+        name="otp"
+        maxlength="6"
+        value=""
+        oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+        [disabled]="loginPhoneForm.phone.length < 9 || !requestedSendOtp"
+        [(ngModel)]="loginPhoneForm.otp"
+        (input)="errorMessage.account = ''"
+      />
+      <div
+        class="auth-phone__input-send-btn {{
+          loginPhoneForm.phone.length < 9 ||
+          statusViewPhone === authConstant.statusViewPhoneSendOtp
+            ? 'disable'
+            : ''
+        }}"
+        (click)="handleRequestLoginSendOtp()"
+      >
+        <span *ngIf="statusViewPhone === authConstant.statusViewPhoneNotSendOtp"
+          >Gửi mã
+        </span>
+        <span *ngIf="statusViewPhone === authConstant.statusViewPhoneSendOtp"
+          >Gửi lại mã
+          <countdown
+            #countdown
+            [config]="config"
+            (event)="handleCountdownEvent($event)"
+          ></countdown
+        ></span>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="errorMessage.account.length > 0" class="auth-phone__input-helper text-danger">
+    Số điện thoại hoặc mã OTP không hợp lệ!
+  </div>
+  <div class="auth-phone__input-wrapper mt-4">
+    <button
+      type="submit"
+      class="auth-phone__input-submit d-flex align-items-center w-100 {{
+        loginPhoneForm.phone.length < 9 || loginPhoneForm.otp.length < 6 ? 'disable' : ''
+      }}"
+    >
+      <span>Đăng nhập</span>
+    </button>
+  </div>
+</form>
+
+<form
+  *ngIf="authView === authConstant.viewEmail"
+  (ngSubmit)="onSubmitFormLoginEmail()"
+>
+  <div class="d-flex justify-content-between align-items-center">
+    <label class="auth-phone__label">Email</label>
+    <label
+      (click)="
+        changeViewEvent.emit({
+          title: authConstant.titleLoginEmailPhone,
+          view: authConstant.viewPhone
+        })
+      "
+      class="auth-phone__label"
+      >Đăng nhập với SĐT</label
+    >
+  </div>
+  <div class="auth-phone__input-wrapper mb-3">
+    <div class="auth-phone__input d-flex align-items-center w-100">
+      <input
+        class="auth-phone__input-form w-100"
+        placeholder="Địa chỉ email"
+        name="email"
+        maxlength="50"
+        [(ngModel)]="loginEmailForm.email"
+      />
+    </div>
+  </div>
+  <div class="auth-phone__input-wrapper mb-2">
+    <div class="auth-phone__input d-flex align-items-center w-100">
+      <input
+        class="auth-phone__input-form w-100"
+        type="password"
+        placeholder="Mật khẩu"
+        name="password"
+        autocomplete="password"
+        [(ngModel)]="loginEmailForm.password"
+        (input)="errorMessage.account = ''"
+      />
+    </div>
+  </div>
+  <div *ngIf="errorMessage.account.length > 0" class="auth-phone__input-helper text-danger">
+    Tài khoản hoặc mật khẩu không chính xác
+  </div>
+  <div class="auth-phone__input-wrapper mt-4 w-100">
+    <button
+      type="submit"
+      class="auth-phone__input-submit d-flex align-items-center w-100 {{
+        !validationHelper.isEmailValid(loginEmailForm.email) || loginEmailForm.password.length < 6
+          ? 'disable'
+          : ''
+      }}"
+    >
+      <span>Đăng nhập</span>
+    </button>
+  </div>
+</form>
+
+<form
+  *ngIf="authView === authConstant.viewRegisterPhone"
+  (ngSubmit)="onSubmitFormRegisterPhone()"
+  class="form-register-phone"
+>
+  <div class="d-flex justify-content-between align-items-center">
+    <label class="auth-phone__label">Tên của bạn</label>
+  </div>
+  <div
+    class="auth-phone__input-wrapper d-flex flex-column {{
+      registerPhoneForm.isNameFocused && registerPhoneForm.name.length < 6
+        ? 'invalid-input'
+        : ''
+    }}"
+  >
+    <div class="auth-phone__input d-flex align-items-center w-100">
+      <input
+        class="auth-phone__input-form w-100"
+        placeholder="Họ và tên của bạn"
+        name="name"
+        maxlength="50"
+        [(ngModel)]="registerPhoneForm.name"
+        (blur)="registerPhoneForm.isNameFocused = true"
+      />
+    </div>
+  </div>
+  <div
+    *ngIf="registerPhoneForm.isNameFocused && registerPhoneForm.name.length < 6"
+    class="auth-phone__input-invalid text-danger"
+  >
+    Tên của bạn không hợp lệ
+  </div>
+  <div class="d-flex justify-content-between align-items-center">
+    <label class="auth-phone__label">Số điện thoại</label>
+    <label
+      (click)="
+        changeViewEvent.emit({
+          title: authConstant.titleRegisterDefault,
+          view: authConstant.viewRegisterEmail
+        })
+      "
+      class="auth-phone__label"
+      >Đăng ký với email</label
+    >
+  </div>
+  <div class="auth-phone__input-wrapper overflow-unset position-relative mb-3">
+    <div class="auth-phone__input d-flex align-items-center">
+      <div class="auth-phone__input-select">
+        <div
+          class="auth-phone__input-select__phone"
+          (click)="openSelectPhoneCountry = !openSelectPhoneCountry"
+        >
+          <span *ngIf="countryCurrent"
+            >{{ countryCurrent.code }} {{ countryCurrent.dial_code }}
+            <i
+              *ngIf="!openSelectPhoneCountry"
+              class="fa-solid fa-angle-down"
+            ></i>
+            <i *ngIf="openSelectPhoneCountry" class="fa-solid fa-angle-up"></i>
+          </span>
+        </div>
+      </div>
+      <input
+        class="auth-phone__input-form"
+        placeholder="Số điện thoại"
+        name="phone"
+        maxlength="12"
+        oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+        [(ngModel)]="registerPhoneForm.phone"
+      />
+    </div>
+    <div *ngIf="openSelectPhoneCountry" class="auth-phone__select">
+      <div class="auth-phone__select-search">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input
+          [(ngModel)]="numberPhoneSearch"
+          name="numberPhoneSearch"
+          type="text"
+          placeholder="Tìm kiếm"
+          (input)="onSearchPhone()"
+        />
+      </div>
+      <div class="auth-phone__select-list-item">
+        <div *ngFor="let item of countryData" class="auth-phone__select-item">
+          <div
+            *ngIf="item.enable !== false"
+            class="auth-phone__select-item-text"
+            (click)="countryCurrent = item; openSelectPhoneCountry = false"
+          >
+            {{ item?.name }} {{ item?.dial_code }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="auth-phone__input-wrapper mb-1">
+    <div class="auth-phone__input d-flex align-items-center w-100">
+      <input
+        class="auth-phone__input-form"
+        type="text"
+        placeholder="Nhập mã xác nhận"
+        name="otp"
+        maxlength="6"
+        value=""
+        oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+        [disabled]="registerPhoneForm.phone.length < 9 || !requestedSendOtp"
+        [(ngModel)]="registerPhoneForm.otp"
+      />
+      <div
+        class="auth-phone__input-send-btn {{
+          registerPhoneForm.name.length < 6 ||
+          registerPhoneForm.phone.length < 9 ||
+          statusViewPhone === authConstant.statusViewPhoneSendOtp
+            ? 'disable'
+            : ''
+        }}"
+        (click)="handleRequestSendOtpRegister()"
+      >
+        <span *ngIf="statusViewPhone === authConstant.statusViewPhoneNotSendOtp"
+          >Gửi mã
+        </span>
+        <span *ngIf="statusViewPhone === authConstant.statusViewPhoneSendOtp"
+          >Gửi lại mã
+          <countdown
+            #countdown
+            [config]="config"
+            (event)="handleCountdownEvent($event)"
+          ></countdown
+        ></span>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="errorMessage.account.length > 0" class="auth-phone__input-helper text-danger">
+    Tài khoản hoặc mật khẩu không chính xác
+  </div>
+  <div class="auth-phone__input-wrapper mt-3 w-100">
+    <button
+      type="submit"
+      class="auth-phone__input-submit d-flex align-items-center w-100 {{
+        registerPhoneForm.name.length < 6 ||
+        registerPhoneForm.phone.length < 9 ||
+        registerPhoneForm.otp.length < 6
+          ? 'disable'
+          : ''
+      }}"
+    >
+      <span>Đăng ký</span>
+    </button>
+  </div>
+</form>
+
+<form
+  *ngIf="authView === authConstant.viewRegisterEmail"
+  (ngSubmit)="onSubmitFormRegisterEmail()"
+>
+  <div class="d-flex justify-content-between align-items-center">
+    <label class="auth-phone__label">Tên của bạn</label>
+  </div>
+  <div
+    class="auth-phone__input-wrapper d-flex flex-column {{
+      registerEmailForm.isNameFocused && registerEmailForm.name.length < 6
+        ? 'invalid-input'
+        : ''
+    }}"
+  >
+    <div class="auth-phone__input d-flex align-items-center w-100">
+      <input
+        class="auth-phone__input-form w-100"
+        placeholder="Họ và tên của bạn"
+        name="name"
+        maxlength="50"
+        [(ngModel)]="registerEmailForm.name"
+        (blur)="registerEmailForm.isNameFocused = true"
+      />
+    </div>
+  </div>
+  <div
+    *ngIf="registerEmailForm.isNameFocused && registerEmailForm.name.length < 6"
+    class="auth-phone__input-invalid text-danger"
+  >
+    Tên của bạn không hợp lệ
+  </div>
+  <div class="d-flex justify-content-between align-items-center">
+    <label class="auth-phone__label">Email</label>
+    <label
+      (click)="
+        changeViewEvent.emit({
+          title: authConstant.titleRegisterDefault,
+          view: authConstant.viewRegisterPhone
+        })
+      "
+      class="auth-phone__label"
+      >Đăng ký với SĐT</label
+    >
+  </div>
+  <div class="auth-phone__input-wrapper mb-3">
+    <div class="auth-phone__input d-flex align-items-center w-100">
+      <input
+        class="auth-phone__input-form w-100"
+        placeholder="Địa chỉ email"
+        name="email"
+        maxlength="50"
+        [(ngModel)]="registerEmailForm.email"
+      />
+    </div>
+  </div>
+  <div class="auth-phone__input-wrapper mb-1">
+    <div class="auth-phone__input d-flex align-items-center w-100">
+      <input
+        class="auth-phone__input-form w-100"
+        type="password"
+        placeholder="Mật khẩu"
+        name="password"
+        autocomplete="password"
+        [(ngModel)]="registerEmailForm.password"
+      />
+    </div>
+  </div>
+  <div class="auth-phone__input-helper mb-3">
+    Gợi ý: Mật khẩu cần có ít nhất 8 kí tự
+  </div>
+  <div class="auth-phone__input-wrapper mb-1">
+    <div class="auth-phone__input d-flex align-items-center w-100">
+      <input
+        class="auth-phone__input-form"
+        type="text"
+        placeholder="Nhập mã xác nhận"
+        name="otp"
+        maxlength="6"
+        value=""
+        oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+        [disabled]="registerEmailForm.email.length < 9 || !requestedSendOtp"
+        [(ngModel)]="registerEmailForm.otp"
+      />
+      <div
+        class="auth-phone__input-send-btn {{
+          registerEmailForm.name.length < 6 ||
+          registerEmailForm.email.length < 9 ||
+          statusViewPhone === authConstant.statusViewPhoneSendOtp
+            ? 'disable'
+            : ''
+        }}"
+        (click)="handleRequestSendOtpEmailRegister()"
+      >
+        <span *ngIf="statusViewPhone === authConstant.statusViewPhoneNotSendOtp"
+          >Gửi mã
+        </span>
+        <span *ngIf="statusViewPhone === authConstant.statusViewPhoneSendOtp"
+          >Gửi lại mã
+          <countdown
+            #countdown
+            [config]="config"
+            (event)="handleCountdownEvent($event)"
+          ></countdown
+        ></span>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="errorMessage.account.length > 0" class="auth-phone__input-helper text-danger">
+    Tài khoản hoặc mật khẩu không chính xác
+  </div>
+  <div class="auth-phone__input-wrapper mt-3 w-100">
+    <button
+      type="submit"
+      class="auth-phone__input-submit d-flex align-items-center w-100 {{
+        !validationHelper.isEmailValid(registerEmailForm.email) ||
+        registerEmailForm.password.length < 6
+          ? 'disable'
+          : ''
+      }}"
+    >
+      <span>Đăng ký</span>
+    </button>
+  </div>
+</form>

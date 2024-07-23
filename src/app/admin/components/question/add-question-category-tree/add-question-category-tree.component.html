@@ -1,0 +1,70 @@
+<div class="tree-ul ml-3">
+    <div *ngFor="let category of categories" class="tree-li cursor-pointer position-relative mt-1" (click)="handleOnClickMenu($event,category)" (contextmenu)="handleOnOpenActionQuestionCategoryMenu($event,category)" [class.active]="(category.id === addQuestionCategoryService.id && addQuestionCategoryService.currentId < 1)|| (category.id === addQuestionCategoryService.currentId)">
+      <ng-container *ngIf="category.name.trim().toLowerCase().includes(addQuestionCategoryService.search.toLowerCase) || isQuestionCategoriesIncludeKey(category) || search === ''">
+        <i *ngIf="category.questionCategories" class="fa-solid fa-sort-down position-absolute position-left-3"></i>
+        <i class="fa-solid fa-folder text-warning mr-1"></i> <span class="position-relative" [class.active]="(category.id === addQuestionCategoryService.id && addQuestionCategoryService.currentId <= 1 ) || (category.id === addQuestionCategoryService.currentId)">
+          {{ category.name }} 
+          <!-- <div *ngIf="category.id === addQuestionCategoryService.currentId" class="dropdown d-inline-block user-dropdown position-absolute question-category-menu">
+            <div (click)="handleOnClickMenuAction($event,questionCategoryConstant.addAction,category)">Thêm thư mục con</div>
+            <div (click)="handleOnClickMenuAction($event,questionCategoryConstant.editAction,category)">Sửa</div>
+            <div (click)="handleOnClickMenuAction($event,questionCategoryConstant.deleteAction,category)">Xoá</div>
+          </div> -->
+        </span>
+        <app-add-question-category-tree [categories]="category.questionCategories" *ngIf="category.isExpanded && category.questionCategories || (isQuestionCategoriesIncludeKey(category) && search !== '' ||(isQuestionCategoriesIncludeId(category)) )"></app-add-question-category-tree>
+      </ng-container>
+    </div>
+</div>
+
+<ng-template #createQuestionCategoryTemplate>
+    <div class="modal-header">
+        <h5 *ngIf="addQuestionCategoryService.type === 1" class="modal-title mt-0" id="exampleModalScrollableTitle">Tạo loại câu hỏi</h5>
+        <h5 *ngIf="addQuestionCategoryService.type === 2" class="modal-title mt-0" id="exampleModalScrollableTitle">Sửa loại câu hỏi</h5>
+        <!-- <button type="button" class="close" (click)="handleOnCloseCreateQuestionCategoryModal()">
+            <span aria-hidden="true">&times;</span>
+        </button> -->
+    </div>
+    <div class="modal-body">
+        <form (ngSubmit)="handleOnSubmitCreateQuestionCategoryForm()" #addQuestionCategoryForm="ngForm">
+            <div class="form-group">
+                <div class="row">
+                  <input hidden class="form-control" [(ngModel)]="questionCategory.id" name="id" id="id" type="text" placeholder="Id"/>
+                </div>
+                <div class="row">
+                    <label class="col-12 text-dark col-form-label" for="name">Tên loại câu hỏi <span class="text-danger">*</span></label>
+                    <div class="col-12">
+                        <input class="form-control" [(ngModel)]="questionCategory.name" name="name" id="name" type="text" placeholder="Tên loại câu hỏi" required/>
+                        <div *ngIf="addQuestionCategoryForm.controls['name']?.invalid && (addQuestionCategoryForm.controls['name']?.dirty || addQuestionCategoryForm.controls['name'].touched)" class="danger-notice">
+                            <div *ngIf="addQuestionCategoryForm.controls['name'].errors?.['required']">Tên loại câu hỏi không được để trống</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="col-12 text-dark col-form-label" for="description">Mô tả</label>
+                    <div class="col-12">
+                        <input class="form-control" [(ngModel)]="questionCategory.description" name="description" id="description" type="text" placeholder="Mô tả"/>
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="col-12 text-dark col-form-label" for="priority">Độ ưu tiên <span class="text-danger">*</span></label>
+                    <div class="col-12">
+                        <input class="form-control" [(ngModel)]="questionCategory.priority" name="priority" id="priority" type="number" placeholder="Độ ưu tiên" required/>
+                        <div *ngIf="addQuestionCategoryForm.controls['priority']?.invalid && (addQuestionCategoryForm.controls['priority']?.dirty || addQuestionCategoryForm.controls['priority'].touched)" class="danger-notice">
+                            <div *ngIf="addQuestionCategoryForm.controls['priority'].errors?.['required']">Độ ưu tiên không được để trống</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" *ngIf="addQuestionCategoryService.type === questionCategoryConstant.editAction">
+                  <label class="col-12 text-dark col-form-label" for="parentQuestionCategoryId">Vị trí</label>
+                  <!-- <div class="col-12">
+                      <app-question-category-tree [categoriesSelect]="categoriesSelect" [type]="questionCategoryConstant.questionCategorySelectTreeType" [activeCategoryIdSelect]="0"></app-question-category-tree>
+                  </div> -->
+                </div>
+            </div>
+        </form> 
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-light waves-effect" (click)="handleOnCloseCreateQuestionCategoryModal()">Đóng</button>
+        <button [disabled]="addQuestionCategoryForm.invalid" type="button" class="btn btn-primary waves-effect waves-light" (click)="handleOnSubmitCreateQuestionCategoryForm()">Xác nhận</button>
+    </div>
+</ng-template>
+    

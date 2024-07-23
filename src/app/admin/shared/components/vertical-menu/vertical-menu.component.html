@@ -1,0 +1,195 @@
+<div class="vertical-menu bg-dark-ui">
+
+    <div id="simplebar" data-simplebar class="h-100">
+        <div id="sidebar-menu">
+            <ul class="metismenu list-unstyled" id="side-menu">
+                <li class="menu-title">Menu</li>
+
+                <li routerLink="/admin/dashboard">
+                    <a class="waves-effect {{ currentUrl === '/admin/dashboard' ? 'active' : '' }}">
+                        <i class="fa-solid fa-house pb-0"></i>
+                        <span>Trang điều khiển</span>
+                    </a>
+                </li>
+
+                <li class="{{ isActive('/admin/course')  ? 'mm-active' : '' }}">
+                    <a class="waves-effect navigation-menu-main d-flex justify-content-between {{ isActive('/admin/course') ? 'active' : '' }}">
+                        <div class="navigation-label">
+                            <i class="fa-solid fa-school pb-0"></i>
+                            <span>Khoá học</span>
+                        </div>
+                        <i class="fa-solid fa-angle-down"></i>
+                    </a>
+
+                    <ul class="sub-menu {{ isActive('/admin/course')? 'mm-show' : '' }}">
+                        <li class="cursor-pointer" routerLink="/admin/course/info"><a class="{{ isActive('/admin/course/info') ? 'active' : '' }}">Thông tin khoá học</a></li>
+                        <li class="cursor-pointer" routerLink="/admin/course/section"><a class="{{ isActive('/admin/course/section')? 'active' : '' }}">Quản lý chương</a></li>
+                        <li class="cursor-pointer" routerLink="/admin/course/lesson"><a class="{{ isActive('/admin/course/lesson')? 'active' : '' }}">Quản lý bài giảng</a></li>
+                    </ul>
+                </li>
+
+                <li class="{{ isActive('/admin/group-module')  ? 'mm-active' : '' }}">
+                    <a class="waves-effect navigation-menu-main d-flex justify-content-between {{ isActive('/admin/group-module') ? 'active' : '' }}">
+                        <div class="navigation-label">
+                            <i class="fa-solid fa-user-group pb-0"></i>
+                            <span>Học phần</span>
+                        </div>
+                        <i class="fa-solid fa-angle-down"></i>
+                    </a>
+
+                    <ul class="sub-menu {{ isActive('/admin/group-module') ? 'mm-show' : '' }}">
+                        <li class="cursor-pointer" [routerLink]="['/admin/group-module']" [queryParams]="{ status: 'true' }"><a class="{{ isActive('/admin/group-module') ? 'active' : '' }}">Nhóm học phần</a></li>
+                    </ul>
+                </li>
+
+                <li class="{{ isActive('/admin/exam')  ? 'mm-active' : '' }}">
+                    <a class="waves-effect navigation-menu-main d-flex justify-content-between {{ isActive('/admin/exam') ? 'active' : '' }}">
+                        <div class="navigation-label">
+                            <i class="fa-solid fa-user-group pb-0"></i>
+                            <span>Kỳ thi</span>
+                        </div>
+                        <i class="fa-solid fa-angle-down"></i>
+                    </a>
+
+                    <ul class="sub-menu {{ isActive('/admin/exam') ? 'mm-show' : '' }}">
+                        <li class="cursor-pointer" [routerLink]="['/admin/exam']"><a class="{{ isActive('/admin/exam') ? 'active' : '' }}">Quản lý đề thi</a></li>
+                    </ul>
+                </li>
+
+                <!-- <li class="{{ isActive('/admin/course')  ? 'mm-active' : '' }}">
+                    <a class="waves-effect navigation-menu-main d-flex justify-content-between {{ isActive('/admin/course') ? 'active' : '' }}">
+                        <div class="navigation-label">
+                            <i class="fa-solid fa-graduation-cap pb-0"></i>
+                            <span>Kỳ thi</span>
+                        </div>
+                        <i class="fa-solid fa-angle-down"></i>
+                    </a>
+
+                    <ul class="sub-menu {{ isActive('/admin/course')? 'mm-show' : '' }}">
+                        <li class="cursor-pointer" routerLink="/admin/course/info"><a class="{{ isActive('/admin/course/info') ? 'active' : '' }}">Thông tin khoá học</a></li>
+                        <li class="cursor-pointer" routerLink="/admin/course/lesson"><a class="{{ isActive('/admin/course/lesson')? 'active' : '' }}">Quản lý bài giảng</a></li>
+                    </ul>
+                </li> -->
+
+                <li class="{{ isActive('/admin/question') || isActive('/admin/question-category')  ? 'mm-active' : '' }}">
+                    <a class="waves-effect navigation-menu-main d-flex justify-content-between {{ isActive('/admin/question') ? 'active' : '' }}">
+                        <div class="navigation-label">
+                            <i class="fa-regular fa-circle-question pb-0"></i>
+                            <span>Ngân hàng câu hỏi</span>
+                        </div>
+                        <i class="fa-solid fa-angle-down"></i>
+                    </a>
+
+                    <ul class="sub-menu {{ isActive('/admin/question') || isActive('/admin/question-category') ? 'mm-show' : '' }}">
+                        <!-- <li class="cursor-pointer" routerLink="/admin/question-category"><a class="{{ isActive('/admin/question-category') && (currentUrl != '/admin/question-tag') ? 'active' : '' }}">Quản lý loại câu hỏi</a></li> -->
+                        <li class="cursor-pointer" routerLink="/admin/question"><a class="{{ isActive('/admin/question') && (currentUrl != '/admin/question-category') && (currentUrl != '/admin/question-tag') ? 'active' : '' }}">Quản lý câu hỏi</a></li>
+                        <li class="cursor-pointer" routerLink="/admin/question-tag"><a class="{{ isActive('/admin/question-tag') && (currentUrl != '/admin/question-category') ? 'active' : '' }}">Quản lý thẻ tag câu hỏi</a></li>
+                        <!-- <li class="cursor-pointer" routerLink="/admin/exam"><a class="{{ isActive('/admin/exam') && (currentUrl != '/admin/question-category') ? 'active' : '' }}">Quản lý bộ đề thi</a></li> -->
+                    </ul>
+                </li>
+
+                <li class="{{ isActive('/admin/post') ? 'mm-active' : '' }}">
+                    <a class="waves-effect navigation-menu-main d-flex justify-content-between {{ isActive('/admin/post') ? 'active' : '' }}">
+                        <div class="navigation-label">
+                            <i class="fa-regular fa-newspaper pb-0"></i>
+                            <span>Bài viết</span>
+                        </div>
+                        <i class="fa-solid fa-angle-down"></i>
+                    </a>
+                
+                    <ul class="sub-menu {{ isActive('/admin/post') ? 'mm-show' : '' }}">
+                        <li class="cursor-pointer" routerLink="/admin/post">
+                            <a class="{{ currentUrl === '/admin/post' ? 'active' : '' }}">Quản lý bài viết</a>
+                        </li>
+                        <li class="cursor-pointer" routerLink="/admin/post/approve">
+                            <a class="{{ currentUrl === '/admin/post/approve' ? 'active' : '' }}">Kiểm duyệt bài viết</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="{{ isActive('/admin/group1') || isActive('/admin/teacher') || isActive('/admin/student')  ? 'mm-active' : '' }}">
+                    <a class="waves-effect navigation-menu-main d-flex justify-content-between {{ isActive('/admin/group1') || isActive('/admin/teacher') || isActive('/admin/student') ? 'active' : '' }}">
+                        <div class="navigation-label">
+                            <i class="fa-solid fa-graduation-cap pb-0"></i>
+                            <span>Người dùng</span>
+                        </div>
+                        <i class="fa-solid fa-angle-down"></i>
+                    </a>
+
+                    <ul class="sub-menu {{ isActive('/admin/group1') || isActive('/admin/teacher') || isActive('/admin/student') ? 'mm-show' : '' }}">
+                        <!-- <li class="cursor-pointer" routerLink="/admin/group"><a class="{{ isActive('/admin/group') ? 'active' : '' }}">Quản lý nhóm người</a></li> -->
+                        <li class="cursor-pointer" routerLink="/admin/teacher"><a class="{{ isActive('/admin/teacher') ? 'active' : '' }}">Quản lý giáo viên</a></li>
+                        <li class="cursor-pointer" routerLink="/admin/student"><a class="{{ isActive('/admin/student') ? 'active' : '' }}">Quản lý sinh viên</a></li>
+                        <li class="cursor-pointer" routerLink="/admin/role"><a class="{{ isActive('/admin/role') ? 'active' : '' }}">Quản lý vai trò </a></li>
+
+                    </ul>
+                </li>
+
+                <li class="{{ isActive('/admin/banner')  ? 'mm-active' : '' }}">
+                    <a class="waves-effect navigation-menu-main d-flex justify-content-between {{ isActive('/admin/banner') ? 'active' : '' }}">
+                        <div class="navigation-label">
+                            <i class="fa-brands fa-slideshare"></i>
+                            <span>Nội dung</span>
+                        </div>
+                        <i class="fa-solid fa-angle-down"></i>
+                    </a>
+
+                    <ul class="sub-menu {{ isActive('/admin/banner')? 'mm-show' : '' }}">
+                        <li class="cursor-pointer" routerLink="/admin/banner"><a class="{{ isActive('/admin/banner') ? 'active' : '' }}">Quản lý banner</a></li>
+                    </ul>
+                </li>
+
+                <li class="{{ isActive('/admin/config/web')  ? 'mm-active' : '' }}">
+                    <a class="waves-effect navigation-menu-main d-flex justify-content-between {{ isActive('/admin/config/web')? 'active' : '' }}">
+                        <div class="navigation-label">
+                            <i class="fa-solid fa-gears"></i>
+                            <span>Cấu hình</span>
+                        </div>
+                        <i class="fa-solid fa-angle-down"></i>
+                    </a>
+
+                    <ul class="sub-menu {{ isActive('/admin/config/web')? 'mm-show' : '' }}">
+                        <li class="cursor-pointer" routerLink="/admin/config/web"><a class="{{ isActive('/admin/config/web') ? 'active' : '' }}">Cấu hình trang web</a></li>
+                        <li class="cursor-pointer" routerLink="/admin/config/system"><a class="{{ false ? 'active' : '' }}">Cấu hình hệ thống</a></li>
+                    </ul>
+                </li>
+
+                <li class="{{ isActive('/admin/account/update')  ? 'mm-active' : '' }}">
+                    <a class="waves-effect navigation-menu-main d-flex justify-content-between {{ isActive('/admin/account/update') ? 'active' : '' }}">
+                        <div class="navigation-label">
+                            <i class="fa-solid fa-user"></i>
+                            <span>Người dùng</span>
+                        </div>
+                        <i class="fa-solid fa-angle-down"></i>
+                    </a>
+
+                    <ul class="sub-menu {{ isActive('/admin/account/update') ? 'mm-show' : '' }}">
+                        <li class="cursor-pointer" routerLink="/admin/account/update"><a class="{{ isActive('/admin/account/update') ? 'active' : '' }}">Thông tin người dùng</a></li>
+                    </ul>
+                </li>
+
+                <!-- <li routerLink="/admin/teacher">
+                    <a class="waves-effect" [class.active]="isActive('/admin/teacher')">
+                        <i class="ri-dashboard-line"></i>
+                        <span>Quản lý giáo viên</span>
+                    </a>
+                </li>
+                <li routerLink="/admin/student">
+                    <a class="waves-effect" [class.active]="isActive('/admin/student')">
+                        <i class="ri-dashboard-line"></i>
+                        <span>Quản lý sinh viên</span>
+                    </a>
+                </li> -->
+                <!-- <li routerLink="/admin/post">
+                    <a class="waves-effect" [class.active]="isActive('/admin/post')">
+                        <i class="ri-dashboard-line"></i>
+                        <span>Quản lý bài viết</span>
+                    </a>
+                </li> -->
+                <!-- them -->
+                
+                <!--  -->
+            </ul>
+        </div>
+    </div>
+</div>

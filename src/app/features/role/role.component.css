@@ -1,0 +1,49 @@
+.tree {
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #333;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .tree-item {
+    margin-left: 20px;
+    margin-bottom: 10px;
+    position: relative;
+  }
+  
+  .flex-row {
+    display: flex;
+    align-items: center;
+  }
+  
+  .flex-row input[type="checkbox"] {
+    margin-right: 5px;
+  }
+  
+  .name {
+    font-weight: bold;
+  }
+  
+  .children {
+    padding-left: 15px;
+    list-style-type: disc;
+  }
+  
+  .children:not(:empty) {
+    margin-left: 20px;
+    border-left: 1px dashed #ccc;
+  }
+  
+  .tree-item:not(:last-child)::before {
+    content: "-";
+    position: absolute;
+    left: -10px;
+  }
+  
+  .tree-item:last-child::before {
+    content: "";
+  }
+  

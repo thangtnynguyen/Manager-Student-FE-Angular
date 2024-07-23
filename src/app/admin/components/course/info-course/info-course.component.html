@@ -1,0 +1,154 @@
+<div class="row">
+    <div class="col-12">
+       <div
+          class="page-title-box d-flex align-items-center justify-content-between"
+          >
+          <h4 class="mb-0">Thông tin khoá học</h4>
+          <div class="page-title-right">
+             <ol class="breadcrumb m-0">
+                <li
+                   routerLink="/admin/dashboard"
+                   class="breadcrumb-item d-flex align-items-center"
+                   >
+                   <span>Trang chủ</span>
+                   <i class="breadcrumb-item-arrow fa-solid fa-angle-right"></i>
+                </li>
+                <li class="breadcrumb-item d-flex align-items-center">
+                   <span>Quản lý khoá học</span>
+                   <i class="breadcrumb-item-arrow fa-solid fa-angle-right"></i>
+                </li>
+                <li class="breadcrumb-item active">
+                    <span>Thông tin khoá học</span>
+                 </li>
+             </ol>
+          </div>
+       </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+       <div class="card">
+          <div class="card-body">
+            <form (ngSubmit)="handleSubmitForm()" #form="ngForm">
+                <div class="form-group">
+                    <div class="row">
+                        <label class="col-md-3 col-lg-3 col-form-label" for="title">Tên khoá học <span class="text-danger">*</span></label>
+                        <div class="col-md-9 col-lg-8 col-table-reponsive p-0">
+                            <input class="form-control" [(ngModel)]="course.title" name="title" id="title" type="text" placeholder="Tên khoá học" required/>
+                            <div *ngIf="form.controls['title']?.invalid && (form.controls['title']?.dirty || form.controls['title'].touched)" class="danger-notice">
+                                <div *ngIf="form.controls['title'].errors?.['required']">Tên khoá học không được để trống</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <div class="row">
+                        <label class="col-md-3 col-lg-3 col-form-label" for="shortDescription">Mô tả ngắn</label>
+                        <div class="col-md-9 col-lg-8 col-table-reponsive p-0">
+                            <textarea class="form-control" [(ngModel)]="course.shortDescription" name="shortDescription" id="shortDescription" placeholder="Mô tả ngắn"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="row">
+                        <label class="col-md-3 col-lg-3 col-form-label" for="description">Mô tả</label>
+                        <div class="col-md-9 col-lg-8 col-table-reponsive p-0">
+                            <ckeditor id="editor" [config]="config.classicEditorConfig" [editor]="classicEditor" [data]="course.description" class="title-editor" (change)="handleChangeQuestionAnswer($event,course,1)" (ready)="onReady($event)"></ckeditor>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="row">
+                        <label class="col-md-3 col-lg-3 col-form-label" for="imageUrl">Ảnh đại diện</label>
+                        <div class="col-md-9 col-lg-4 col-table-reponsive p-0">
+                            <div class="custom-file">
+                                <input (change)="handleChangeImage($event)" type="file" class="custom-file-input" id="customFile" accept="image/*" multiple="false">
+                                <label class="custom-file-label" for="customFile">Chọn file</label>
+                            </div>
+                            <div *ngIf="course.base64Image || course.imageUrl" class="img-preview mt-2">
+                                <img *ngIf="course.base64Image" [src]="course.base64Image" class="rounded img-preview-small"/>
+                                <img *ngIf="course.imageUrl" [src]="config.system.baseUrl + course.imageUrl" class="rounded img-preview-small"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="row">
+                        <label class="col-md-3 col-lg-3 col-form-label" for="imageUrl">Video giới thiệu</label>
+                        <div class="col-md-9 col-lg-6 col-table-reponsive d-flex align-items-center gap-4">
+                            <div class="custom-control custom-radio">
+                                <input type="radio" id="verification-type-email" name="verificationType" class="custom-control-input" [(ngModel)]="course.typeVideo" [value]="1" checked="">
+                                <label class="custom-control-label font-weight-normal" for="verification-type-email">Youtube</label>
+                            </div>
+                            <div class="custom-control custom-radio">
+                                <input type="radio" id="verification-type-phone" name="verificationType" class="custom-control-input" [(ngModel)]="course.typeVideo" [value]="2">
+                                <label class="custom-control-label font-weight-normal" for="verification-type-phone">Video</label>
+                            </div>  
+                        </div>
+                    </div>
+
+                    <div class="youtube-video">
+                        <div *ngIf="course.typeVideo === 1" class="row">
+                            <label class="col-md-3 col-lg-3 col-form-label" for="title"></label>
+                            <div class="col-md-9 col-lg-4 col-table-reponsive p-0 mt-2">
+                                <input class="form-control" [(ngModel)]="course.videoUrl" name="videoUrl" id="videoUrl" type="text" placeholder="Youtube link"/>
+                            </div>
+                        </div>
+    
+                        <!-- <div *ngIf="course.videoUrl !== '' && course.typeVideo === 1" class="row">
+                            <label class="col-md-3 col-lg-3 col-form-label" for="imageUrl"></label>
+                            <div class="col-md-9 col-lg-6 col-table-reponsive d-flex align-items-center gap-4 video-preview-small mt-2 pl-0 mt-3">
+                                <iframe width="252" height="140" src="{{ course.videoUrl }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                            </div>
+                        </div> -->
+                    </div>
+
+                    <div class="normal-video">
+                        <div class="form-group mt-2">
+                            <div class="row">
+                                <label class="col-md-3 col-lg-3 col-form-label" for="imageUrl"></label>
+                                <div class="col-md-9 col-lg-4 col-table-reponsive p-0">
+                                    <div *ngIf="course.typeVideo === 2" class="custom-file">
+                                        <input (change)="handleChangeVideo($event)" type="file" class="custom-file-input" id="customFile" accept="video/*" multiple="false">
+                                        <label class="custom-file-label" for="customFile">Chọn file</label>
+                                    </div>
+                                    <div *ngIf="course.base64Video !== '' && course.typeVideo === 2" class="img-preview mt-2">
+                                        <video width="252" height="140" controls>
+                                            <source [src]="course.base64Video" type="video/mp4">
+                                            Your browser does not support the video tag.
+                                          </video>
+                                        <!-- <img [src]="course.base64Image" class="rounded img-preview-small"/> -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="row">
+                        <label class="col-md-3 col-lg-3 col-form-label" for="description">Nội dung</label>
+                        <div class="col-md-9 col-lg-8 col-table-reponsive p-0">
+                            <ckeditor id="editor" [config]="config.classicEditorConfig" [editor]="classicEditor" [data]="course.content" class="title-editor" (change)="handleChangeQuestionAnswer($event,course,2)" (ready)="onReady($event)"></ckeditor>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="d-flex">
+                        <div class="ml-auto">
+                            <button [disabled]="form.invalid" type="submit" class="btn btn-success waves-effect waves-light ml-2">Lưu</button>
+                        </div>
+                    </div>
+                </div>
+            </form>            
+          </div>
+       </div>
+    </div>
+    <!-- end col -->
+ </div>

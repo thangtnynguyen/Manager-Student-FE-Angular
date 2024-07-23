@@ -1,0 +1,9 @@
+/* Validator message */
+.danger-notice{
+    color: red;
+    font-size: 12px !important;
+}
+
+.danger-notice > div{
+    margin-top: 6px;
+}

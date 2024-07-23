@@ -1,0 +1,242 @@
+<div class="row">
+    <div class="col-12">
+       <div
+          class="page-title-box d-flex align-items-center justify-content-between"
+          >
+          <h4 class="mb-0">Điểm danh lớp {{groupModule.name}}</h4>
+          <div class="page-title-right">
+             <ol class="breadcrumb m-0">
+                <li
+                   routerLink="/admin/dashboard"
+                   class="breadcrumb-item d-flex align-items-center"
+                   >
+                   <span>Trang chủ</span>
+                   <i class="breadcrumb-item-arrow fa-solid fa-angle-right"></i>
+                </li>
+                <li class="breadcrumb-item active">
+                    <span>Quản lý lớp học</span>
+                </li>
+                <li class="breadcrumb-item active">
+                     <span>Điểm danh</span>
+                </li>
+             </ol>
+          </div>
+       </div>
+    </div>
+</div>
+
+<p-tabView styleClass="tabview-custom position-relative">
+    <p-tabPanel>
+       <ng-template pTemplate="header">
+          Điểm danh theo ngày
+       </ng-template>
+       <div>
+            <div class="d-flex align-items-center box-date-school">
+                <div class="d-flex align-items-center select-box-date-school">
+                    <div id="date-school" class="d-flex justify-content-center position-relative" dropdown>
+                        <div id="button-basic" dropdownToggle class="d-flex align-items-center btn-select-box-date-school"
+                                aria-controls="dropdown-basic">
+                            <div class="date-school-selected d-flex align-items-center justify-content-center">{{daySelected | date:'dd/MM/yyyy'}}</div>
+                            <span class="ml-2 d-flex justify-content-center align-items-center"><i class="fa-solid fa-calendar-days"></i></span>
+                        </div>
+                        <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu dropdown-select-box-date-school"
+                            role="menu" aria-labelledby="button-basic">
+                            <li *ngFor="let item of schedules" class="item-box-date-school" (click)="getAttendenceByScheduleId(item)" role="menuitem">{{item.dateSchool | date:'dd/MM/yyyy'}}</li>
+                        </ul>
+                      </div>
+                </div>
+            </div>
+
+            <ng-container *ngIf="!hasAttendanted">
+                
+                <div class="card">
+                    <p-table
+                        #dt2
+                        dataKey="id"
+                        [value]="attendences"
+                        [tableStyle]="{'min-width': '50rem'}"
+                        >
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th pSortableColumn="stt" style="width:8%">STT <p-sortIcon field="stt"></p-sortIcon></th>
+                                <th pSortableColumn="user.name" style="width:18%">Họ tên <p-sortIcon field="user.name"></p-sortIcon></th>
+                                <th pSortableColumn="studentId" style="width:11%">Mã SV <p-sortIcon field="studentId"></p-sortIcon></th>
+                                <th style="width:14%">Số điện thoại</th>
+                                <th style="width:9%">Có mặt</th>
+                                <th style="width:13%">Nghỉ có phép</th>
+                                <th style="width:13%">Nghỉ không phép</th>
+                                <th style="width:14%">Ghi chú</th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-attendence>
+                            <tr>
+                                <td>{{ attendence.index }}</td>
+                                <td style="text-align: center;">
+                                    {{ attendence.user.name }}
+                                </td>
+                                <td style="text-align: center;">{{ attendence.studentId }}</td>
+                                <td style="text-align: center;">
+                                    {{ attendence.user.phoneNumber }}
+                                </td>
+                                <td>
+                                    <div class="d-flex justify-content-center align-items-center">
+                                        <input type="radio" class="input-attendence input-attendence-attendent" [(ngModel)]="attendence.attendance" value="attendant" name="attendence-{{ attendence.index }}"/>
+                                        <label class="label-attendence label-attendence-attendent" for="attendant-{{ attendence.index }}"></label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex justify-content-center align-items-center">
+                                        <input type="radio" class="input-attendence input-attendence-permitted" [(ngModel)]="attendence.attendance" value="permittedLeave" name="attendence-{{ attendence.index }}"/>
+                                        <label class="label-attendence label-attendence-permitted" for="permittedLeave-{{ attendence.index }}"></label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex justify-content-center align-items-center">
+                                        <input type="radio" class="input-attendence input-attendence-unpermitted" [(ngModel)]="attendence.attendance" value="unpermittedLeave" name="attendence-{{ attendence.index }}"/>
+                                        <label class="label-attendence label-attendence-unpermitted" for="unpermittedLeave-{{ attendence.index }}"></label>
+                                    </div>
+                                </td>
+                                <td style="text-align: center;">
+                                    <input type="text" [(ngModel)]="attendence.note" class="input-attendence form-control" value=""/>
+                                </td>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="emptymessage">
+                            <tr>
+                                <td colspan="5">Không có lịch học môn cơ sở dữ liệu nào ngày {{daySelected | date:'dd/MM/yyyy'}}!</td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+                <button (click)="submitAttendence()" class="btn btn-primary">Lưu</button>
+            </ng-container>
+
+            <ng-container *ngIf="hasAttendanted">
+                <div class="card">
+                    <p-table
+                        #dt2
+                        dataKey="id"
+                        [value]="attendences"
+                        [tableStyle]="{'min-width': '50rem'}"
+                        >
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th pSortableColumn="stt" style="width:8%">STT <p-sortIcon field="stt"></p-sortIcon></th>
+                                <th pSortableColumn="user.name" style="width:18%">Họ và tên <p-sortIcon field="user.name"></p-sortIcon></th>
+                                <th pSortableColumn="studentId" style="width:11%">Mã SV <p-sortIcon field="studentId"></p-sortIcon></th>
+                                <th style="width:14%">Số điện thoại</th>
+                                <th style="width:9%">Có mặt</th>
+                                <th style="width:13%">Nghỉ có phép</th>
+                                <th style="width:13%">Nghỉ không phép</th>
+                                <th style="width:14%">Ghi chú</th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-attendence>
+                            <tr>
+                                <td>{{ attendence.index }}</td>
+                                <td style="text-align: center;">
+                                    {{ attendence.user.name }}
+                                </td>
+                                <td style="text-align: center;">{{ attendence.studentId }}</td>
+                                <td style="text-align: center;">
+                                    {{ attendence.user.phoneNumber }}
+                                </td>
+                                <td>
+                                    <div class="d-flex justify-content-center align-items-center">
+                                        <input type="radio" class="input-attendence input-attendence-attendent" [(ngModel)]="attendence.attendance" value="attendant" [disabled]="disableEdit" name="attendence-{{ attendence.index }}"/>
+                                        <label class="label-attendence label-attendence-attendent" for="attendant-{{ attendence.index }}"></label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex justify-content-center align-items-center">
+                                        <input type="radio" class="input-attendence input-attendence-permitted" [(ngModel)]="attendence.attendance" [disabled]="disableEdit" value="permittedLeave" name="attendence-{{ attendence.index }}"/>
+                                        <label class="label-attendence label-attendence-permitted" for="permittedLeave-{{ attendence.index }}"></label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex justify-content-center align-items-center">
+                                        <input type="radio" class="input-attendence input-attendence-unpermitted" [(ngModel)]="attendence.attendance" [disabled]="disableEdit" value="unpermittedLeave" name="attendence-{{ attendence.index }}"/>
+                                        <label class="label-attendence label-attendence-unpermitted" for="unpermittedLeave-{{ attendence.index }}"></label>
+                                    </div>
+                                </td>
+                                <td style="text-align: center;">
+                                    <input type="text" [(ngModel)]="attendence.note" [disabled]="disableEdit" class="input-attendence form-control" value=""/>
+                                </td>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="emptymessage">
+                            <tr>
+                                <td *ngIf="checkDateSelected" colspan="5">Không có lịch học môn cơ sở dữ liệu ngày {{daySelected | date:'dd/MM/yyyy'}}!</td>
+                                <td *ngIf="!checkDateSelected" colspan="5">Không thể điểm danh trước!</td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <button (click)="submitAttendence()" class="btn btn-primary">Lưu</button>
+                    <button class="btn" style="color: cornflowerblue; cursor: pointer;" (click)="disableEdit = !disableEdit" title="Sửa bảng điểm danh"><i class="fa fa-solid fa-pen-to-square"></i></button>
+                </div>
+            </ng-container>
+       </div>
+    </p-tabPanel>
+    <p-tabPanel header="Header II">
+       <ng-template pTemplate="header">
+          Điểm danh theo tháng
+       </ng-template>
+       <div>
+        <div class="card">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div class="mr-3">C: có mặt, P: Nghỉ có phép, K: Nghỉ không phép</div>
+                    <button class="btn btn-info" (click)="exportExcelAttendenceSheet()">Xuất bảng điểm danh</button>
+                </div>
+            <p-table
+                #dt2
+                dataKey="id"
+                [value]="attendencesByMonth"
+                [tableStyle]="{'min-width': '50rem'}"
+                id="table-attendences-group-module"
+                >
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th pSortableColumn="stt" style="width:100px">STT <p-sortIcon field="stt"></p-sortIcon></th>
+                        <th pSortableColumn="user.name" style="width:200px">Họ và tên <p-sortIcon field="user.name"></p-sortIcon></th>
+                        <th pSortableColumn="studentId" style="width:120px">Mã SV <p-sortIcon field="studentId"></p-sortIcon></th>
+                        <th *ngFor="let schedule of schedules" style="width: 140px;">{{schedule.dateSchool | date:'dd/MM/yyyy'}}</th>
+                        <th style="width: 120px;">Tổng số buổi</th>
+                        <th style="width: 150px;">Tổng số buổi đã học</th>
+                        <th style="width: 100px;">Có mặt</th>
+                        <th style="width: 100px;">Vắng</th>
+                        <th style="width: 100px;">Tỉ lệ</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-attendence>
+                    <tr>
+                        <td style="text-align: center;width: 100px;">{{ attendence.index }}</td>
+                        <td style="text-align: center;width:200px">
+                            {{ attendence.name }}
+                        </td>
+                        <td style="text-align: center;width: 120px">{{ attendence.studentId }}</td>
+                        <td *ngFor="let item of schedules; let i = index" style="text-align: center;width: 140px">
+                            <ng-container *ngIf="attendence">
+                                <ng-container *ngIf="attendence.attendence[i]">
+                                    {{attendence.attendence[i]}}
+                                </ng-container>
+                            </ng-container>
+                        </td>
+                        <td style="text-align: center;width: 120px;">{{ schedules.length }}</td>
+                        <td style="text-align: center;width: 150px;">{{ attendence.attendence.length }}</td>
+                        <td style="text-align: center;width: 100px;">{{ attendence.numberLessonPresent }}</td>
+                        <td style="text-align: center;width: 100px;">{{ attendence.numberLessonAbsented }}</td>
+                        <td style="text-align: center;width: 100px;">{{ attendence.schoolAttendanceRate }}</td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td *ngIf="checkDateSelected" colspan="5">Không có bảng điểm danh môn cơ sở dữ liệu nào!</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+       </div>
+    </p-tabPanel>
+ </p-tabView>

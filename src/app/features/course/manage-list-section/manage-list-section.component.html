@@ -1,0 +1,232 @@
+<app-breadcrumb [breadcrumbs]="breadcrumb"></app-breadcrumb>
+
+<div class="row">
+    <div class="group-action__left col-xl-10 col-md-9 col-sm-12">
+        <div class="row">
+            <div class="form-group col-md-4">
+                <input
+                   class="form-control"
+                   type="text"
+                   placeholder="Tên chương"
+                   [(ngModel)]="filterTitle"
+                   />
+            </div>
+            <div class="form-group col-md-3">
+                <select class="custom-select" [(ngModel)]="filterStatus">
+                    <option [ngValue]="''">Trạng thái</option>
+                    <option *ngFor="let status of Status;" [ngValue]="status.key">{{ status.value }}</option>
+                </select>
+            </div>
+             <div class="form-group col-md-1">
+                <button (click)="handleSearchSection()"
+                   type="button"
+                   class="btn btn-primary waves-effect waves-light"
+                   >
+                <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+             </div>
+        </div>
+    </div>
+     <div class="group-action__right col-xl-2 col-md-3 col-sm-12 align-end">
+        <button
+           type="button"
+           class="btn btn-success waves-effect waves-light"
+           (click)="handleOpenCreateSectionModal()"
+           >
+        <i class="fa-solid fa-plus mr-1"></i> Thêm mới
+        </button>
+     </div>
+</div>
+
+<div class="row">
+    <ng-container *ngIf="sections.length > 0">
+        <div *ngFor="let section of sections; let i = index" class="col-sm-6 col-lg-6 col-xl-4 mb-4">
+            <div class="block block-rounded">
+                <div class="block-header block-header-default">
+                    <h3 class="block-title block-class-name">
+                        Chương {{ i + 1 }}: {{ section.title }}
+                    </h3>
+                    <div class="block-options" dropdown>
+                        <div class="dropdown ms-2">
+                            <button type="button" class="btn btn-light module__dropdown" id="button-basic" dropdownToggle aria-controls="dropdown-basic">
+                            <i class="fa-solid fa-gear"></i>
+                            </button>
+                            <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
+                                <li [routerLink]="['/course/section/' + section.id]" [state]="{ data: { section: section } }" role="menuitem"><span class="dropdown-item cursor-pointer"><i class="fa-solid fa-circle-info dropdown-group-module-icon"></i> Danh sách bài học</span></li>
+                                <li (click)="handleOpenEditSectionModal(section)"  role="menuitem"><span class="dropdown-item cursor-pointer"><i class="fa-solid fa-pen dropdown-group-module-icon"></i> Sửa thông tin</span></li>
+                                <li (click)="handleDeleteSection(section.id)" role="menuitem"><span class="dropdown-item cursor-pointer text-danger"><i class="fa-solid fa-trash dropdown-group-module-icon"></i> Xoá chương</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="block-content pt-1 pb-2">
+                    <div class="row mb-2">
+                        <div class="col-12">
+                            <span class="badge {{ section.status ? 'badge-success' : 'badge-danger' }}">{{ section.status ? 'Hoạt động' : 'Không hoạt động' }}</span> 
+                        </div>
+                    </div>
+                    <ng-container *ngIf="section.createdBy">
+                        <div class="row">
+                            <div class="col-12">Người tạo &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: {{section?.userCreated?.userName}}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">Ngày tạo  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: {{section.createdAt | date: 'dd/MM/yyyy'}}</div>
+                        </div>
+                    </ng-container>
+                    <ng-container *ngIf="section.updatedBy">
+                        <div class="row">
+                            <div class="col-12">Cập nhật &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: {{section?.userUpdated?.userName}}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">Ngày cập nhật : {{section.updatedAt| date: 'dd/MM/yyyy'}}</div>
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+
+    <ng-container *ngIf="!(sections.length > 0)">
+        <div class="d-flex justify-content-center my-4">Không có bản ghi nào!</div>
+    </ng-container>
+</div>
+
+<form (ngSubmit)="handleOpenCreateSectionModal()" #createForm="ngForm">
+    <ng-template #createTemplate>
+        <div class="modal-header">
+            <h5 class="modal-title mt-0" id="exampleModalScrollableTitle">Thêm chương</h5>
+            <button type="button" class="close" (click)="createModalRef?.hide()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <div class="row">
+                  <label class="col-md-3 col-lg-3 col-form-label" for="name">Tên chương <span class="text-danger">*</span></label>
+                  <div class="col-md-9 col-lg-8 col-table-reponsive p-0">
+                    <input class="form-control" [(ngModel)]="section.title" name="title" id="title" type="text" required/>
+                    <div *ngIf="createForm.controls['title']?.invalid && (createForm.controls['title']?.dirty || createForm.controls['title'].touched)" class="danger-notice">
+                        <div *ngIf="createForm.controls['title'].errors?.['required']">Tên chương không được để trống</div>
+                    </div>
+                  </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                  <label class="col-md-3 col-lg-3 col-form-label" for="name">Độ ưu tiên <span class="text-danger">*</span></label>
+                  <div class="col-md-9 col-lg-8 col-table-reponsive p-0">
+                    <input class="form-control" [(ngModel)]="section.priority" (ngModelChange)="onPriorityChange($event)" name="priority" id="priority" type="number" required/>
+                    <div *ngIf="validateCreateForm.priority.inValidNumber || createForm.controls['priority']?.invalid && (createForm.controls['priority']?.dirty || createForm.controls['title'].touched)" class="danger-notice">
+                        <div *ngIf="createForm.controls['priority'].errors?.['required']">Độ ưu tiên không được để trống</div>
+                        <div *ngIf="validateCreateForm.priority.inValidNumber && !createForm.controls['priority'].errors?.['required']">Chương số phải là số lớn hơn 0</div>
+                    </div>
+                  </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                  <label class="col-md-3 col-lg-3 col-form-label" for="name">Mô tả</label>
+                  <div class="col-md-9 col-lg-8 col-table-reponsive p-0">
+                    <ckeditor
+                        [config]="classicEditorConfig" 
+                        [editor]="classicEditor"
+                        [disableTwoWayDataBinding]="true"
+                        (change)="handleChangeDataCkeditor($event,section,SectionField.Description)" 
+                        (ready)="initEditor($event)"
+                        data="{{section.description}}">
+                    </ckeditor>
+                  </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <label class="col-md-3 col-lg-3 col-form-label" for="name">Trạng thái</label>
+                    <div class="col-md-9 col-lg-8 col-table-reponsive p-0 d-flex align-items-center">
+                        <div class="custom-control custom-switch" dir="ltr">
+                            <input type="checkbox" class="custom-control-input" id="status" name="status" [(ngModel)]="section.status" [checked]="section.status">
+                            <label class="custom-control-label" for="status"></label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-light waves-effect" (click)="createModalRef?.hide()">Đóng</button>
+            <button [disabled]="createForm.invalid || validateCreateForm.priority.inValidNumber" (click)="handleOnSubmitCreateSection()" type="submit" class="btn btn-primary waves-effect waves-light ml-2">Xác nhận</button>
+        </div>
+     </ng-template>
+</form>
+
+<form (ngSubmit)="handleOpenCreateSectionModal()" #editForm="ngForm">
+    <ng-template #editTemplate>
+        <div class="modal-header">
+            <h5 class="modal-title mt-0" id="exampleModalScrollableTitle">Sửa chương</h5>
+            <button type="button" class="close" (click)="editModalRef?.hide()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <div class="row">
+                  <label class="col-md-3 col-lg-3 col-form-label" for="name">Tên chương <span class="text-danger">*</span></label>
+                  <div class="col-md-9 col-lg-8 col-table-reponsive p-0">
+                    <input class="form-control" [(ngModel)]="section.title" name="title" id="title" type="text" required/>
+                    <div *ngIf="editForm.controls['title']?.invalid && (createForm.controls['title']?.dirty || createForm.controls['title'].touched)" class="danger-notice">
+                        <div *ngIf="editForm.controls['title'].errors?.['required']">Tên chương không được để trống</div>
+                    </div>
+                  </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                  <label class="col-md-3 col-lg-3 col-form-label" for="name">Độ ưu tiên <span class="text-danger">*</span></label>
+                  <div class="col-md-9 col-lg-8 col-table-reponsive p-0">
+                    <input class="form-control" [(ngModel)]="section.priority" (ngModelChange)="onPriorityChange($event)" name="priority" id="priority" type="number" required/>
+                    <div *ngIf="validateEditForm.priority.inValidNumber || editForm.controls['priority']?.invalid && (editForm.controls['priority']?.dirty || editForm.controls['title'].touched)" class="danger-notice">
+                        <div *ngIf="editForm.controls['priority'].errors?.['required']">Độ ưu tiên không được để trống</div>
+                        <div *ngIf="validateEditForm.priority.inValidNumber && !editForm.controls['priority'].errors?.['required']">Chương số phải là số lớn hơn 0</div>
+                    </div>
+                  </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                  <label class="col-md-3 col-lg-3 col-form-label" for="name">Mô tả</label>
+                  <div class="col-md-9 col-lg-8 col-table-reponsive p-0">
+                    <ckeditor
+                        [config]="classicEditorConfig" 
+                        [editor]="classicEditor"
+                        [disableTwoWayDataBinding]="true"
+                        (change)="handleChangeDataCkeditor($event,section,SectionField.Description)" 
+                        (ready)="initEditor($event)"
+                        data="{{section.description}}">
+                    </ckeditor>
+                  </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <label class="col-md-3 col-lg-3 col-form-label" for="name">Mô tả</label>
+                    <div class="col-md-9 col-lg-8 col-table-reponsive p-0 d-flex align-items-center">
+                        <div class="custom-control custom-switch" dir="ltr">
+                            <input type="checkbox" class="custom-control-input" id="status" name="status" [(ngModel)]="section.status" [checked]="section.status">
+                            <label class="custom-control-label" for="status"></label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-light waves-effect" (click)="editModalRef?.hide()">Đóng</button>
+            <button [disabled]="editForm.invalid || validateEditForm.priority.inValidNumber" (click)="handleOnSubmitEditSection()" type="submit" class="btn btn-primary waves-effect waves-light ml-2">Xác nhận</button>
+        </div>
+     </ng-template>
+</form>

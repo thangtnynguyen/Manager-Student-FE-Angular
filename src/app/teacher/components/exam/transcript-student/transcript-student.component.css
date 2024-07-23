@@ -1,0 +1,64 @@
+.block-content{
+    margin-top: 15px;
+}
+.alert{
+    padding: 0.5rem 0.75rem;
+    font-size: 13px;
+    margin-bottom: 0.5rem;
+}
+
+.app-search.form-search .form-control {
+    border: 1px solid;
+    height: 38px;
+    padding-left: 40px;
+    padding-right: 20px;
+    background-color: white;
+    box-shadow: none;
+    border-radius: 4px;
+}
+
+.card-body.pb-0{
+    padding-bottom: 0 !important;
+}
+
+.position-left-3{
+    left: -14px;
+}
+
+span.active{
+    font-weight: 700;
+}
+
+.pt-12{
+    padding-top: 12px;
+}
+
+.fs-17{
+    font-size: 17px !important;
+}
+
+.border-gray-search{
+    border: 1px solid #ced4da !important;
+}
+
+.input-type-select{
+    border: 1px solid #ced4da;
+}
+
+.input-form-space{
+    /* margin-left: 12px; */
+    /* width: calc(100% - 12px) !important; */
+    width: 100%;
+}
+
+/* .title-column{
+    width: 30% !important;
+} */
+
+/* .section-column{
+    width: 15%;
+} */
+
+/* .type-column{
+    width: 15%;
+} */

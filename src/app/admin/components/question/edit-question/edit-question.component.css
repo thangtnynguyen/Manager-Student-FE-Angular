@@ -1,0 +1,45 @@
+:host ::ng-deep .title-editor .ck-editor__editable_inline {
+    min-height: 100px;
+}
+
+.input-form-space{
+    margin-left: 12px;
+    width: calc(100% - 12px) !important;
+}
+
+.border-right-none{
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.border-left-none{
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.input-type-select{
+    border: 1px solid #ced4da;
+}
+
+.app-search .form-control {
+    border: 1px solid #ced4da !important;
+    height: 38px;
+    padding-left: 40px;
+    padding-right: 20px;
+    background-color: unset !important;
+    box-shadow: none;
+    border-radius: unset !important;
+}
+
+.input-type-select{
+    min-height: 38px !important;
+}
+
+.add-tag-btn{
+    border-radius: 100%;
+}
+
+.add-tag-input{
+    width: 160px;
+    font-size: 11px;
+}

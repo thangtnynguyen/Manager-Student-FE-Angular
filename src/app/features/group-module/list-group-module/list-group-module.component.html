@@ -1,0 +1,301 @@
+<div class="row">
+    <div class="col-12">
+       <div
+          class="page-title-box d-flex align-items-center justify-content-between"
+          >
+          <h4 class="mb-0">Quản lý lớp học</h4>
+          <div class="page-title-right">
+             <ol class="breadcrumb m-0">
+                <li
+                   routerLink="/admin/dashboard"
+                   class="breadcrumb-item d-flex align-items-center"
+                   >
+                   <span>Trang chủ</span>
+                   <i class="breadcrumb-item-arrow fa-solid fa-angle-right"></i>
+                </li>
+                <li class="breadcrumb-item active">
+                    <span>Quản lý lớp học</span>
+                 </li>
+             </ol>
+          </div>
+       </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="group-action__left col-xl-10 col-md-9 col-sm-12">
+        <div class="row">
+            <div class="form-group col-md-2">
+                <input
+                   class="form-control"
+                   type="text"
+                   placeholder="Tên lớp"
+                   [(ngModel)]="queryParameters.name"
+                   />
+            </div>
+            <div class="form-group col-md-2">
+                <input
+                   class="form-control"
+                   type="number"
+                   placeholder="Năm học"
+                   [(ngModel)]="queryParameters.year"
+                   />
+            </div>
+            <div class="form-group col-md-3">
+                <select class="custom-select"  [(ngModel)]="queryParameters.teacherId">
+                    <option [selected]="queryParameters.teacherId === null || queryParameters.semester === 0" [ngValue]="0">Giáo viên</option>
+                    <option *ngFor="let teacher of teachers;" value="{{ teacher.id }}">{{ teacher.teacherId }}-{{ teacher.name }}</option>
+                </select>
+             </div>
+            <div class="form-group col-md-2">
+                <select class="custom-select"  [(ngModel)]="queryParameters.semester">
+                    <option [selected]="queryParameters.semester === null || queryParameters.semester === 0" [ngValue]="0">Kỳ học</option>
+                    <option *ngFor="let semester of constant.groupModule.semesters;" value="{{ semester.key }}">{{ semester.value }}</option>
+                </select>
+             </div>
+             <div class="form-group col-md-2">
+                <select class="custom-select"  [(ngModel)]="queryParameters.status">
+                    <option [selected]="queryParameters.status === null || queryParameters.status === 0" [ngValue]="0">Trạng thái</option>
+                    <option *ngFor="let status of constant.groupModule.status;" value="{{ status.key }}">{{ status.value }}</option>
+                </select>
+             </div>
+             <div class="form-group col-md-1">
+                <button (click)="handleSearchGroupModule()"
+                   type="button"
+                   class="btn btn-primary waves-effect waves-light"
+                   >
+                <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+             </div>
+        </div>
+    </div>
+     <div class="group-action__right col-xl-2 col-md-3 col-sm-12">
+        <button
+           type="button"
+           class="btn btn-success waves-effect waves-light"
+           (click)="handleOpenCreateGroupModuleModal()"
+           >
+        <i class="fa-solid fa-plus mr-1"></i> Thêm mới
+        </button>
+     </div>
+</div>
+
+<div class="row">
+    <ng-container *ngIf="groupModules?.length > 0">
+        <div *ngFor="let groupModule of groupModules;" class="col-sm-6 col-lg-6 col-xl-4 mb-4">
+            <div class="block block-rounded">
+            <div class="block-header block-header-default">
+                <h3 class="block-title block-class-name">{{ groupModule.name }}</h3>
+                <div class="d-flex">
+                    <button [routerLink]="'/group-module/attendence/' + groupModule.id" class="mr-3 btn-attendence btn btn-primary">Điểm danh</button>
+                    <div class="block-options" dropdown>
+                        <div class="dropdown">
+                            <button type="button" class="btn btn-light module__dropdown" id="button-basic" dropdownToggle aria-controls="dropdown-basic">
+                            <i class="fa-solid fa-gear"></i>
+                            </button>
+                            <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu"
+                            role="menu" aria-labelledby="button-basic">
+                                <li routerLink="/group-module/student/{{ groupModule.id }}" role="menuitem"><span class="dropdown-item cursor-pointer"><i class="fa-solid fa-circle-info dropdown-group-module-icon"></i> Danh sách sinh viên</span></li>
+                                <li (click)="handleOpenEditGroupModuleModal(groupModule)" role="menuitem"><span class="dropdown-item cursor-pointer"><i class="fa-solid fa-pen dropdown-group-module-icon"></i> Sửa thông tin</span></li>
+                                <li (click)="handleHideGroupModule(groupModule.id)" role="menuitem"><span class="dropdown-item cursor-pointer"><i class="fa-solid fa-eye-slash dropdown-group-module-icon"></i> Ẩn nhóm</span></li>
+                                <li (click)="handleDeleteGroupModule(groupModule.id)" role="menuitem"><span class="dropdown-item cursor-pointer text-danger"><i class="fa-solid fa-trash dropdown-group-module-icon"></i> Xoá nhóm</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                </div>
+                <div class="block-content">
+                    <p class="block-class-note">
+                        {{ groupModule.description }}
+                        <span class="ms-3 badge {{ groupModule.status ? 'badge-success' : 'badge-danger' }}">{{ groupModule.status ? 'Hoạt động' : 'Không hoạt động' }}</span>
+                    </p>
+                    <p>Học kỳ {{ groupModule.semester }} - Năm học {{ groupModule.year}}</p>
+                    <p *ngIf="groupModule.teacher" class="Si-So">Giáo viên: <span>{{ groupModule.teacher.user.name }}</span></p>
+                    <p class="Si-So">Sĩ số: <span>{{ groupModule.studentGroupModules?.length }}</span></p>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+
+    <ng-container *ngIf="!(groupModules?.length > 0)">
+        <div class="d-flex justify-content-center my-4">Không có bản ghi nào!</div>
+    </ng-container>
+</div>
+  
+<form (ngSubmit)="handleOnSubmitCreateGroupModule()" #createForm="ngForm">
+    <ng-template #createGroupModuleTemplate>
+        <div class="modal-header">
+            <h5 class="modal-title mt-0" id="exampleModalScrollableTitle">Thêm lớp học</h5>
+            <button type="button" class="close" (click)="createGroupModuleModalRef?.hide()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <div class="row">
+                  <label class="col-md-3 col-lg-3 col-form-label" for="name">Tên lớp học</label>
+                  <div class="col-md-9 col-lg-8 col-table-reponsive p-0">
+                    <input class="form-control" [(ngModel)]="groupModule.name" name="name" id="name" type="text" required/>
+                    <div *ngIf="createForm.controls['name']?.invalid && (createForm.controls['name']?.dirty || createForm.controls['name'].touched)" class="danger-notice">
+                        <div *ngIf="createForm.controls['name'].errors?.['required']">Tên lớp học không được để trống</div>
+                    </div>
+                  </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                  <label class="col-md-3 col-lg-3 col-form-label" for="description">Mô tả</label>
+                  <div class="col-md-9 col-lg-8 col-table-reponsive p-0">
+                    <textarea class="form-control" [(ngModel)]="groupModule.description" name="description" id="description"></textarea>
+                  </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                  <label class="col-md-3 col-lg-3 col-form-label" for="year">Năm học</label>
+                  <div class="col-md-9 col-lg-8 col-table-reponsive p-0">
+                    <input class="form-control" [(ngModel)]="groupModule.year" name="year" id="year" type="number" required/>
+                    <div *ngIf="createForm.controls['year']?.invalid && (createForm.controls['year']?.dirty || createForm.controls['year'].touched)" class="danger-notice">
+                        <div *ngIf="createForm.controls['year'].errors?.['required']">Năm học không được để trống</div>
+                    </div>
+                  </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                  <label class="col-md-3 col-lg-3 col-form-label" for="year">Học kỳ</label>
+                  <div class="col-md-9 col-lg-8 col-table-reponsive p-0">
+                    <select (blur)="validateGroupModule.touchSemester = true" class="custom-select" name="semester" [(ngModel)]="groupModule.semester">
+                        <option [selected]="groupModule.semester === null || groupModule.semester === 0" [ngValue]="0">Kỳ học</option>
+                        <option *ngFor="let semester of constant.groupModule.semesters;" value="{{ semester.key }}">{{ semester.value }}</option>
+                    </select>
+                    <div *ngIf="groupModule.semester === 0 && groupModule.semester !== null && validateGroupModule.touchSemester" class="danger-notice">
+                        <div *ngIf="groupModule.semester === 0 && groupModule.semester !== null && validateGroupModule.touchSemester">Kỳ học không được để trống</div>
+                     </div>
+                  </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                  <label class="col-md-3 col-lg-3 col-form-label" for="year">Giáo viên phụ trách</label>
+                  <div class="col-md-9 col-lg-8 col-table-reponsive p-0">
+                    <select name="teacherId" class="custom-select"  [(ngModel)]="groupModule.teacherId">
+                        <option [selected]="groupModule.teacherId === null || groupModule.teacherId === 0" [ngValue]="0">Giáo viên</option>
+                        <option *ngFor="let teacher of teachers;" value="{{ teacher.id }}">{{ teacher.teacherId }}-{{ teacher.name }}</option>
+                    </select>
+                  </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <label class="col-md-3 col-lg-3 col-form-label" for="isBlank">Trạng thái</label>
+                    <div class="col-md-9 col-lg-8 col-table-reponsive d-flex align-items-center p-0">
+                      <div class="custom-control custom-switch" dir="ltr">
+                         <input type="checkbox" class="custom-control-input" name="isBlank" id="isBlank" [(ngModel)]="groupModule.status" [checked]="true">
+                         <label class="custom-control-label" for="isBlank"></label>
+                     </div>
+                    </div>
+                </div>
+             </div>
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-light waves-effect" (click)="createGroupModuleModalRef?.hide()">Đóng</button>
+            <button [disabled]="createForm.invalid || validateForm()" (click)="handleOnSubmitCreateGroupModule()" type="submit" class="btn btn-primary waves-effect waves-light ml-2">Xác nhận</button>
+        </div>
+     </ng-template>
+</form>
+
+<form (ngSubmit)="handleOnSubmitEditGroupModule()" #editForm="ngForm">
+    <ng-template #editGroupModuleTemplate>
+        <div class="modal-header">
+            <h5 class="modal-title mt-0" id="exampleModalScrollableTitle">Thêm lớp học</h5>
+            <button type="button" class="close" (click)="editGroupModuleModalRef?.hide()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <div class="row">
+                  <label class="col-md-3 col-lg-3 col-form-label" for="name">Tên lớp học</label>
+                  <div class="col-md-9 col-lg-8 col-table-reponsive p-0">
+                    <input class="form-control" [(ngModel)]="groupModule.name" name="name" id="name" type="text" required/>
+                    <div *ngIf="editForm.controls['name']?.invalid && (editForm.controls['name']?.dirty || editForm.controls['name'].touched)" class="danger-notice">
+                        <div *ngIf="editForm.controls['name'].errors?.['required']">Tên lớp học không được để trống</div>
+                    </div>
+                  </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                  <label class="col-md-3 col-lg-3 col-form-label" for="description">Mô tả</label>
+                  <div class="col-md-9 col-lg-8 col-table-reponsive p-0">
+                    <textarea class="form-control" [(ngModel)]="groupModule.description" name="description" id="description"></textarea>
+                  </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                  <label class="col-md-3 col-lg-3 col-form-label" for="year">Năm học</label>
+                  <div class="col-md-9 col-lg-8 col-table-reponsive p-0">
+                    <input class="form-control" [(ngModel)]="groupModule.year" name="year" id="year" type="number" required/>
+                    <div *ngIf="editForm.controls['year']?.invalid && (editForm.controls['year']?.dirty || editForm.controls['year'].touched)" class="danger-notice">
+                        <div *ngIf="editForm.controls['year'].errors?.['required']">Năm học không được để trống</div>
+                    </div>
+                  </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                  <label class="col-md-3 col-lg-3 col-form-label" for="year">Học kỳ</label>
+                  <div class="col-md-9 col-lg-8 col-table-reponsive p-0">
+                    <select (blur)="validateGroupModule.touchSemester = true" class="custom-select" name="semester" [(ngModel)]="groupModule.semester">
+                        <option [selected]="groupModule.semester === null || groupModule.semester === 0" [ngValue]="0">Kỳ học</option>
+                        <option *ngFor="let semester of constant.groupModule.semesters;" value="{{ semester.key }}">{{ semester.value }}</option>
+                    </select>
+                    <div *ngIf="groupModule.semester === 0 && groupModule.semester !== null && validateGroupModule.touchSemester" class="danger-notice">
+                        <div *ngIf="groupModule.semester === 0 && groupModule.semester !== null && validateGroupModule.touchSemester">Kỳ học không được để trống</div>
+                     </div>
+                  </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                  <label class="col-md-3 col-lg-3 col-form-label" for="year">Giáo viên phụ trách</label>
+                  <div class="col-md-9 col-lg-8 col-table-reponsive p-0">
+                    <select name="teacherId" class="custom-select"  [(ngModel)]="groupModule.teacherId">
+                        <option [selected]="groupModule.teacherId === null || groupModule.teacherId === 0" [ngValue]="0">Giáo viên</option>
+                        <option *ngFor="let teacher of teachers;" value="{{ teacher.id }}">{{ teacher.teacherId }}-{{ teacher.name }}</option>
+                    </select>
+                  </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <label class="col-md-3 col-lg-3 col-form-label" for="isBlank">Trạng thái</label>
+                    <div class="col-md-9 col-lg-8 col-table-reponsive d-flex align-items-center p-0">
+                      <div class="custom-control custom-switch" dir="ltr">
+                         <input type="checkbox" class="custom-control-input" name="isBlank" id="isBlank" [(ngModel)]="groupModule.status" [checked]="true">
+                         <label class="custom-control-label" for="isBlank"></label>
+                     </div>
+                    </div>
+                </div>
+             </div>
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-light waves-effect" (click)="editGroupModuleModalRef?.hide()">Đóng</button>
+            <button [disabled]="editForm.invalid || !validateFormEdit()" (click)="handleOnSubmitEditGroupModule()" type="submit" class="btn btn-primary waves-effect waves-light ml-2">Xác nhận</button>
+        </div>
+     </ng-template>
+</form>

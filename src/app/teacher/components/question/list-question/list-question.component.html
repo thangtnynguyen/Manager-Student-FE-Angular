@@ -1,0 +1,374 @@
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0">Danh sách câu hỏi</h4>
+            <!-- <div>Import <input type="file" (change)="onTestChange($event)" /></div>
+          <button (click)="onTest()" class="btn btn-primary">Test</button> -->
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li routerLink="/teacher/question" class="breadcrumb-item d-flex align-items-center">
+                        <span>Trang chủ</span>
+                        <i class="breadcrumb-item-arrow fa-solid fa-angle-right"></i>
+                    </li>
+                    <li class="breadcrumb-item active">
+                        <span>Quản lý câu hỏi</span>
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- <div class="col-xl-3 col-lg-4">
+        <div class="card">
+            <div class="card-header bg-transparent border-bottom">
+                <h6 class="mb-0 fw-700 fs-r-1">BỘ LỌC</h6>
+            </div>
+
+            <div class="card-body pb-0">
+                <div class="d-flex justify-content-between cursor-pointer" (click)="collapseFilter.questionCategory = !collapseFilter.questionCategory" [attr.aria-expanded]="!collapseFilter.questionCategory" aria-controls="collapseBasic">
+                    <h5 class="font-size-14 fw-700 mb-3">LOẠI CÂU HỎI</h5>
+                    <i class="fa-solid fa-angle-down"></i>
+                </div>
+
+                <div [collapse]="collapseFilter.questionCategory" [isAnimated]="true" id="accordion" class="custom-accordion categories-accordion mb-3">
+                    <div class="categories-group-card bb-0">
+                        <div class="alert alert-success" role="alert">
+                            Tip: Nhấn chuột phải để thao tác
+                        </div>
+
+                        <button (click)="handleOnClickCreateQuestionCategoryButton()" type="button" class="btn btn-success waves-effect waves-light w-100 mb-2">
+                            <i class="fa-solid fa-plus mr-1"></i> Thêm mới
+                        </button>
+
+                        <form class="app-search form-search d-none d-lg-block pt-0 pb-0">
+                            <div class="position-relative">
+                              <input [(ngModel)]="questionCategorySearch" name="searchTerm" type="text" class="form-control" placeholder="Tìm kiếm...">
+                              <span class="fa-solid fa-magnifying-glass ri-search-line"></span>
+                            </div>
+                        </form>
+
+                        <div id="categories-tree" class="mt-3 px-0" role="tree">
+                            <app-question-category-tree [categoriesSelect]="questionCategoriesSelect" [search]="questionCategorySearch" [type]="questionCategoryConstant.questionCategoryTreeType" [categories]="questionCategories"></app-question-category-tree>
+                        </div>               
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-body pb-0 border-top">
+                <div class="d-flex justify-content-between cursor-pointer" (click)="collapseFilter.typeQuestion = !collapseFilter.typeQuestion" [attr.aria-expanded]="!collapseFilter.typeQuestion" aria-controls="collapseBasic">
+                    <h5 class="font-size-14 fw-700 mb-3">KIỂU CÂU HỎI</h5>
+                    <i class="fa-solid fa-angle-down"></i>
+                </div>
+
+                <div [collapse]="collapseFilter.typeQuestion" [isAnimated]="true" id="accordion" class="custom-accordion categories-accordion mb-3">
+                    <div class="categories-group-card bb-0">
+                        <div class="custom-control custom-radio mt-2">
+                            <input value="0" [checked]="search.type === 0" type="radio" id="productdiscountRadio6" name="productdiscountRadio1" class="custom-control-input">
+                            <label class="custom-control-label fw-100" for="productdiscountRadio6">Tất cả</label>
+                        </div>
+                        <div class="custom-control custom-radio mt-2">
+                            <input value="1" [checked]="search.type === 1" type="radio" id="productdiscountRadio5" name="productdiscountRadio1" class="custom-control-input">
+                            <label class="custom-control-label fw-100" for="productdiscountRadio5">Nhiều lựa chọn</label>
+                        </div>
+                        <div class="custom-control custom-radio mt-2">
+                            <input value="2" [checked]="search.type === 2" type="radio" id="productdiscountRadio4" name="productdiscountRadio1" class="custom-control-input">
+                            <label class="custom-control-label fw-100" for="productdiscountRadio4">Nhiều kết quả</label>
+                        </div>
+                        <div class="custom-control custom-radio mt-2">
+                            <input value="3" [checked]="search.type === 3" type="radio" id="productdiscountRadio3" name="productdiscountRadio1" class="custom-control-input">
+                            <label class="custom-control-label fw-100" for="productdiscountRadio3">Điền vào chỗ trống</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> -->
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body pt-12">
+                <div>
+                    <div class="group-action">
+                        <div class="row">
+                            <div class="group-action__left col-xl-10 col-md-9 col-sm-12">
+                                <div class="row">
+                                    <div class="form-group col-md-3">
+                                        <input class="form-control" type="text" placeholder="Tiểu đề"
+                                            [(ngModel)]="search.title" />
+                                    </div>
+
+                                    <div class="form-group col-md-3">
+                                        <select class="custom-select" [(ngModel)]="search.type">
+                                            <option [selected]="search.type === null || search.type === 0"
+                                                [ngValue]="0">Loại câu hỏi</option>
+                                            <option *ngFor="let questionType of questionContant.types;"
+                                                value="{{ questionType.key }}">{{ questionType.value }}</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group col-md-3">
+                                        <select class="custom-select" [(ngModel)]="search.difficulty">
+                                            <option [selected]="search.difficulty === null || search.difficulty === 0"
+                                                [ngValue]="0">Độ khó</option>
+                                            <option *ngFor="let questionType of questionContant.difficulties;"
+                                                value="{{ questionType.key }}">{{ questionType.value }}</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group col-md-2">
+                                        <!-- <button (click)="handleOpenQuestionCategoryTreeModal()" type="button" class="btn input-type-select dropdown-toggle input-form-space d-flex justify-content-between align-items-center">
+                                        <span>{{ questionCategory.name }}</span> <i class="mdi mdi-chevron-down"></i>
+                                    </button> -->
+                                        <select class="custom-select" [(ngModel)]="search.sectionId">
+                                            <option [selected]="search.sectionId === null || search.sectionId === 0"
+                                                [ngValue]="0">Chương</option>
+                                            <option *ngFor="let section of sections;" value="{{ section.id }}">{{
+                                                section.title }}</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group col-md-1">
+                                        <button type="button" class="btn btn-primary waves-effect waves-light"
+                                            (click)="handleSubmitSearch()">
+                                            <i class="fa-solid fa-magnifying-glass"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="group-action__right col-xl-2 col-md-3 col-sm-12">
+                                <button type="button" class="btn btn-success waves-effect waves-light"
+                                    routerLink="/teacher/question/create">
+                                    <i class="fa-solid fa-plus mr-1"></i> Thêm mới
+                                </button>
+                            </div>
+                            <div class="group-action__right col-xl-2 col-md-4 col-sm-12">
+                                <button [@fadeInOut]="selectedItems.length > 0 ? 'visible' : 'hidden'" type="button"
+                                    class="btn btn-danger waves-effect waves-light align-items-center"
+                                    (click)="handleOnDeleteMultiple()">
+                                    <i class="fa-solid fa-trash mr-1"></i> Xoá {{ selectedItems.length}} bản ghi
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="table-data overflow-auto">
+                        <table id="datatable" class="table table-bordered dt-responsive nowrap mt-3"
+                            style="border-collapse: collapse; border-spacing: 0; width: 100%">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th class="select-checkbox-column">
+                                        <div class="custom-control custom-checkbox">
+                                            <input (change)="selectAllQuestions($event)"
+                                                [checked]="selectedItems.length === questions.length && selectedItems.length > 0"
+                                                type="checkbox" class="custom-control-input" id="select-box"
+                                                title="select-box" placeholder="select-box">
+                                            <label class="custom-control-label" for="select-box">&nbsp;</label>
+                                        </div>
+                                    </th>
+                                    <th class="order-sort" (click)="onSortAndOrderChange(orderConstant.id)"
+                                        [ngClass]="{'order-sort-active': search?.orderBy === orderConstant.id }">
+                                        Id
+                                        <span *ngIf="search?.orderBy === orderConstant.id" class="order-sort-group">
+                                            <i *ngIf="search?.sortBy === sortConstant.desc" class="bi bi-sort-down"></i>
+                                            <i *ngIf="search?.sortBy === sortConstant.asc" class="bi bi-sort-up"></i>
+                                        </span>
+                                        <span *ngIf="!(search?.orderBy === orderConstant.id)"><img
+                                                src="../../../../../assets/sort.png" height="14.41" width="14.41"
+                                                style="margin-top: -3px;" alt="icon-sort"></span>
+                                    </th>
+                                    <th class="title-column">Tiêu đề</th>
+                                    <!-- <th>Ghi chú</th> -->
+                                    <th class="type-column">Loại câu hỏi</th>
+                                    <th class="section-column">Chương</th>
+                                    <th>Độ khó</th>
+                                    <!-- <th class="order-sort" (click)="onSortAndOrderChange(orderConstant.score)" [ngClass]="{'order-sort-active': search?.orderBy === orderConstant.score }">
+                                    Số điểm
+                                    <span *ngIf="search?.orderBy === orderConstant.score" class="order-sort-group">
+                                        <i *ngIf="search?.sortBy === sortConstant.desc" class="bi bi-sort-down"></i>
+                                        <i *ngIf="search?.sortBy === sortConstant.asc" class="bi bi-sort-up"></i>
+                                     </span>
+                                     <span *ngIf="!(search?.orderBy === orderConstant.score)"><img src="../../../../../assets/sort.png" height="14.41" width="14.41" style="margin-top: -3px;" alt="icon-sort"></span>
+                                </th> -->
+                                    <th>Hành động</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <ng-container *ngIf="questions.length > 0">
+                                    <tr *ngFor="let question of questions;">
+                                        <td>
+                                            <div class="custom-control custom-checkbox">
+                                                <input (change)="toggleSelection(question.id)"
+                                                    id="select-box-{{ question.id }}"
+                                                    [checked]="isSelected(question.id)" type="checkbox"
+                                                    class="custom-control-input">
+                                                <label class="custom-control-label"
+                                                    for="select-box-{{ question.id }}">&nbsp;</label>
+                                            </div>
+                                        </td>
+                                        <td>{{ question.id }}</td>
+                                        <td [innerHTML]="question.title"></td>
+                                        <!-- <td [innerHTML]="question.feedback"></td> -->
+                                        <td>{{ questionHelper.getTypeQuestion(question.type) }}</td>
+                                        <td>{{ question.section.title }}</td>
+                                        <!-- <td>{{ question.questionCategoryName }}</td> -->
+                                        <td>
+                                            <!-- {{ questionHelper.getDifficultyQuestion(question.difficulty) }} -->
+                                            <span *ngIf="question.difficulty === 1"
+                                                class="badge badge-success px-2 py-1">Dễ</span>
+                                            <span *ngIf="question.difficulty === 2"
+                                                class="badge badge-warning px-2 py-1">Trung bình</span>
+                                            <span *ngIf="question.difficulty === 3"
+                                                class="badge badge-danger px-2 py-1">Khó</span>
+                                        </td>
+                                        <!-- <td>{{ question.score }}</td> -->
+                                        <td>
+                                            <span class="text-info cursor-pointer"
+                                                [routerLink]="['/teacher/question/detail', question.id]"><i
+                                                    class="fa-solid fa-eye"></i></span>
+                                            <span class="text-warning cursor-pointer ml-2"
+                                                [routerLink]="['/teacher/question/edit', question.id]"><i
+                                                    class="fa-solid fa-pen"></i></span>
+                                            <span class="text-danger cursor-pointer ml-2"
+                                                (click)="handleDelete(question.id)"><i
+                                                    class="fa-solid fa-trash"></i></span>
+                                        </td>
+                                    </tr>
+                                </ng-container>
+                                <ng-container *ngIf="!(questions.length > 0)">
+                                    <tr>
+                                        <td class="text-center" colspan="8">Không có bản ghi nào</td>
+                                    </tr>
+                                </ng-container>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="table-filter d-flex justify-content-between align-items-center mt-2">
+                        <div class="page-index">
+                            <ul class="pagination pagination-rounded">
+                                <li class="page-item" (click)="setPage(pageIndex - 1)"
+                                    [class.disabled]="pageIndex === 1 || questions.length === 0">
+                                    <span class="page-link"><i class="fa-solid fa-angle-left"></i></span>
+                                </li>
+
+                                <ng-container *ngIf="questions.length > 0">
+                                    <li *ngFor="let page of [].constructor(totalPages); let i = index" class="page-item"
+                                        (click)="setPage(i + 1)" [class.active]="pageIndex === i + 1">
+                                        <span class="page-link">{{ i + 1 }}</span>
+                                    </li>
+                                </ng-container>
+
+                                <li class="page-item" (click)="setPage(pageIndex + 1)"
+                                    [class.disabled]="pageIndex === totalPages || questions.length === 0">
+                                    <span class="page-link"><i class="fa-solid fa-angle-right"></i></span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="per-page">
+                            Hiển thị
+                            <select class="mx-1" (change)="onPerPageChange($event)">
+                                <option *ngFor="let item of config.perPageOptions;" [ngValue]="item.value"
+                                    [attr.selected]="item.value === +search.pageSize ? true : null">{{ item.label }}
+                                </option>
+                            </select>
+                            bản ghi
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #createQuestionCategoryTemplate>
+    <div class="modal-header">
+        <h5 class="modal-title mt-0" id="exampleModalScrollableTitle">Tạo loại câu hỏi</h5>
+        <button type="button" class="close" (click)="handleOnCloseCreateQuestionCategoryModal()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form (ngSubmit)="handleOnSubmitCreateQuestionCategoryForm()" #addQuestionCategoryForm="ngForm">
+            <div class="form-group">
+                <div class="row">
+                    <label class="col-12 text-dark col-form-label" for="name">Tên loại câu hỏi <span
+                            class="text-danger">*</span></label>
+                    <div class="col-12">
+                        <input class="form-control" [(ngModel)]="questionCategory.name" name="name" id="name"
+                            type="text" placeholder="Tên loại câu hỏi" required />
+                        <div *ngIf="addQuestionCategoryForm.controls['name']?.invalid && (addQuestionCategoryForm.controls['name']?.dirty || addQuestionCategoryForm.controls['name'].touched)"
+                            class="danger-notice">
+                            <div *ngIf="addQuestionCategoryForm.controls['name'].errors?.['required']">Tên loại câu hỏi
+                                không được để trống</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="col-12 text-dark col-form-label" for="description">Mô tả</label>
+                    <div class="col-12">
+                        <input class="form-control" [(ngModel)]="questionCategory.description" name="description"
+                            id="description" type="text" placeholder="Mô tả" />
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="col-12 text-dark col-form-label" for="priority">Độ ưu tiên <span
+                            class="text-danger">*</span></label>
+                    <div class="col-12">
+                        <input class="form-control" [(ngModel)]="questionCategory.priority" name="priority"
+                            id="priority" type="number" placeholder="Độ ưu tiên" required />
+                        <div *ngIf="addQuestionCategoryForm.controls['priority']?.invalid && (addQuestionCategoryForm.controls['priority']?.dirty || addQuestionCategoryForm.controls['priority'].touched)"
+                            class="danger-notice">
+                            <div *ngIf="addQuestionCategoryForm.controls['priority'].errors?.['required']">Độ ưu tiên
+                                không được để trống</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="col-12 text-dark col-form-label" for="parentQuestionCategoryId">Vị trí</label>
+                    <div class="col-12">
+                        <app-question-category-tree [categoriesSelect]="questionCategoriesSelect"
+                            [type]="questionCategoryConstant.questionCategorySelectTreeType"
+                            [activeCategoryIdSelect]="activeCategoryIdSelect"></app-question-category-tree>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-light waves-effect"
+            (click)="handleOnCloseCreateQuestionCategoryModal()">Đóng</button>
+        <button [disabled]="addQuestionCategoryForm.invalid" type="button"
+            class="btn btn-primary waves-effect waves-light" (click)="handleOnSubmitCreateQuestionCategoryForm()">Xác
+            nhận</button>
+    </div>
+</ng-template>
+
+<ng-template #questionCategoryTreeTemplate>
+    <div class="modal-header">
+        <h5 class="modal-title mt-0" id="exampleModalScrollableTitle">Lựa chọn loại câu hỏi</h5>
+        <button type="button" class="close" (click)="handleCloseQuestionCategoryTreeModal()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="app-search form-search d-none d-lg-block pt-0 pb-0">
+            <div class="position-relative">
+                <input (input)="handleChangeSearchCategory()" [(ngModel)]="questionCategorySearch" name="searchCategory"
+                    id="searchCategory" type="text" placeholder="Tìm kiếm" class="form-control">
+                <span class="fa-solid fa-magnifying-glass ri-search-line"></span>
+            </div>
+        </div>
+        <div id="categories-tree" class="mt-3 px-0" role="tree">
+            <!-- <app-question-category-tree [categoriesSelect]="questionCategoriesSelect" [search]="questionCategorySearch" [type]="questionCategoryConstant.questionCategoryTreeType" [categories]="questionCategories"></app-question-category-tree> -->
+            <app-add-question-category-tree [categories]="questionCategoryTree"
+                [search]="questionCategorySearch"></app-add-question-category-tree>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-light waves-effect"
+            (click)="handleCloseQuestionCategoryTreeModal()">Đóng</button>
+        <button type="button" class="btn btn-primary waves-effect waves-light"
+            (click)="handleChooseQuestionCategoryId()">Xác nhận</button>
+    </div>
+</ng-template>

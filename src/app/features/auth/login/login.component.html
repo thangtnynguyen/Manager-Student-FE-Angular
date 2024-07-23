@@ -1,0 +1,74 @@
+<div class="bg-white">
+    <div class="container-fluid p-0">
+        <div class="row no-gutters">
+            <div class="col-12 col-lg-4">
+                <div class="authentication-page-content p-4 min-vh-100">
+                    <div class="w-100 login-form">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-9">
+                                <div>
+                                    <div class="text-center">
+                                        <div>
+                                            <a [routerLink]="Page.Login" class="logo"><img src="assets/images/logo.png" height="80" alt="logo"></a>
+                                        </div>
+
+                                        <h4 class="font-size-18 mt-2">Đăng nhập</h4>
+                                        <p class="text-muted mb-2">Hệ thống hỗ trợ dạy và học môn Cơ sở dữ liệu FIT.UTEHY</p>
+                                    </div>
+
+                                    <div class="p-2 mt-2">
+                                        <form class="form-horizontal" [formGroup]="loginForm" (submit)="handleOnSubmitLogin()">
+                                            <div  class="form-group auth-form-group-custom mb-4">
+                                                <select formControlName="type" name="touchDiff" class="custom-select input-type-select input-form-space">
+                                                    <option *ngFor="let role of RoleType" [value]="role.key">{{ role.value }}</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="form-group auth-form-group-custom mb-4">
+                                                <i class="fa-solid fa-user auti-custom-input-icon"></i>
+                                                <label for="username">Tài khoản</label>
+                                                <input formControlName="username" name="email" type="text" class="form-control" id="username" placeholder="Nhập tên tài khoản">
+                                                <app-validation-message [form]="loginForm" [messages]="validationMessages" field="username"></app-validation-message>
+                                            </div>
+                    
+                                            <div class="form-group auth-form-group-custom mb-4">
+                                                <i class="fa-solid fa-lock auti-custom-input-icon"></i>
+                                                <label for="userpassword">Mật khẩu</label>
+                                                <input formControlName="password" name="password" type="password" class="form-control" id="userpassword" placeholder="Nhập mật khẩu">
+                                                <app-validation-message [form]="loginForm" [messages]="validationMessages" field="password"></app-validation-message>
+                                            </div>
+                    
+                                            <div class="custom-control custom-checkbox">
+                                                <input formControlName="rememberMe" type="checkbox" class="custom-control-input" id="customControlInline">
+                                                <label class="custom-control-label" name="rememberMe" for="customControlInline">Lưu đăng nhập</label>
+                                            </div>
+
+                                            <div class="mt-4 text-center">
+                                                <button class="btn btn-primary w-md waves-effect waves-light" type="submit">Đăng nhập</button>
+                                            </div>
+
+                                            <div class="mt-3 text-center">
+                                                <span routerLink="/admin/auth/forgot-password" class="text-muted cursor-pointer"><i class="mdi mdi-lock mr-1"></i> Quên mật khẩu?</span>
+                                            </div>
+                                        </form>
+                                    </div>
+
+                                    <div class="mt-2 mb-0 text-center">
+                                        <p class="mb-0">© 2023 Bản quyền thuộc về khoa CNTT trường ĐH SPKT Hưng Yên</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-8 d-none d-md-block">
+                <div class="authentication-bg d-flex">
+                    <div class="d-flex align-items-center">
+                        <img src="assets/images/background.jpg" class="fluid-img w-100 h-100" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

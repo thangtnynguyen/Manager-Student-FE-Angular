@@ -1,0 +1,93 @@
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0">Quản lý đề thi</h4>
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li routerLink="/admin/dashboard" class="breadcrumb-item d-flex align-items-center">
+                        <span>Trang chủ</span>
+                        <i class="breadcrumb-item-arrow fa-solid fa-angle-right"></i>
+                    </li>
+                    <li class="breadcrumb-item active">
+                        <span>Quản lý đề thi</span>
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="row">
+    <ng-container *ngIf="(exams.length > 0)">
+        <div class="col-12" *ngFor="let exam of exams;">
+            <div class="block-content bg-white box-shadow-exam block-content-full border-start border-3 border-danger py-3">
+                <div class="d-md-flex justify-content-md-between align-items-md-center">
+                    <div class="p-1 p-md-3">
+                        <h3 class="h4 fw-bold mb-3">
+                            <a href="./test/detail/21" class="text-dark link-fx">{{exam.title}}</a>
+                        </h3>
+                        <p class="fs-sm text-muted mb-0">
+                            <i class="fa fa-clock me-1"></i> Diễn ra từ <span>{{ formatAMPM(exam.startTime) + ' ' + formatDate(exam.startTime) }}</span> đến <span>{{ formatAMPM(exam.endTime) + ' ' + formatDate(exam.endTime) }}</span>
+                        </p>
+                    </div>
+                    <div class="p-1 p-md-3">
+                        <span *ngIf="statusButton(exam) === 1" class="btn btn-secondary btn-sm rounded-pill px-3 me-1 my-1 d-inline-flex align-items-center justify-content-center gap-2" disabled>
+                            Đã đóng
+                        </span>
+
+                        <span *ngIf="statusButton(exam) === 2" class="btn btn-success btn-sm rounded-pill px-3 me-1 my-1 d-inline-flex align-items-center justify-content-center gap-2" disabled>
+                            Đang mở
+                        </span>
+
+                        <span *ngIf="statusButton(exam) === 3" class="btn btn-info btn-sm rounded-pill px-3 me-1 my-1 d-inline-flex align-items-center justify-content-center gap-2" disabled>
+                            Chưa mở
+                        </span>
+
+                        <span class="btn btn-primary btn-sm btn-alt-success rounded-pill px-3 me-1 my-1 d-inline-flex align-items-center justify-content-center" [routerLink]="['/test-exam/start-test', exam.id]" >
+                            <i class="fa fa-eye opacity-50 me-2"></i>
+                            <span>Xem chi tiết</span>
+                        </span>
+                      
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-filter d-flex justify-content-between align-items-center my-3">
+            <div class="page-index">
+               <ul class="pagination pagination-rounded">
+                  <li class="page-item" (click)="handleOnChangePage(paging.pageIndex - 1)" [class.disabled]="paging.pageIndex === 1 || exams.length === 0">
+                    <span class="page-link"><i class="fa-solid fa-angle-left"></i></span>
+                  </li>
+                
+                  <ng-container *ngIf="exams.length > 0">
+                    <li *ngFor="let page of [].constructor(paging.totalPages); let i = index" class="page-item" (click)="handleOnChangePage(i + 1)" [class.active]="paging.pageIndex === i + 1">
+                      <span class="page-link">{{ i + 1 }}</span>
+                    </li>
+                  </ng-container>
+                
+                  <li class="page-item" (click)="handleOnChangePage(paging.pageIndex + 1)" [class.disabled]="paging.pageIndex === paging.totalPages || exams.length === 0">
+                    <span class="page-link"><i class="fa-solid fa-angle-right"></i></span>
+                  </li>
+                </ul>
+            </div>
+            <div class="per-page">
+               Hiển thị 
+               <select class="mx-1" (change)="handleOnPerPageChange($event)">
+                  <option *ngFor="let item of config.perPageOptions;" [ngValue]="item.value" [attr.selected]="item.value === paging.pageSize ? true : null">{{ item.label }}</option>
+               </select>
+               / {{ paging.totalRecords }} tổng số bản ghi
+            </div>
+          </div>
+    </ng-container>
+
+    <ng-container *ngIf="!(exams.length > 0)">
+        <tr>
+           <td class="text-center my-4 d-flex justify-content-center">Không có bản ghi nào</td>
+        </tr>
+    </ng-container>
+</div>
+
+

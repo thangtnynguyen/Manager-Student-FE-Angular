@@ -1,0 +1,103 @@
+<div class="row">
+    <div class="col-12">
+       <div
+          class="page-title-box d-flex align-items-center justify-content-between"
+          >
+          <h4 class="mb-0">Sửa thông tin bài viết</h4>
+          <div class="page-title-right">
+             <ol class="breadcrumb m-0">
+                <li
+                   routerLink="/admin/dashboard"
+                   class="breadcrumb-item d-flex align-items-center"
+                   >
+                   <span>Trang chủ</span>
+                   <i class="breadcrumb-item-arrow fa-solid fa-angle-right"></i>
+                </li>
+                <li routerLink="/admin/post" class="breadcrumb-item d-flex align-items-center">
+                   <span>Quản lý bài viết</span>
+                   <i class="breadcrumb-item-arrow fa-solid fa-angle-right"></i>
+                </li>
+                <li class="breadcrumb-item active">
+                    <span>Sửa thông tin bài viết</span>
+                 </li>
+             </ol>
+          </div>
+       </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12">
+       <div class="card">
+          <div class="card-body">
+            <form (ngSubmit)="onSubmit()" #form="ngForm">
+                <div class="form-group">
+                    <div class="row">
+                        <label class="col-md-3 col-lg-3 col-form-label" for="idpost">Mã bài viết</label>
+                        <input disabled="" class="col-md-9 col-lg-6 col-table-reponsive form-control" [(ngModel)]="post.id" name="idpost" id="idpost" type="text" placeholder="Mã bài viết"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <label class="col-md-3 col-lg-3 col-form-label" for="name">Tiêu đề <span class="text-danger">*</span></label>
+                        <div class="col-md-9 col-lg-6 col-table-reponsive p-0">
+                            <input class="form-control" [(ngModel)]="post.title" name="name" id="name" type="text" placeholder="Tiêu đề" required/>
+                            <div *ngIf="form.controls['name']?.invalid && (form.controls['name']?.dirty || form.controls['name'].touched)" class="danger-notice">
+                                <div *ngIf="form.controls['name'].errors?.['required']">Tiêu đề không được để trống</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <label class="col-md-3 col-lg-3 col-form-label" for="description">Mô tả</label>
+                        <div class="col-md-9 col-lg-6 col-table-reponsive p-0">
+                            <input class="form-control" [(ngModel)]="post.description" name="description" id="description" type="text" placeholder="Mô tả" required/>
+                            <div *ngIf="form.controls['name']?.invalid && (form.controls['name']?.dirty || form.controls['name'].touched)" class="danger-notice">
+                                <div *ngIf="form.controls['name'].errors?.['required']">Mô tả không được để trống</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <label class="col-md-3 col-lg-3 col-form-label" for="image">Hình ảnh</label>
+                        <div class="col-md-9 col-lg-6 col-table-reponsive p-0">
+                            <img src="{{post.image}}" width="400px" height="220px" name="image" id="image" type="text" >
+                            <input class="form-control" (change)="onFileSelected($event)" name="image" id="image" type="file" placeholder="Hình ảnh" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <label class="col-md-3 col-lg-3 col-form-label" for="content">Nội dung</label>
+                        <div class="col-md-9 col-lg-6 col-table-reponsive p-0">
+                            <input class="form-control" [(ngModel)]="post.content" name="content" id="content" type="text" placeholder="Nội dung" required/>
+                            <div *ngIf="form.controls['name']?.invalid && (form.controls['name']?.dirty || form.controls['name'].touched)" class="danger-notice">
+                                <div *ngIf="form.controls['name'].errors?.['required']">Nội dung không được để trống</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="custom-control custom-switch ml-3" dir="ltr">
+                            <input type="checkbox" class="custom-control-input" id="status" name="status" [(ngModel)]="post.isPublished" [checked]="post.isPublished">
+                            <label class="custom-control-label" for="status">Công khai</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="d-flex">
+                        <div class="ml-auto">
+                            <button routerLink="/admin/post" type="button" class="btn btn-secondary waves-effect waves-light">Quay lại</button>
+                            <button [disabled]="form.invalid" type="submit" class="btn btn-success waves-effect waves-light ml-2">Xác nhận</button>
+                        </div>
+                    </div>
+                </div>
+            </form>            
+          </div>
+       </div>
+    </div>
+    <!-- end col -->
+ </div>
+

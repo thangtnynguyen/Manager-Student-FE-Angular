@@ -1,0 +1,102 @@
+<div class="vertical-menu bg-dark-ui">
+
+    <div id="simplebar" data-simplebar class="h-100">
+        <div id="sidebar-menu">
+            <ul class="metismenu list-unstyled" id="side-menu">
+                <li class="menu-title">Menu</li>
+
+                <li routerLink="/teacher/dashboard">
+                    <a class="waves-effect {{ currentUrl === '/teacher/dashboard' ? 'active' : '' }}">
+                        <i class="fa-solid fa-house pb-0"></i>
+                        <span>Trang điều khiển</span>
+                    </a>
+                </li>
+
+                <!-- <li class="{{ isActive('/teacher/course')  ? 'mm-active' : '' }}">
+                    <a class="waves-effect navigation-menu-main d-flex justify-content-between {{ isActive('/teacher/course') ? 'active' : '' }}">
+                        <div class="navigation-label">
+                            <i class="fa-solid fa-school pb-0"></i>
+                            <span>Khoá học</span>
+                        </div>
+                        <i class="fa-solid fa-angle-down"></i>
+                    </a>
+
+                    <ul class="sub-menu {{ isActive('/teacher/course')? 'mm-show' : '' }}">
+                        <li class="cursor-pointer" routerLink="/teacher/course/info"><a class="{{ isActive('/teacher/course/info') ? 'active' : '' }}">Thông tin khoá học</a></li>
+                        <li class="cursor-pointer" routerLink="/teacher/course/section"><a class="{{ isActive('/teacher/course/section')? 'active' : '' }}">Quản lý chương</a></li>
+                        <li class="cursor-pointer" routerLink="/teacher/course/lesson"><a class="{{ isActive('/teacher/course/lesson')? 'active' : '' }}">Quản lý bài giảng</a></li>
+                    </ul>
+                </li> -->
+
+                <li class="{{ isActive('/teacher/group-module')  ? 'mm-active' : '' }}">
+                    <a class="waves-effect navigation-menu-main d-flex justify-content-between {{ isActive('/teacher/group-module') ? 'active' : '' }}">
+                        <div class="navigation-label">
+                            <i class="fa-solid fa-user-group pb-0"></i>
+                            <span>Học phần giảng dạy</span>
+                        </div>
+                        <i class="fa-solid fa-angle-down"></i>
+                    </a>
+
+                    <ul class="sub-menu {{ isActive('/teacher/group-module') ? 'mm-show' : '' }}">
+                        <li class="cursor-pointer" [routerLink]="['/teacher/group-module']" [queryParams]="{ status: 'true' }"><a class="{{ isActive('/teacher/group-module') ? 'active' : '' }}">Nhóm học phần</a></li>
+                    </ul>
+                </li>
+
+                <li class="{{ isActive('/teacher/exam')  ? 'mm-active' : '' }}">
+                    <a class="waves-effect navigation-menu-main d-flex justify-content-between {{ isActive('/teacher/exam') ? 'active' : '' }}">
+                        <div class="navigation-label">
+                            <i class="fa-solid fa-user-group pb-0"></i>
+                            <span>Kỳ thi</span>
+                        </div>
+                        <i class="fa-solid fa-angle-down"></i>
+                    </a>
+
+                    <ul class="sub-menu {{ isActive('/teacher/exam') ? 'mm-show' : '' }}">
+                        <li class="cursor-pointer" [routerLink]="['/teacher/exam']"><a class="{{ isActive('/teacher/exam') ? 'active' : '' }}">Quản lý đề thi cá nhân</a></li>
+                    </ul>
+                </li>
+
+                <li class="{{ isActive('/teacher/question') || isActive('/teacher/question-category')  ? 'mm-active' : '' }}">
+                    <a class="waves-effect navigation-menu-main d-flex justify-content-between {{ isActive('/teacher/question') ? 'active' : '' }}">
+                        <div class="navigation-label">
+                            <i class="fa-regular fa-circle-question pb-0"></i>
+                            <span>Ngân hàng câu hỏi</span>
+                        </div>
+                        <i class="fa-solid fa-angle-down"></i>
+                    </a>
+
+                    <ul class="sub-menu {{ isActive('/teacher/question') || isActive('/teacher/question-category') ? 'mm-show' : '' }}">
+                        <!-- <li class="cursor-pointer" routerLink="/teacher/question-category"><a class="{{ isActive('/teacher/question-category') && (currentUrl != '/teacher/question-tag') ? 'active' : '' }}">Quản lý loại câu hỏi</a></li> -->
+                        <li class="cursor-pointer" routerLink="/teacher/question"><a class="{{ isActive('/teacher/question') && (currentUrl != '/teacher/question-category') && (currentUrl != '/teacher/question-tag') ? 'active' : '' }}">Quản lý câu hỏi</a></li>
+                        <li class="cursor-pointer" routerLink="/teacher/question-tag"><a class="{{ isActive('/teacher/question-tag') && (currentUrl != '/teacher/question-category') ? 'active' : '' }}">Quản lý thẻ tag câu hỏi</a></li>
+                        <!-- <li class="cursor-pointer" routerLink="/teacher/exam"><a class="{{ isActive('/teacher/exam') && (currentUrl != '/teacher/question-category') ? 'active' : '' }}">Quản lý bộ đề thi</a></li> -->
+                    </ul>
+                </li>
+
+                <li routerLink="/teacher/notification">
+                    <a class="waves-effect" [class.active]="isActive('/teacher/notification')">
+                        <i class="ri-dashboard-line"></i>
+                        <span>Quản lý thông báo</span>
+                    </a>
+                </li>
+
+
+
+                <li class="{{ isActive('/teacher/account/update')  ? 'mm-active' : '' }}">
+                    <a class="waves-effect navigation-menu-main d-flex justify-content-between {{ isActive('/teacher/account/update') ? 'active' : '' }}">
+                        <div class="navigation-label">
+                            <i class="fa-solid fa-user"></i>
+                            <span>Người dùng</span>
+                        </div>
+                        <i class="fa-solid fa-angle-down"></i>
+                    </a>
+
+                    <ul class="sub-menu {{ isActive('/teacher/account/update') ? 'mm-show' : '' }}">
+                        <li class="cursor-pointer" routerLink="/teacher/account/update"><a class="{{ isActive('/teacher/account/update') ? 'active' : '' }}">Thông tin người dùng</a></li>
+                    </ul>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+</div>

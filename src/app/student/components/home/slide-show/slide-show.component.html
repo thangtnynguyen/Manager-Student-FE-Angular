@@ -1,0 +1,21 @@
+<div class="slide-show">
+  <div class="slide-show__wrapper">
+    <carousel [itemsPerSlide]="slideConfig.itemsPerSlide" [singleSlideOffset]="slideConfig.singleSlideOffset"
+      [noWrap]="slideConfig.noWrap" [interval]="slideConfig.cycleInterval" [startFromIndex]="slideConfig.startIndex">
+      <slide *ngFor="let banner of banners; let index = index" class="mx-auto slide-show__item"
+        [style.background]="banner.properties.props.style.background">
+        <div class="slide-show__item-left">
+          <h2 class="slide-show__item-left__title">{{banner.title}}</h2>
+          <p class="slide-show__item-left__description">
+            {{banner.description}}
+          </p>
+          <a class="slide-show__item-left__btn" [target]="banner.isBlank ? '_blank' : '_self'"
+            href="{{banner.linkTo}}">{{banner.ctaTitle}}</a>
+        </div>
+        <div class="slide-show__item-right">
+          <img [src]="baseUrlApi + banner.image" class="img-fluid" alt="{{banner.alt}}" />
+        </div>
+      </slide>
+    </carousel>
+  </div>
+</div>

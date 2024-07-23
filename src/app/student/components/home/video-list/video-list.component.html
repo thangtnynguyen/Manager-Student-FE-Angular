@@ -1,0 +1,55 @@
+<div class="course-pro my-4">
+  <div class="course-pro__header">
+    <div
+      class="course-pro__header-title__wrapper w-100 d-flex justify-content-between"
+    >
+      <h2 class="course-pro__header-title mt-0">
+        <span>Video nổi bật</span>
+      </h2>
+      <div>
+        <span>Xem tất cả</span>
+        <i class="fa-solid fa-angle-right"></i>
+      </div>
+    </div>
+  </div>
+
+  <div class="course-pro__body">
+    <div class="course-pro__body-wrapper row mt-2">
+      <div *ngFor="let video of videos;" (click)="redirectToVideoUrl(video.urlVideo)" class="course-pro__item col col-xl-3 col-lg-4 p-0">
+        <div class="course-pro__item-wrapper">
+          <div class="course-pro__item-link cursor-pointer">
+            <button type="button">Xem video</button>
+            <div class="course-pro__item-link__img position-relative">
+              <img
+                class="img-fluid w-100"
+                src="{{ video.thumbnailUrl }}"
+                alt="HTML CSS Pro"
+              />
+              <div class="position-absolute overley"></div>
+            </div>
+          </div>
+          <h3 class="course-pro__item-title mt-2">
+            {{ video.title }}
+          </h3>
+          <div class="course-pro__item-icon">
+            <i class="fa-solid fa-play"></i>
+          </div>
+          <div class="course-pro__item-time">
+            <span>{{ video.duration }}</span>
+          </div>
+          <div class="course-pro__item-video-info d-flex align-items-center">
+            <div class="course-pro__item-video-info__item me-3">
+              <i class="fa-solid fa-eye"></i> {{ video.viewCount | number: '1.0-3' }}
+            </div>
+            <div class="course-pro__item-video-info__item me-3">
+              <i class="fa-solid fa-thumbs-up"></i> {{ video.likeCount | number: '1.0-3' }}
+            </div>
+            <div class="course-pro__item-video-info__item me-3">
+              <i class="fa-solid fa-comment"></i> {{ video.commentCount | number: '1.0-3' }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
